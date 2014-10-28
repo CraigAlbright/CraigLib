@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D5A9FF47-B9FA-4038-8F86-60EE885F0DD6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CraigLib.Sound</RootNamespace>
+    <AssemblyName>CraigLib.Sound</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="libsndfile\DllImports.cs" />
+    <Compile Include="libsndfile\ILibsndfileApi.cs" />
+    <Compile Include="libsndfile\ILibsndfileArrayMarshal.cs" />
+    <Compile Include="libsndfile\ILibsndfileCommandApi.cs" />
+    <Compile Include="libsndfile\ILibsndfileMarshal.cs" />
+    <Compile Include="libsndfile\LibsndfileApi.cs" />
+    <Compile Include="libsndfile\LibsndfileApiNative.cs" />
+    <Compile Include="libsndfile\LibsndfileApiNativeWrapper.cs" />
+    <Compile Include="libsndfile\LibsndfileArrayMarshal.cs" />
+    <Compile Include="libsndfile\LibsndfileBraodcastInfo.cs" />
+    <Compile Include="libsndfile\LibsndfileCommand.cs" />
+    <Compile Include="libsndfile\LibsndfileCommandApi.cs" />
+    <Compile Include="libsndfile\LibsndfileCommandApiNativeWrapper.cs" />
+    <Compile Include="libsndfile\LibsndfileCommandUtilities.cs" />
+    <Compile Include="libsndfile\LibsndfileEmbedFileInfo.cs" />
+    <Compile Include="libsndfile\LibsndfileError.cs" />
+    <Compile Include="libsndfile\LibsndfileExeption.cs" />
+    <Compile Include="libsndfile\LibsndfileFormat.cs" />
+    <Compile Include="libsndfile\LibsndfileFormatInfo.cs" />
+    <Compile Include="libsndfile\LibsndfileInfo.cs" />
+    <Compile Include="libsndfile\LibsndfileInstrumentInfo.cs" />
+    <Compile Include="libsndfile\LibsndfileLoopInfo.cs" />
+    <Compile Include="libsndfile\LibsndfileLoopMode.cs" />
+    <Compile Include="libsndfile\LibsndfileMarshal.cs" />
+    <Compile Include="libsndfile\LibsndfileMode.cs" />
+    <Compile Include="libsndfile\LibsndfileStringType.cs" />
+    <Compile Include="libsndfile\UnmanagedMemoryHandle.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ExternalLibraries\libsndfile-1.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4FC538AE-A46E-4AF1-93CA-DD8BAB0FC1B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CraigLib.Data</RootNamespace>
+    <AssemblyName>CraigLib.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BulkCopy.cs" />
+    <Compile Include="CacheCriteriaStats.cs" />
+    <Compile Include="CacheData.cs" />
+    <Compile Include="CacheInfo.cs" />
+    <Compile Include="CacheItem.cs" />
+    <Compile Include="CacheMachine.cs" />
+    <Compile Include="CacheStats.cs" />
+    <Compile Include="CacheTimeoutException.cs" />
+    <Compile Include="CommandBuilder.cs" />
+    <Compile Include="DatabaseAdapter.cs" />
+    <Compile Include="DatabaseAdapterException.cs" />
+    <Compile Include="DatabaseCriteria.cs" />
+    <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="DatabaseJoin.cs" />
+    <Compile Include="DatabaseModel.cs" />
+    <Compile Include="DatabaseParameterCache.cs" />
+    <Compile Include="DatabaseSchema.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DatabaseSysGen.cs" />
+    <Compile Include="DataHelper.cs" />
+    <Compile Include="DataSetHelper.cs" />
+    <Compile Include="DatabaseContent.cs" />
+    <Compile Include="Expr.cs" />
+    <Compile Include="ICacheable.cs" />
+    <Compile Include="IDbAdptUpdater.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryBuilder.cs" />
+    <Compile Include="SelectCriteria.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CraigLib.Main\CraigLib.csproj">
+      <Project>{13cf0a2a-e468-4433-85a8-890f273c70aa}</Project>
+      <Name>CraigLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,7 @@
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.Test.dll
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.Test.pdb
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.dll
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.pdb
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.csprojResolveAssemblyReference.cache
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.dll
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.pdb

@@ -1,0 +1,5 @@
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.csprojResolveAssemblyReference.cache
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.dll
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.pdb
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.dll
+c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.pdb
