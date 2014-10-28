@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraigLib", "CraigLib.Main\CraigLib.csproj", "{13CF0A2A-E468-4433-85A8-890F273C70AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraigLib.TimeAndDate", "CraigLib.TimeAndDate\CraigLib.TimeAndDate.csproj", "{9A82242E-10DC-4649-9F9A-78A19B861B0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraigLib", "CraigLib\CraigLib.csproj", "{13CF0A2A-E468-4433-85A8-890F273C70AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraigLib.TimeAndDate", "TimeAndDate\CraigLib.TimeAndDate.csproj", "{9A82242E-10DC-4649-9F9A-78A19B861B0E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraigLib.TimeAndDate.Test", "CraigLib.TimeAndDate.Test\CraigLib.TimeAndDate.Test.csproj", "{FDEE899D-5DAA-469F-96B7-C193BCA8B9A2}"
 EndProject
