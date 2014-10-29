@@ -3,117 +3,36 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 
 namespace CraigLib.Data
 {
     public class DatabaseAdapter : IDisposable
     {
-        private bool _pushchanges = true;
         private readonly IsolationLevel _isolatationlevel = IsolationLevel.ReadCommitted;
-        private readonly bool _autoCommit = true;
-        private int _commandTimeout = int.Parse(ConfigurationManager.AppSettings["CommandTimeOut"]);
-        private bool _vote = true;
-        private bool _useevents = true;
-        private string _creationName = string.Empty;
-        private bool _acceptChangesDuringFill = true;
         private readonly ConnectionInfo _connectInfo;
         private bool _disposed;
-        private readonly bool _catchDbError;
         private bool _usesnaphot;
-        private DbCommand _updatingCommand;
 
         public DbConnection Connection { get; private set; }
 
         public DbTransaction Transaction { get; private set; }
 
-        public bool AutoCommit
-        {
-            get
-            {
-                return _autoCommit;
-            }
-        }
+        public bool AutoCommit { get; private set; }
 
-        public bool CatchDbError
-        {
-            get
-            {
-                return _catchDbError;
-            }
-        }
+        public bool CatchDbError { get; private set; }
 
         public bool IgnoreSecuriyPermission { get; set; }
 
-        public int CommandTimeout
-        {
-            get
-            {
-                return _commandTimeout;
-            }
-            set
-            {
-                _commandTimeout = value;
-            }
-        }
+        public int CommandTimeout { get; set; }
 
-        public bool Vote
-        {
-            get
-            {
-                return _vote;
-            }
-        }
+        public bool Vote { get; set; }
 
-        public bool Useevents
-        {
-            get
-            {
-                return _useevents;
-            }
-            set
-            {
-                _useevents = value;
-            }
-        }
+        public string CreationName { get; set; }
 
-        public string CreationName
-        {
-            get
-            {
-                return _creationName;
-            }
-            set
-            {
-                _creationName = value;
-            }
-        }
+        public bool AcceptChangesDuringFill { get; set; }
 
-        public bool AcceptChangesDuringFill
-        {
-            get
-            {
-                return _acceptChangesDuringFill;
-            }
-            set
-            {
-                _acceptChangesDuringFill = value;
-            }
-        }
-
-        public bool PushChanges
-        {
-            get
-            {
-                return _pushchanges;
-            }
-            set
-            {
-                _pushchanges = value;
-            }
-        }
+        public bool PushChanges { get; set; }
 
         public bool UseSnapshot
         {
@@ -130,65 +49,58 @@ namespace CraigLib.Data
             }
         }
 
-        public DbCommand UpdatingCommand
-        {
-            get
-            {
-                return _updatingCommand;
-            }
-            set
-            {
-                _updatingCommand = value;
-            }
-        }
+        public DbCommand UpdatingCommand { get; set; }
 
-        public DatabaseAdapter(IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
-            : this(ApplicationConfig.DbConnectInfo, true, false, messageUpdater, workflowUpdater)
+        public DatabaseAdapter(bool autoCommit)
+            : this(ApplicationConfig.DbConnectInfo, autoCommit, false)
         {
         }
 
-        public DatabaseAdapter(bool autoCommit, IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
-            : this(ApplicationConfig.DbConnectInfo, autoCommit, false, messageUpdater, workflowUpdater)
-        {
-        }
-
-        public DatabaseAdapter(IsolationLevel ilevel, IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
-            : this(ApplicationConfig.DbConnectInfo, true, false, messageUpdater, workflowUpdater)
+        public DatabaseAdapter(IsolationLevel ilevel)
+            : this(ApplicationConfig.DbConnectInfo, true, false)
         {
             _isolatationlevel = ilevel;
         }
 
-        public DatabaseAdapter(bool autoCommit, bool catchDbError, IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
-            : this(ApplicationConfig.DbConnectInfo, autoCommit, catchDbError, messageUpdater, workflowUpdater)
+        public DatabaseAdapter(bool autoCommit, bool catchDbError)
+            : this(ApplicationConfig.DbConnectInfo, autoCommit, catchDbError)
         {
         }
 
-        public DatabaseAdapter(ConnectionInfo connInfo, IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
-            : this(connInfo, true, false, messageUpdater, workflowUpdater)
+        public DatabaseAdapter(ConnectionInfo connInfo)
+            : this(connInfo, true, false)
         {
         }
 
-        public DatabaseAdapter(ConnectionInfo connInfo, bool autoCommit, IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
-            : this(connInfo, autoCommit, false, messageUpdater, workflowUpdater)
+        public DatabaseAdapter(ConnectionInfo connInfo, bool autoCommit)
+            : this(connInfo, autoCommit, false)
         {
         }
 
-        public DatabaseAdapter(ConnectionInfo connInfo, bool autoCommit, bool catchDbError, IDbAdptUpdater messageUpdater, IDbAdptUpdater workflowUpdater)
+        public DatabaseAdapter(ConnectionInfo connInfo, bool autoCommit, bool catchDbError)
         {
+            CommandTimeout = int.Parse(ConfigurationManager.AppSettings["CommandTimeOut"]);
+            Vote = true;
+            PushChanges = true;
+            AcceptChangesDuringFill = true;
+            CreationName = string.Empty;
             _connectInfo = connInfo;
             Connection = DatabaseHelper.GetNewConnection(connInfo);
-            _autoCommit = autoCommit;
-            _catchDbError = catchDbError;
+            AutoCommit = autoCommit;
+            CatchDbError = catchDbError;
             var windowsIdentity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (windowsIdentity != null && (connInfo.AllowSnapshot && windowsIdentity.Name.Equals("System")))
                 _usesnaphot = true;
-            var connectionExists = DatabaseContent.GetDbTable("connection") != null;
-            var messageExists = DatabaseContent.GetDbTable("message") != null;
-            _useevents = connectionExists || messageExists;
         }
 
         public DatabaseAdapter()
         {
+            CommandTimeout = int.Parse(ConfigurationManager.AppSettings["CommandTimeOut"]);
+            AutoCommit = true;
+            Vote = true;
+            PushChanges = true;
+            AcceptChangesDuringFill = true;
+            CreationName = string.Empty;
             // TODO: Complete member initialization
         }
 
@@ -207,7 +119,7 @@ namespace CraigLib.Data
         {
             if (!_disposed && disposing)
             {
-                if (_vote)
+                if (Vote)
                     Commit();
                 else
                     Rollback();
@@ -243,7 +155,7 @@ namespace CraigLib.Data
             }
             if (Connection.State != ConnectionState.Closed)
                 Connection.Close();
-            _vote = true;
+            Vote = true;
         }
 
         public void Rollback()
@@ -262,7 +174,7 @@ namespace CraigLib.Data
             }
             if (Connection.State != ConnectionState.Closed)
                 Connection.Close();
-            _vote = true;
+            Vote = true;
         }
 
         public int Fill(DataSet dsFill)
@@ -338,7 +250,7 @@ namespace CraigLib.Data
                 else
                     dtFill.CaseSensitive = true;
             }
-            var rows = 0;
+            int rows;
             var flag1 = false;
             var flag2 = false;
             if (Transaction == null)
@@ -360,16 +272,16 @@ namespace CraigLib.Data
                         dataSet.EnforceConstraints = false;
                     }
                     dtFill.BeginLoadData();
-                    newDataAdapter.AcceptChangesDuringFill = _acceptChangesDuringFill;
+                    newDataAdapter.AcceptChangesDuringFill = AcceptChangesDuringFill;
                     if (Connection.State != ConnectionState.Open)
                     {
                         DatabaseHelper.OpenConnection(Connection, _connectInfo);
                         flag1 = true;
                     }
                     if (newDataAdapter.SelectCommand != null)
-                        newDataAdapter.SelectCommand.CommandTimeout = _commandTimeout;
+                        newDataAdapter.SelectCommand.CommandTimeout = CommandTimeout;
                     if (dtFill.ExtendedProperties.ContainsKey("_maxrows"))
-                        rows = newDataAdapter.Fill(0, Convert.ToInt32(dtFill.ExtendedProperties["_maxrows"]), new DataTable[1]
+                        rows = newDataAdapter.Fill(0, Convert.ToInt32(dtFill.ExtendedProperties["_maxrows"]), new[]
             {
               dtFill
             });
@@ -385,7 +297,7 @@ namespace CraigLib.Data
                     }
                     else
                         dtFill.SetDateTimeKind();
-                    DataSetHelper.AttachSqlLog(dataSet, selectSql, rows.ToString());
+                    DataSetHelper.AttachSqlLog(dataSet, selectSql, rows.ToString(CultureInfo.InvariantCulture));
                 }
                 catch (Exception ex)
                 {
@@ -396,7 +308,7 @@ namespace CraigLib.Data
                     rows = -1;
                     DatabaseHelper.WriteSqlLog(ex.Message);
                     DataSetHelper.AttachSqlLog(dataSet, selectSql, ex.Message);
-                    if (!_catchDbError)
+                    if (!CatchDbError)
                         throw new DatabaseAdapterException(ex.Message, selectSql, ex);
                     DataSetHelper.AttachDbError(dataSet, ex.Message, selectSql);
                 }
@@ -414,7 +326,7 @@ namespace CraigLib.Data
 
         public DataTable[] FillSchema(DataSet dataSet, string selectSql, SchemaType schemaType)
         {
-            var dataTableArray = new DataTable[0];
+            DataTable[] dataTableArray;
             using (var newDataAdapter = DatabaseHelper.GetNewDataAdapter(selectSql, Connection))
             {
                 var flag = false;
@@ -437,7 +349,7 @@ namespace CraigLib.Data
 
         public DataTable FillSchema(DataTable dataTable, string selectSql, SchemaType schemaType)
         {
-            var dataTable1 = (DataTable)null;
+            DataTable dataTable1;
             using (var newDataAdapter = DatabaseHelper.GetNewDataAdapter(selectSql, Connection))
             {
                 var flag = false;
@@ -464,7 +376,7 @@ namespace CraigLib.Data
         public int Update(DataTable dtUpdate, bool sysGen)
         {
             var selectSql = DatabaseHelper.GetSelectSql(dtUpdate, new string[0]);
-            return Update(new DataTable[1]
+            return Update(new[]
       {
         dtUpdate
       }, new[]
@@ -516,7 +428,7 @@ namespace CraigLib.Data
 
         public int Update(DataTable[] dtUpdates, string[] selectSqls, bool sysGen, bool backgroundProcess)
         {
-            if (!_vote)
+            if (!Vote)
                 throw new DatabaseAdapterException("Update does not execute due to previous failed transaction votes");
             var num1 = 0;
             var dbDataAdapterArray = new DbDataAdapter[dtUpdates.Length];
@@ -543,15 +455,15 @@ namespace CraigLib.Data
                     {
                         DbSysGen.SetSurrogate(dtUpdates[index], updatetable[index]);
                         DbSysGen.SetSysGenValue(dtUpdates[index], dtUpdates[index].TableName, Connection, Transaction);
-                        DbSysGen.SetCreationValue(dtUpdates[index], _creationName);
+                        DbSysGen.SetCreationValue(dtUpdates[index], CreationName);
                         DbSysGen.SetRevisionValue(dtUpdates[index]);
                     }
                     DbSysGen.SetDbDefaultValue(dtUpdates[index], updatetable[index]);
                     dbDataAdapterArray[index] = DatabaseHelper.GetNewDataAdapter(selectSqls[index], Connection, Transaction);
                     dbDataAdapterArray[index].AcceptChangesDuringUpdate = false;
                     commandBuilderArray[index] = new CommandBuilder(dbDataAdapterArray[index], updatetable[index]);
-                    if (_creationName.Length > 0)
-                        commandBuilderArray[index].CreationName = _creationName;
+                    if (CreationName.Length > 0)
+                        commandBuilderArray[index].CreationName = CreationName;
                 }
                 for (var index = dtUpdates.Length - 1; index >= 0; --index)
                 {
@@ -565,26 +477,26 @@ namespace CraigLib.Data
                             dataSet = dtUpdates[index].DataSet;
                             if (dataRows.Length > 0)
                             {
-                                _updatingCommand = commandBuilderArray[index].GetDeleteCommand();
-                                if (_updatingCommand != null)
+                                UpdatingCommand = commandBuilderArray[index].GetDeleteCommand();
+                                if (UpdatingCommand != null)
                                 {
-                                    _updatingCommand.CommandTimeout = _commandTimeout;
-                                    DataSetHelper.AttachSqlLog(dataSet, _updatingCommand.CommandText, dataRows.Length.ToString());
+                                    UpdatingCommand.CommandTimeout = CommandTimeout;
+                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, dataRows.Length.ToString(CultureInfo.InvariantCulture));
                                 }
                                 num1 = dbDataAdapterArray[index].Update(dataRows);
-                                _updatingCommand = null;
+                                UpdatingCommand = null;
                             }
                             if (deleteSqls.Length > 0)
                             {
-                                _updatingCommand = DatabaseHelper.GetNewCommand(string.Empty, Connection, Transaction);
-                                _updatingCommand.CommandTimeout = _commandTimeout;
+                                UpdatingCommand = DatabaseHelper.GetNewCommand(string.Empty, Connection, Transaction);
+                                UpdatingCommand.CommandTimeout = CommandTimeout;
                                 foreach (var str in deleteSqls)
                                 {
-                                    _updatingCommand.CommandText = str;
-                                    num1 = _updatingCommand.ExecuteNonQuery();
-                                    DataSetHelper.AttachSqlLog(dataSet, _updatingCommand.CommandText, num1.ToString());
+                                    UpdatingCommand.CommandText = str;
+                                    num1 = UpdatingCommand.ExecuteNonQuery();
+                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, num1.ToString(CultureInfo.InvariantCulture));
                                 }
-                                _updatingCommand = null;
+                                UpdatingCommand = null;
                             }
                             if (!dts.ContainsKey(dtUpdates[index]))
                                 dts.Add(dtUpdates[index], updatetable[index]);
@@ -606,16 +518,16 @@ namespace CraigLib.Data
                             }
                             else
                             {
-                                _updatingCommand = commandBuilderArray[index].GetInsertCommand();
-                                if (_updatingCommand != null)
+                                UpdatingCommand = commandBuilderArray[index].GetInsertCommand();
+                                if (UpdatingCommand != null)
                                 {
-                                    _updatingCommand.CommandTimeout = _commandTimeout;
-                                    DataSetHelper.AttachSqlLog(dataSet, _updatingCommand.CommandText, dataRowArray.Length.ToString());
+                                    UpdatingCommand.CommandTimeout = CommandTimeout;
+                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, dataRowArray.Length.ToString(CultureInfo.InvariantCulture));
                                 }
                                 num1 = dbDataAdapterArray[index].Update(dataRowArray);
                                 foreach (var dataRow in dataRowArray)
                                     dataRow.SetAdded();
-                                _updatingCommand = null;
+                                UpdatingCommand = null;
                             }
                             if (!dts.ContainsKey(dtUpdates[index]))
                                 dts.Add(dtUpdates[index], updatetable[index]);
@@ -632,33 +544,33 @@ namespace CraigLib.Data
                         {
                             dataSet = dtUpdates[index].DataSet;
                             commandBuilderArray[index].ConcurrentCheckColumns = list = dtUpdates[index].GetConcurrentCheckColumns();
-                            _updatingCommand = commandBuilderArray[index].GetUpdateCommand();
-                            if (_updatingCommand != null)
+                            UpdatingCommand = commandBuilderArray[index].GetUpdateCommand();
+                            if (UpdatingCommand != null)
                             {
-                                _updatingCommand.CommandTimeout = _commandTimeout;
-                                DataSetHelper.AttachSqlLog(dataSet, _updatingCommand.CommandText, dataRows.Length.ToString());
+                                UpdatingCommand.CommandTimeout = CommandTimeout;
+                                DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, dataRows.Length.ToString(CultureInfo.InvariantCulture));
                             }
                             num1 = dbDataAdapterArray[index].Update(dataRows);
                             list = null;
                             foreach (var dbCommand in commandBuilderArray[index].TextCommands)
                             {
-                                _updatingCommand = dbCommand;
+                                UpdatingCommand = dbCommand;
                                 dbDataAdapterArray[index].UpdateCommand = dbCommand;
                                 num1 = dbDataAdapterArray[index].Update(dataRows);
                             }
                             foreach (var dbCommand in commandBuilderArray[index].ImageCommands)
                             {
-                                _updatingCommand = dbCommand;
+                                UpdatingCommand = dbCommand;
                                 dbDataAdapterArray[index].UpdateCommand = dbCommand;
                                 num1 = dbDataAdapterArray[index].Update(dataRows);
                             }
-                            _updatingCommand = null;
+                            UpdatingCommand = null;
                             if (!dts.ContainsKey(dtUpdates[index]))
                                 dts.Add(dtUpdates[index], updatetable[index]);
                         }
                     }
                 }
-               if (_autoCommit)
+               if (AutoCommit)
                 {
                     Commit();
                     foreach (var dt in dtUpdates)
@@ -668,7 +580,7 @@ namespace CraigLib.Data
             }
             catch (DbException ex)
             {
-                var commandText = DatabaseHelper.GetCommandText(_updatingCommand);
+                var commandText = DatabaseHelper.GetCommandText(UpdatingCommand);
                 if ((ex.Message.Contains("ORA-02292") || ex.Message.ToLower().Contains("constraint")) && commandText.ToLower().Trim().StartsWith("delete"))
                 {
                     var strArray = commandText.Split(new[]
@@ -683,6 +595,7 @@ namespace CraigLib.Data
                     var str3 = string.Empty;
                     if (commandText.ToLower().Contains("where"))
                     {
+                        // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
                         for (var index = 0; index < strArray.Length; ++index)
                         {
                             if (strArray[index].ToLower().Trim().Equals("where"))
@@ -691,7 +604,7 @@ namespace CraigLib.Data
                                 break;
                             }
                         }
-                        var num2 = commandText.LastIndexOf("=");
+                        var num2 = commandText.LastIndexOf("=", StringComparison.Ordinal);
                         if (num2 != -1)
                             str3 = commandText.Substring(num2 + 1);
                     }
@@ -700,9 +613,9 @@ namespace CraigLib.Data
                 }
                 else
                     SetGenericDbUpdateException(ex, dataSet, ex.Message);
-                if (_updatingCommand == null)
+                if (UpdatingCommand == null)
                 {
-                    if (!_catchDbError)
+                    if (!CatchDbError)
                         throw;
                 }
             }
@@ -712,18 +625,18 @@ namespace CraigLib.Data
                 if (list != null)
                     dbErrorMessage = string.Format("Record has been modified in database.  Please refresh the data first.", new object[0]);
                 SetGenericDbUpdateException(ex, dataSet, dbErrorMessage);
-                if (_updatingCommand == null)
+                if (UpdatingCommand == null)
                 {
-                    if (!_catchDbError)
+                    if (!CatchDbError)
                         throw;
                 }
             }
             catch (Exception ex)
             {
                 SetGenericDbUpdateException(ex, dataSet, ex.Message);
-                if (_updatingCommand == null)
+                if (UpdatingCommand == null)
                 {
-                    if (!_catchDbError)
+                    if (!CatchDbError)
                         throw;
                 }
             }
@@ -741,30 +654,30 @@ namespace CraigLib.Data
             return num1;
         }
 
-        private void SetGenericDbUpdateException(Exception e, DataSet updatingDS, string dbErrorMessage)
+        private void SetGenericDbUpdateException(Exception e, DataSet updatingDs, string dbErrorMessage)
         {
-            _vote = false;
-            if (_autoCommit)
+            Vote = false;
+            if (AutoCommit)
                 Rollback();
-            if (_updatingCommand != null)
+            if (UpdatingCommand != null)
             {
-                var commandText = DatabaseHelper.GetCommandText(_updatingCommand);
+                var commandText = DatabaseHelper.GetCommandText(UpdatingCommand);
                 DatabaseHelper.WriteSqlLog(commandText);
                 DatabaseHelper.WriteSqlLog(dbErrorMessage);
-                DataSetHelper.AttachSqlLog(updatingDS, commandText, dbErrorMessage);
-                if (!_catchDbError)
+                DataSetHelper.AttachSqlLog(updatingDs, commandText, dbErrorMessage);
+                if (!CatchDbError)
                     throw new DatabaseAdapterException(dbErrorMessage, commandText, e);
-                DataSetHelper.AttachDbError(updatingDS, dbErrorMessage, commandText);
+                DataSetHelper.AttachDbError(updatingDs, dbErrorMessage, commandText);
             }
             else
             {
                 var str = e is DatabaseAdapterException ? "" : e.Message;
                 DatabaseHelper.WriteSqlLog(str);
                 DatabaseHelper.WriteSqlLog(dbErrorMessage);
-                DataSetHelper.AttachSqlLog(updatingDS, str, dbErrorMessage);
-                if (!_catchDbError)
+                DataSetHelper.AttachSqlLog(updatingDs, str, dbErrorMessage);
+                if (!CatchDbError)
                     return;
-                DataSetHelper.AttachDbError(updatingDS, dbErrorMessage, str);
+                DataSetHelper.AttachDbError(updatingDs, dbErrorMessage, str);
             }
         }
 
@@ -808,7 +721,7 @@ namespace CraigLib.Data
                 commandText = queryBuilder.Query;
             }
             var newCommand = DatabaseHelper.GetNewCommand(commandText, Connection, Transaction);
-            newCommand.CommandTimeout = _commandTimeout;
+            newCommand.CommandTimeout = CommandTimeout;
             foreach (var dataParameter in commandParameters)
             {
                 var str = DatabaseHelper.SetParameterName(dataParameter);
@@ -831,47 +744,22 @@ namespace CraigLib.Data
                     obj = newCommand.ExecuteNonQuery();
                 if (flag1)
                 {
-                    if (_autoCommit)
+                    if (AutoCommit)
                         Commit();
                 }
             }
             catch (Exception ex)
             {
                 if (!flag2)
-                    _vote = false;
-                if (_autoCommit)
+                    Vote = false;
+                if (AutoCommit)
                     Rollback();
                 DatabaseHelper.WriteSqlLog(ex.Message);
-                if (_catchDbError)
+                if (CatchDbError)
                     return ex.Message;
                 throw new DatabaseAdapterException(ex.Message, commandText, ex);
             }
             return obj;
-        }
-
-        private struct SetParam
-        {
-            public string SetClause;
-            public DbParameter Parameter;
-            public object CurrentValue;
-            public object OriginalValue;
-            public bool AddWhere;
-
-            public SetParam(string setClause, DbParameter dbParam)
-            {
-                SetClause = setClause;
-                Parameter = dbParam;
-                CurrentValue = null;
-                OriginalValue = null;
-                AddWhere = false;
-            }
-
-            public SetParam(string setClause, DbParameter dbParam, object currVal, object origVal)
-            {
-                this = new SetParam(setClause, dbParam);
-                CurrentValue = currVal;
-                OriginalValue = origVal;
-            }
         }
     }
 }
