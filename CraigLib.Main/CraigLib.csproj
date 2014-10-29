@@ -251,6 +251,18 @@
       <Project>{7e10d3be-75cd-44d8-ab0e-83f73aff235d}</Project>
       <Name>CraigLib.Cloud</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CraigLib.FileHelper\CraigLib.File.csproj">
+      <Project>{83B874FC-893E-48F1-8E8B-059B51E6E401}</Project>
+      <Name>CraigLib.File</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CraigLib.Sound\CraigLib.Sound.csproj">
+      <Project>{D5A9FF47-B9FA-4038-8F86-60EE885F0DD6}</Project>
+      <Name>CraigLib.Sound</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CraigLib.TimeAndDate\CraigLib.TimeAndDate.csproj">
+      <Project>{9A82242E-10DC-4649-9F9A-78A19B861B0E}</Project>
+      <Name>CraigLib.TimeAndDate</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
