@@ -200,3 +200,7 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 >>>>>>> bc449dc415f42b36983233c510e677aa16c9ac69
+
+*.dll
+*.cache
+*.pdb
