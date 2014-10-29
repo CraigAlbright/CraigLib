@@ -1,6 +1,6 @@
 ﻿namespace CraigLib.File
 {
-    public class FileHelper
+    public class FileHelper : IFileHelper
     {
 
     }
