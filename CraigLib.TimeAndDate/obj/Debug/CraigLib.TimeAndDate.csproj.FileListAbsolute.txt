@@ -2,3 +2,8 @@ c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\TimeAndDa
 c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\TimeAndDate\bin\Debug\CraigLib.TimeAndDate.pdb
 c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\TimeAndDate\obj\Debug\CraigLib.TimeAndDate.dll
 c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\TimeAndDate\obj\Debug\CraigLib.TimeAndDate.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\bin\Debug\CraigLib.TimeAndDate.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\bin\Debug\CraigLib.TimeAndDate.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\obj\Debug\CraigLib.TimeAndDate.csprojResolveAssemblyReference.cache
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\obj\Debug\CraigLib.TimeAndDate.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\obj\Debug\CraigLib.TimeAndDate.pdb

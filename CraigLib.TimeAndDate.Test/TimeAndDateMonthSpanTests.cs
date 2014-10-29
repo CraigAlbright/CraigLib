@@ -1,17 +1,31 @@
 ﻿using System;
+using System.ComponentModel;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IContainer = Autofac.IContainer;
 
 namespace CraigLib.TimeAndDate.Test
 {
     [TestClass]
     public class TimeAndDateMonthSpanTests
     {
+        private readonly IContainer _container;
+        public TimeAndDateMonthSpanTests()
+        {
+            var diHelper = new DependencyInjectionHelper();
+            _container = diHelper.Container;
+        }
+
         [TestMethod]
         public void TestNumberMonthsBetweenDatesSameMonth()
         {
             var d1 = new DateTime(2014, 10, 1);
             var d2 = new DateTime(2014, 10, 15);
-            Assert.AreEqual(1, TimeAndDateHelper.NumberMonthsBetweenDates(d1, d2));
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var helper = scope.Resolve<ITimeAndDateHelper>();
+                Assert.AreEqual(1, helper.NumberMonthsBetweenDates(d1, d2));
+            }
         }
 
         [TestMethod]
@@ -19,7 +33,11 @@ namespace CraigLib.TimeAndDate.Test
         {
             var d1 = new DateTime(2014, 10, 1);
             var d2 = new DateTime(2014, 11, 15);
-            Assert.AreEqual(2, TimeAndDateHelper.NumberMonthsBetweenDates(d1, d2));
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var helper = scope.Resolve<ITimeAndDateHelper>();
+                Assert.AreEqual(2, helper.NumberMonthsBetweenDates(d1, d2));
+            }
         }
 
         [TestMethod]
@@ -27,7 +45,11 @@ namespace CraigLib.TimeAndDate.Test
         {
             var d1 = new DateTime(2014, 10, 1);
             var d2 = new DateTime(2015, 11, 15);
-            Assert.AreEqual(13, TimeAndDateHelper.NumberMonthsBetweenDates(d1, d2));
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var helper = scope.Resolve<ITimeAndDateHelper>();
+                Assert.AreEqual(13, helper.NumberMonthsBetweenDates(d1, d2));
+            }
         }
 
         [TestMethod]
@@ -35,7 +57,11 @@ namespace CraigLib.TimeAndDate.Test
         {
             var d1 = new DateTime(2014, 10, 1);
             var d2 = new DateTime(2015, 10, 15);
-            Assert.AreEqual(12, TimeAndDateHelper.NumberMonthsBetweenDates(d1, d2));
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var helper = scope.Resolve<ITimeAndDateHelper>();
+                Assert.AreEqual(12, helper.NumberMonthsBetweenDates(d1, d2));
+            }
         }
 
         [TestMethod]
@@ -43,7 +69,11 @@ namespace CraigLib.TimeAndDate.Test
         {
             var d1 = new DateTime(2014, 10, 1);
             var d2 = new DateTime(2015, 10, 15);
-            Assert.AreEqual(12, TimeAndDateHelper.NumberMonthsBetweenDates(d2, d1));
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var helper = scope.Resolve<ITimeAndDateHelper>();
+                Assert.AreEqual(12, helper.NumberMonthsBetweenDates(d2, d1));
+            }
         }
 
         [TestMethod]
@@ -51,7 +81,11 @@ namespace CraigLib.TimeAndDate.Test
         {
             var d1 = new DateTime(2014, 12, 1);
             var d2 = new DateTime(2015, 1, 1);
-            Assert.AreEqual(1, TimeAndDateHelper.NumberMonthsBetweenDates(d1, d2));
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var helper = scope.Resolve<ITimeAndDateHelper>();
+                Assert.AreEqual(1, helper.NumberMonthsBetweenDates(d1, d2));
+            }
         }
     }
 }

@@ -9,7 +9,8 @@ namespace CraigLib
 {
     public class DependencyInjectionHelper
     {
-        private static IContainer Container { get; set; }
+        public IContainer Container { get; private set; }
+
         public DependencyInjectionHelper()
         {
             var builder = new ContainerBuilder();

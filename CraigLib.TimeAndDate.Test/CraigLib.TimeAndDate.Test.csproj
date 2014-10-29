@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -54,10 +57,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CraigLib.Main\CraigLib.csproj">
+      <Project>{13CF0A2A-E468-4433-85A8-890F273C70AA}</Project>
+      <Name>CraigLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CraigLib.TimeAndDate\CraigLib.TimeAndDate.csproj">
-          <Project>{9a82242e-10dc-4649-9f9a-78a19b861b0e}</Project>
+      <Project>{9a82242e-10dc-4649-9f9a-78a19b861b0e}</Project>
       <Name>CraigLib.TimeAndDate</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

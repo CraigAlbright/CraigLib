@@ -3,3 +3,8 @@ c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.
 c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.pdb
 c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.dll
 c:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.csprojResolveAssemblyReference.cache
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.pdb
