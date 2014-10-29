@@ -75,11 +75,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CraigLib.Main\CraigLib.csproj">
-          <Project>{13cf0a2a-e468-4433-85a8-890f273c70aa}</Project>
+      <Project>{13cf0a2a-e468-4433-85a8-890f273c70aa}</Project>
       <Name>CraigLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>Xcopy $(TargetPath) $(SolutionDir)$(OutDir) /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

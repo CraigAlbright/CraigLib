@@ -49,6 +49,5 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWS.S
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWS.TraceListener.xml
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWSSDK.xml
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\System.Spatial.xml
-C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.csprojResolveAssemblyReference.cache
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.pdb
