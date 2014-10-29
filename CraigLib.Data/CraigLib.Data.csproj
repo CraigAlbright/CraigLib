@@ -75,8 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CraigLib.Main\CraigLib.csproj">
-    <ProjectReference Include="..\CraigLib\CraigLib.csproj">
-      <Project>{13cf0a2a-e468-4433-85a8-890f273c70aa}</Project>
+          <Project>{13cf0a2a-e468-4433-85a8-890f273c70aa}</Project>
       <Name>CraigLib</Name>
     </ProjectReference>
   </ItemGroup>
