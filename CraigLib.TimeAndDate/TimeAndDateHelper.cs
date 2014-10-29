@@ -2,7 +2,7 @@
 
 namespace CraigLib.TimeAndDate
 {
-    public class TimeAndDateHelper
+    public class TimeAndDateHelper : ITimeAndDateHelper
     {
         /// <summary>
         /// This is a quick and slightly inaccurate way to get the number of months in a date range. Follows
@@ -11,7 +11,7 @@ namespace CraigLib.TimeAndDate
         /// <param name="beginningDate"></param>
         /// <param name="endingDate"></param>
         /// <returns></returns>
-        public static int NumberMonthsBetweenDates(DateTime beginningDate, DateTime endingDate)
+        public int NumberMonthsBetweenDates(DateTime beginningDate, DateTime endingDate)
         {
             if (beginningDate.Year == endingDate.Year)
             {
@@ -27,5 +27,6 @@ namespace CraigLib.TimeAndDate
             var backwardsMonthOffset = (beginningDate.Year - endingDate.Year) * 12;
             return Math.Abs((endingDate.Month - beginningDate.Month) + backwardsMonthOffset);
         }
+
     }
 }
