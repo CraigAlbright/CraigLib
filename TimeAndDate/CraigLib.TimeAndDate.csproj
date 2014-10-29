@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9A82242E-10DC-4649-9F9A-78A19B861B0E}</ProjectGuid>
+    <ProjectGuid>{0595E43D-7BB1-42B8-B198-E4ED67B633E3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CraigLib.TimeAndDate</RootNamespace>
