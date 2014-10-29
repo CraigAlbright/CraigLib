@@ -17,3 +17,38 @@ C:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.
 C:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWS.TraceListener.xml
 C:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWSSDK.xml
 C:\Users\craig.albright\documents\visual studio 2013\Projects\CraigLib\CraigLib.Cloud\bin\Debug\System.Spatial.xml
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\CraigLib.Cloud.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\CraigLib.Cloud.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWS.SessionProvider.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWS.TraceListener.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWSSDK.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Azure.ResourceManager.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Data.Edm.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Data.OData.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Data.Services.Client.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Common.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Compute.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.ExpressRoute.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.MediaServices.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Network.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Scheduler.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.ServiceBus.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Sql.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Storage.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Store.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.TrafficManager.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.VirtualNetworks.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.WebSites.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Storage.DataMovement.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Storage.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Newtonsoft.Json.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Threading.Tasks.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\System.Spatial.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWS.SessionProvider.xml
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWS.TraceListener.xml
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWSSDK.xml
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\System.Spatial.xml
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.csprojResolveAssemblyReference.cache
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.dll
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.pdb
