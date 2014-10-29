@@ -71,7 +71,9 @@
     <Compile Include="AWS\AWSHelper.cs" />
     <Compile Include="AWS\AWSMain.cs" />
     <Compile Include="AWS\IAWSHelper.cs" />
+    <Compile Include="Azure\AzureHelper.cs" />
     <Compile Include="Azure\AzureMain.cs" />
+    <Compile Include="Azure\IAzureHelper.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
