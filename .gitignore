@@ -204,3 +204,5 @@ $RECYCLE.BIN/
 *.dll
 *.cache
 *.pdb
+CraigLib.Data/bin/Debug/CraigLib.dll
+CraigLib.Data/bin/Debug/CraigLib.pdb
