@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CraigLib.Data
 {
     public class CacheItem
     {
-        private object _locker = new object();
+        private readonly object _locker = new object();
         private DateTime _expires = DateTime.MaxValue;
         private readonly Dictionary<string, string> _watchtables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, string> _hints = new Dictionary<string, string>();
         private readonly Dictionary<string, CacheCriteriaStats> _retrieved = new Dictionary<string, CacheCriteriaStats>();
-        private string _name;
-        private ICacheable _cacheable;
+        private readonly string _name;
+        private readonly ICacheable _cacheable;
         private object _cacheitem;
         private bool _stale;
-        public CacheStats _cstats;
+        public CacheStats Cstats;
         public bool IsVolatile;
         public bool IsSegmented;
         public volatile bool DeferClear;
@@ -34,7 +30,7 @@ namespace CraigLib.Data
             _hints = hints;
             IsSegmented = segmented;
             DeferClear = deferclear;
-            _cstats = new CacheStats(name);
+            Cstats = new CacheStats(name);
         }
 
         public CacheItem(string name, ICacheable cacheable, string[] watchtables, string[] hints)
@@ -86,7 +82,7 @@ namespace CraigLib.Data
         public void Clear(string[] items)
         {
             if (IsSegmented || _name.EndsWith("DbContent") || _name.EndsWith("DatabaseModel"))
-                _cacheable.CleanUpCacheItem(new CacheInfo()
+                _cacheable.CleanUpCacheItem(new CacheInfo
                 {
                     Retrieved = _retrieved,
                     ChangeItems = items
@@ -114,16 +110,16 @@ namespace CraigLib.Data
         {
             _retrieved.Clear();
             _cacheitem = null;
-            ++_cstats.Clears;
-            _cstats.Items = 0;
+            ++Cstats.Clears;
+            Cstats.Items = 0;
             if (!setinfo)
                 return;
-            _cstats.Info = "Cleared";
+            Cstats.Info = "Cleared";
         }
 
         public object Get()
         {
-            return Get(new string[1]
+            return Get(new[]
       {
         "All"
       }, null);
@@ -131,7 +127,7 @@ namespace CraigLib.Data
 
         public object Get(string[] tableNames, SelectCriteria criteria)
         {
-            object currentitem = null;
+            object currentitem;
             var key = "";
             if (tableNames != null)
                 key = string.Join(",", tableNames) + ",";
@@ -146,7 +142,7 @@ namespace CraigLib.Data
                 if ((_cacheitem != null || IsSegmented) && _retrieved.TryGetValue(key, out ccstat))
                 {
                     ++ccstat.Hit;
-                    ++_cstats.Hit;
+                    ++Cstats.Hit;
                 }
                 else
                 {
@@ -160,7 +156,7 @@ namespace CraigLib.Data
                     var timeSpan = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified) - dateTime1;
                     ccstat = _retrieved[key] = new CacheCriteriaStats(key, _watchtables);
                     ccstat.MergeWatchItems(cacheData.WatchTables);
-                    _cstats.IoTime += timeSpan;
+                    Cstats.IoTime += timeSpan;
                     ccstat.IoTime = timeSpan;
                     GetItemInfo(cacheData.NewData, ccstat);
                     _expires = cacheData.Expires;
@@ -170,16 +166,16 @@ namespace CraigLib.Data
                         if (cacheData.NewData is DataTable)
                             DTImport((DataTable)_cacheitem, (DataTable)cacheData.NewData);
                         else if (cacheData.NewData is DataSet)
-                            DSImport((DataSet)_cacheitem, (DataSet)cacheData.NewData);
-                        _cstats.MergeTime += DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified) - dateTime2;
+                            DsImport((DataSet)_cacheitem, (DataSet)cacheData.NewData);
+                        Cstats.MergeTime += DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified) - dateTime2;
                     }
-                    if (_stale || !cacheData.Append || IsSegmented && _cstats.Items > 500000)
+                    if (_stale || !cacheData.Append || IsSegmented && Cstats.Items > 500000)
                     {
                         SetAsCleared(false);
                         if (!_stale)
                             _retrieved[key] = ccstat;
                     }
-                    ++_cstats.Miss;
+                    ++Cstats.Miss;
                     if (IsSegmented)
                     {
                         ccstat.Item = cacheData.NewData;
@@ -202,28 +198,32 @@ namespace CraigLib.Data
         {
             var str = "";
             var num1 = 0;
-            _cstats.DataType = item.GetType().Name;
-            try
+            Cstats.DataType = item.GetType().Name;
+
+            var set = item as DataSet;
+            if (set != null)
             {
-                if (item is DataSet)
+                foreach (DataTable dataTable in set.Tables)
                 {
-                    foreach (DataTable dataTable in ((DataSet)item).Tables)
-                    {
-                        str = str + dataTable.TableName + ": " + dataTable.Rows.Count + " ";
-                        num1 += dataTable.Rows.Count;
-                    }
+                    str = str + dataTable.TableName + ": " + dataTable.Rows.Count + " ";
+                    num1 += dataTable.Rows.Count;
                 }
-                else if (item is DataTable)
+            }
+            else
+            {
+                var table = item as DataTable;
+                if (table != null)
                 {
-                    var dataTable = (DataTable)item;
-                    str = (string)(string.IsNullOrEmpty(dataTable.TableName) ? (object)"Items" : (object)dataTable.TableName) + (object)": " + (string)(object)dataTable.Rows.Count;
+                    var dataTable = table;
+                    str =
+                        (string)
+                            (string.IsNullOrEmpty(dataTable.TableName) ? (object) "Items" : (object) dataTable.TableName) +
+                        (object) ": " + (string) (object) dataTable.Rows.Count;
                     num1 = dataTable.Rows.Count;
                 }
                 else
                 {
-                    PropertyInfo property = item.GetType().GetProperty("Count");
-                    if (property == null)
-                        property = item.GetType().GetProperty("Length");
+                    var property = item.GetType().GetProperty("Count") ?? item.GetType().GetProperty("Length");
                     if (property != null)
                     {
                         num1 = Convert.ToInt32(property.GetValue(item, null));
@@ -233,10 +233,7 @@ namespace CraigLib.Data
                         str = item.ToString();
                 }
             }
-            catch
-            {
-                throw;
-            }
+
             if (ccstat != null)
             {
                 ccstat.Items = num1;
@@ -244,23 +241,18 @@ namespace CraigLib.Data
             }
             else if (!IsSegmented)
             {
-                _cstats.Items = num1;
-                _cstats.Info = str;
+                Cstats.Items = num1;
+                Cstats.Info = str;
             }
             else
             {
-                var num2 = 0;
-                foreach (var cacheCriteriaStats in _retrieved.Values)
-                {
-                    if (cacheCriteriaStats.Info != "Cleared")
-                        num2 += cacheCriteriaStats.Items;
-                }
-                _cstats.Info = "Segmented";
-                _cstats.Items = num2;
+                var num2 = _retrieved.Values.Where(cacheCriteriaStats => cacheCriteriaStats.Info != "Cleared").Sum(cacheCriteriaStats => cacheCriteriaStats.Items);
+                Cstats.Info = "Segmented";
+                Cstats.Items = num2;
             }
         }
 
-        private void DSImport(DataSet dsfrom, DataSet dsto)
+        private void DsImport(DataSet dsfrom, DataSet dsto)
         {
             dsto.EnforceConstraints = false;
             foreach (var key in dsfrom.ExtendedProperties.Keys)

@@ -67,7 +67,7 @@ namespace CraigLib.Data
 
         public static DatabaseSchema.DbColumnRow[] GetDbColumns(string tablename, string filter, string sort)
         {
-            var dbColumnRowArray = (DatabaseSchema.DbColumnRow[])null;
+            DatabaseSchema.DbColumnRow[] dbColumnRowArray;
             var dbTable = GetDbTable(tablename);
             if (dbTable != null)
             {
@@ -163,7 +163,6 @@ namespace CraigLib.Data
 
         public static DatabaseSchema.DbFKeyRow[] GetForeignKeys(string tablename)
         {
-            var dbFkeyRowArray = new DatabaseSchema.DbFKeyRow[0];
             var filterExpression = "DbFKeyTable=" + Expr.Value(tablename);
             var currentDbContent = GetCurrentDbContent();
             lock (currentDbContent)
@@ -172,7 +171,6 @@ namespace CraigLib.Data
 
         public static DatabaseSchema.DbFKeyRow[] GetReferencedForeignKeys(string tablename)
         {
-            var dbFkeyRowArray = new DatabaseSchema.DbFKeyRow[0];
             var filterExpression = "DbRefTable=" + Expr.Value(tablename);
             var currentDbContent = GetCurrentDbContent();
             lock (currentDbContent)
@@ -190,10 +188,10 @@ namespace CraigLib.Data
             }
         }
 
-        private static string ResolveMSSCheckCon(string dbExpr)
+        private static string ResolveMssCheckCon(string dbExpr)
         {
-            var num1 = dbExpr.IndexOf("[");
-            var num2 = dbExpr.IndexOf("]", num1 + 1);
+            var num1 = dbExpr.IndexOf("[", StringComparison.Ordinal);
+            var num2 = dbExpr.IndexOf("]", num1 + 1, StringComparison.Ordinal);
             var str1 = dbExpr.Substring(num1 + 1, num2 - num1 - 1);
             var num3 = 0;
             var str2 = string.Empty;
@@ -203,18 +201,18 @@ namespace CraigLib.Data
                 int num5;
                 do
                 {
-                    num3 = dbExpr.IndexOf("[" + str1 + "]", num3 + 1);
+                    num3 = dbExpr.IndexOf("[" + str1 + "]", num3 + 1, StringComparison.Ordinal);
                     if (num3 >= 0)
                     {
-                        var length = dbExpr.IndexOf("[" + str1 + "]", num3 + 1);
+                        var length = dbExpr.IndexOf("[" + str1 + "]", num3 + 1, StringComparison.Ordinal);
                         if (length < 0)
                             length = dbExpr.Length;
-                        num4 = dbExpr.IndexOf("'", num3 + 1);
-                        num5 = dbExpr.Substring(0, length).LastIndexOf("'");
+                        num4 = dbExpr.IndexOf("'", num3 + 1, StringComparison.Ordinal);
+                        num5 = dbExpr.Substring(0, length).LastIndexOf("'", StringComparison.Ordinal);
                         if (num4 < 0 && num5 < 0)
                         {
-                            num4 = dbExpr.IndexOf("(", num3 + 1);
-                            num5 = dbExpr.IndexOf(")", num4 + 1);
+                            num4 = dbExpr.IndexOf("(", num3 + 1, StringComparison.Ordinal);
+                            num5 = dbExpr.IndexOf(")", num4 + 1, StringComparison.Ordinal);
                         }
                     }
                     else
@@ -275,8 +273,8 @@ namespace CraigLib.Data
             var dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var dbColumnRow in dbSchema.DbColumn)
             {
-                var DbTable = dbColumnRow.DbTable.ToLower();
-                if (DbTable != str1)
+                var dbTable = dbColumnRow.DbTable.ToLower();
+                if (dbTable != str1)
                 {
                     dictionary.Clear();
                     using (DatabaseHelper.GetNewConnection(true))
@@ -284,7 +282,7 @@ namespace CraigLib.Data
                         using (var newCommand = DatabaseHelper.GetNewCommand("sys.sp_helpconstraint", conn))
                         {
                             newCommand.CommandType = CommandType.StoredProcedure;
-                            newCommand.Parameters.Add(DatabaseHelper.GetNewParameter("@objname", DbTable));
+                            newCommand.Parameters.Add(DatabaseHelper.GetNewParameter("@objname", dbTable));
                             newCommand.Parameters.Add(DatabaseHelper.GetNewParameter("@nomsg", "nomsg"));
                             using (var dbDataReader = newCommand.ExecuteReader())
                             {
@@ -295,9 +293,9 @@ namespace CraigLib.Data
                                         var str2 = (string)dbDataReader["constraint_type"];
                                         if (str2.StartsWith("CHECK on column"))
                                         {
-                                            var DbColumn = str2.Substring(16);
+                                            var dbColumn = str2.Substring(16);
                                             dbColumnRow.Label = dbDataReader["constraint_name"].ToString();
-                                            dbSchema.DbConstraint.AddDbConstraintRow(dbColumnRow.Label, "C", DbTable, DbColumn, "", ResolveMSSCheckCon(dbDataReader["constraint_keys"].ToString()));
+                                            dbSchema.DbConstraint.AddDbConstraintRow(dbColumnRow.Label, "C", dbTable, dbColumn, "", ResolveMssCheckCon(dbDataReader["constraint_keys"].ToString()));
                                         }
                                         else if (str2.StartsWith("DEFAULT on column"))
                                         {
@@ -307,13 +305,13 @@ namespace CraigLib.Data
                                                 dictionary[index] = "today";
                                         }
                                         else if (str2.StartsWith("PRIMARY KEY"))
-                                            dbSchema.ExtendedProperties["_" + DbTable + "_pk"] = dbDataReader["constraint_name"];
+                                            dbSchema.ExtendedProperties["_" + dbTable + "_pk"] = dbDataReader["constraint_name"];
                                     }
                                 }
                             }
                         }
                     }
-                    str1 = DbTable;
+                    str1 = dbTable;
                 }
                 if (dbColumnRow.IsDbPrecisionNull())
                     dbColumnRow.DbPrecision = 0;
@@ -347,7 +345,7 @@ namespace CraigLib.Data
                 return num;
             FillDbColumn(dbSchema, tableExpr, tableType, conn);
             var dbSyntax = DatabaseHelper.GetDbSyntax(conn);
-            var strArray = new string[11]
+            var strArray = new[]
       {
         "varchar",
         "varchar",
@@ -365,7 +363,7 @@ namespace CraigLib.Data
             switch (dbSyntax)
             {
                 case DatabaseType.MSSQL:
-                    list.AddRange(new string[11]
+                    list.AddRange(new[]
                     {
                         "varchar",
                         "varchar",
@@ -381,7 +379,7 @@ namespace CraigLib.Data
                     });
                     break;
                 case DatabaseType.ORACLE:
-                    list.AddRange(new string[11]
+                    list.AddRange(new[]
                     {
                         "varchar",
                         "varchar2",
@@ -419,7 +417,6 @@ namespace CraigLib.Data
                             if (dbColumnRow.DbType == "text" || dbColumnRow.DbType == "image")
                             {
                                 dbColumnRow.DbLen = int.MaxValue;
-                                break;
                             }
                             break;
                         case DatabaseType.ORACLE:
@@ -447,7 +444,6 @@ namespace CraigLib.Data
                                 if (dbColumnRow.DbDefault == "getdate")
                                 {
                                     dbColumnRow.DbDefault = "today";
-                                    break;
                                 }
                                 break;
                             case DatabaseType.ORACLE:
@@ -455,7 +451,6 @@ namespace CraigLib.Data
                                 if (dbColumnRow.DbDefault == "sysdate")
                                 {
                                     dbColumnRow.DbDefault = "today";
-                                    break;
                                 }
                                 break;
                         }
@@ -481,9 +476,9 @@ namespace CraigLib.Data
                     var dbDataReader = newCommand.ExecuteReader();
                     while (dbDataReader.Read())
                     {
-                        var DbTable = dbDataReader["DbTable"].ToString();
-                        var DbColumn = dbDataReader["DbColumn"].ToString();
-                        var byDbTableDbColumn = dbSchema.DbColumn.FindByDbTableDbColumn(DbTable, DbColumn);
+                        var dbTable = dbDataReader["DbTable"].ToString();
+                        var dbColumn = dbDataReader["DbColumn"].ToString();
+                        var byDbTableDbColumn = dbSchema.DbColumn.FindByDbTableDbColumn(dbTable, dbColumn);
                         if (byDbTableDbColumn != null)
                             byDbTableDbColumn.DbType = "identity";
                     }
@@ -499,7 +494,6 @@ namespace CraigLib.Data
             if (ApplicationConfig.IsSqlAzure)
                 return FillDbTableAzure(dbSchema, tableExpr, tableType, conn);
             var count = dbSchema.DbTable.Count;
-            var str1 = string.Empty;
             switch (DatabaseHelper.GetDbSyntax(conn))
             {
                 case DatabaseType.MSSQL:
@@ -516,8 +510,9 @@ namespace CraigLib.Data
                             newCommand.CommandType = CommandType.StoredProcedure;
                             var newParameter = DatabaseHelper.GetNewParameter("@objname", "");
                             newCommand.Parameters.Add(newParameter);
-                            foreach (DatabaseSchema.DbTableRow dbTableRow in dataRowArray)
+                            foreach (var dataRow in dataRowArray)
                             {
+                                var dbTableRow = (DatabaseSchema.DbTableRow) dataRow;
                                 newParameter.Value = dbTableRow.DbTable;
                                 using (var dbDataReader = newCommand.ExecuteReader())
                                 {
@@ -529,7 +524,6 @@ namespace CraigLib.Data
                             }
                         }
                         dbSchema.DbTable.AcceptChanges();
-                        break;
                     }
                     break;
                 case DatabaseType.ORACLE:
@@ -553,7 +547,6 @@ namespace CraigLib.Data
         public static int FillDbColumn(DatabaseSchema dbSchema, string tableExpr, string tableType, DbConnection conn)
         {
             var count = dbSchema.DbColumn.Count;
-            var str1 = string.Empty;
             switch (DatabaseHelper.GetDbSyntax(conn))
             {
                 case DatabaseType.MSSQL:
@@ -578,9 +571,8 @@ namespace CraigLib.Data
             return dbSchema.DbColumn.Count - count;
         }
 
-        private static int FillPrimaryKey(DatabaseSchema dbSchema, string tableExpr, DbConnection conn, int origCount)
+        private static void FillPrimaryKey(DatabaseSchema dbSchema, string tableExpr, DbConnection conn, int origCount)
         {
-            var num1 = 0;
             switch (DatabaseHelper.GetDbSyntax(conn))
             {
                 case DatabaseType.MSSQL:
@@ -597,14 +589,13 @@ namespace CraigLib.Data
                             var dbDataReader = newCommand.ExecuteReader();
                             while (dbDataReader.Read())
                             {
-                                var DbColumn = dbDataReader["column_name"].ToString();
+                                var dbColumn = dbDataReader["column_name"].ToString();
                                 var num2 = Convert.ToInt32(dbDataReader["key_seq"]);
-                                var byDbTableDbColumn = dbSchema.DbColumn.FindByDbTableDbColumn(dbTableRow.DbTable, DbColumn);
+                                var byDbTableDbColumn = dbSchema.DbColumn.FindByDbTableDbColumn(dbTableRow.DbTable, dbColumn);
                                 if (byDbTableDbColumn != null)
                                 {
                                     byDbTableDbColumn.DbPrimaryKey = 1;
                                     byDbTableDbColumn.DbSysGen = num2;
-                                    ++num1;
                                 }
                             }
                             dbDataReader.Close();
@@ -626,29 +617,26 @@ namespace CraigLib.Data
                         var dbDataReader = newCommand.ExecuteReader();
                         while (dbDataReader.Read())
                         {
-                            var DbTable = dbDataReader["table_name"].ToString();
-                            var DbColumn = dbDataReader["column_name"].ToString();
+                            var dbTable = dbDataReader["table_name"].ToString();
+                            var dbColumn = dbDataReader["column_name"].ToString();
                             var num2 = Convert.ToInt32(dbDataReader["position"]);
-                            var byDbTableDbColumn = dbSchema.DbColumn.FindByDbTableDbColumn(DbTable, DbColumn);
+                            var byDbTableDbColumn = dbSchema.DbColumn.FindByDbTableDbColumn(dbTable, dbColumn);
                             if (byDbTableDbColumn != null)
                             {
                                 byDbTableDbColumn.DbPrimaryKey = 1;
                                 byDbTableDbColumn.DbSysGen = num2;
-                                ++num1;
                             }
                         }
                         dbDataReader.Close();
                         break;
                     }
             }
-            return num1;
         }
 
-        private static int FillDefaultConstraint(DatabaseSchema dbSchema, string tableExpr, DbConnection conn)
+        private static void FillDefaultConstraint(DatabaseSchema dbSchema, string tableExpr, DbConnection conn)
         {
             using (var constraintDataTable = new DatabaseSchema.DbConstraintDataTable())
             {
-                var str = string.Empty;
                 switch (DatabaseHelper.GetDbSyntax(conn))
                 {
                     case DatabaseType.MSSQL:
@@ -664,7 +652,6 @@ namespace CraigLib.Data
                     if (byDbTableDbColumn != null)
                         byDbTableDbColumn.Label = dbConstraintRow.DbConstraint;
                 }
-                return constraintDataTable.Count;
             }
         }
 
@@ -673,7 +660,6 @@ namespace CraigLib.Data
             if (ApplicationConfig.IsSqlAzure)
                 return dbSchema.DbConstraint.Count;
             var count = dbSchema.DbConstraint.Count;
-            var str1 = string.Empty;
             switch (DatabaseHelper.GetDbSyntax(conn))
             {
                 case DatabaseType.MSSQL:
@@ -688,8 +674,8 @@ namespace CraigLib.Data
                         {
                             var dbConstraintRow = (DatabaseSchema.DbConstraintRow)enumerator1.Current;
                             var dbExpr = dbConstraintRow.DbExpr;
-                            var num1 = dbExpr.IndexOf("[");
-                            var num2 = dbExpr.IndexOf("]", num1 + 1);
+                            var num1 = dbExpr.IndexOf("[", StringComparison.Ordinal);
+                            var num2 = dbExpr.IndexOf("]", num1 + 1, StringComparison.Ordinal);
                             var str2 = dbExpr.Substring(num1 + 1, num2 - num1 - 1);
                             var num3 = 0;
                             var str3 = string.Empty;
@@ -699,18 +685,18 @@ namespace CraigLib.Data
                                 int num5;
                                 do
                                 {
-                                    num3 = dbExpr.IndexOf("[" + str2 + "]", num3 + 1);
+                                    num3 = dbExpr.IndexOf("[" + str2 + "]", num3 + 1, StringComparison.Ordinal);
                                     if (num3 >= 0)
                                     {
-                                        var length = dbExpr.IndexOf("[" + str2 + "]", num3 + 1);
+                                        var length = dbExpr.IndexOf("[" + str2 + "]", num3 + 1, StringComparison.Ordinal);
                                         if (length < 0)
                                             length = dbExpr.Length;
-                                        num4 = dbExpr.IndexOf("'", num3 + 1);
-                                        num5 = dbExpr.Substring(0, length).LastIndexOf("'");
+                                        num4 = dbExpr.IndexOf("'", num3 + 1, StringComparison.Ordinal);
+                                        num5 = dbExpr.Substring(0, length).LastIndexOf("'", StringComparison.Ordinal);
                                         if (num4 < 0 && num5 < 0)
                                         {
-                                            num4 = dbExpr.IndexOf("(", num3 + 1);
-                                            num5 = dbExpr.IndexOf(")", num4 + 1);
+                                            num4 = dbExpr.IndexOf("(", num3 + 1, StringComparison.Ordinal);
+                                            num5 = dbExpr.IndexOf(")", num4 + 1, StringComparison.Ordinal);
                                         }
                                     }
                                     else
@@ -744,8 +730,8 @@ namespace CraigLib.Data
                     foreach (DatabaseSchema.DbConstraintRow dbConstraintRow in (InternalDataCollectionBase)dbSchema.DbConstraint.Rows)
                     {
                         var dbExpr = dbConstraintRow.DbExpr;
-                        var num1 = dbExpr.IndexOf("(");
-                        var num2 = dbExpr.LastIndexOf(")");
+                        var num1 = dbExpr.IndexOf("(", StringComparison.Ordinal);
+                        var num2 = dbExpr.LastIndexOf(")", StringComparison.Ordinal);
                         if (num1 >= 0 && num2 > num1)
                         {
                             var str2 = dbExpr.Substring(num1 + 1, num2 - num1 - 1).Replace("''", "^^").Replace("'", string.Empty).Replace("^^", "'");
@@ -776,7 +762,6 @@ namespace CraigLib.Data
         public static int FillForeignKey(DatabaseSchema dbSchema, string tableExpr, DbConnection conn)
         {
             var count = dbSchema.DbFKey.Count;
-            var str = string.Empty;
             switch (DatabaseHelper.GetDbSyntax(conn))
             {
                 case DatabaseType.MSSQL:
@@ -824,9 +809,9 @@ namespace CraigLib.Data
                         {
                             while (dbDataReader.Read())
                             {
-                                var DbIndex = (string)dbDataReader["index_name"];
-                                if (!DbIndex.StartsWith("pk_", StringComparison.OrdinalIgnoreCase))
-                                    dbSchema.DbIndex.AddDbIndexRow(DbIndex, dbTableRow.DbTable, 1, dbDataReader["index_keys"].ToString().ToLower().Replace(", ", ","));
+                                var dbIndex = (string)dbDataReader["index_name"];
+                                if (!dbIndex.StartsWith("pk_", StringComparison.OrdinalIgnoreCase))
+                                    dbSchema.DbIndex.AddDbIndexRow(dbIndex, dbTableRow.DbTable, 1, dbDataReader["index_keys"].ToString().ToLower().Replace(", ", ","));
                             }
                         }
                     }
@@ -840,7 +825,6 @@ namespace CraigLib.Data
             if (ApplicationConfig.IsSqlAzure)
                 return FillIndexAzure(dbSchema, tableExpr, conn);
             var count = dbSchema.DbIndex.Count;
-            var str = string.Empty;
             switch (DatabaseHelper.GetDbSyntax(conn))
             {
                 case DatabaseType.MSSQL:
@@ -858,8 +842,9 @@ namespace CraigLib.Data
             }
             var dataRowArray = dbSchema.DbIndex.Select(string.Empty, "DbIndex ASC, DbIndexColSeq ASC");
             var dbIndexRow1 = (DatabaseSchema.DbIndexRow)null;
-            foreach (DatabaseSchema.DbIndexRow dbIndexRow2 in dataRowArray)
+            foreach (var dataRow in dataRowArray)
             {
+                var dbIndexRow2 = (DatabaseSchema.DbIndexRow) dataRow;
                 if (dbIndexRow1 == null || dbIndexRow1.DbIndex != dbIndexRow2.DbIndex || dbIndexRow1.DbIndexTable != dbIndexRow2.DbIndexTable)
                 {
                     dbIndexRow1 = dbIndexRow2;
@@ -911,14 +896,14 @@ namespace CraigLib.Data
         {
             if (reader.IsDBNull(ordinal))
                 return new Decimal?();
-            return new Decimal?(reader.GetDecimal(ordinal));
+            return reader.GetDecimal(ordinal);
         }
 
         public static DateTime? GetNullableDateTime(this DbDataReader reader, int ordinal)
         {
             if (reader.IsDBNull(ordinal))
                 return new DateTime?();
-            return new DateTime?(reader.GetDateTime(ordinal));
+            return reader.GetDateTime(ordinal);
         }
 
         public static string GetNullableString(this DbDataReader reader, int ordinal)

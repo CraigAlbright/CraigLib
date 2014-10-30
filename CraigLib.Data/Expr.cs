@@ -47,6 +47,7 @@ namespace CraigLib.Data
                 else
                     list.Add(Value(obj));
             }
+            // ReSharper disable once CoVariantArrayConversion
             return string.Format(format, list.ToArray());
         }
 
@@ -147,7 +148,7 @@ namespace CraigLib.Data
         public static int CharCount(string strSource, string strToCount)
         {
             var num = 0;
-            for (var index = strSource.IndexOf(strToCount); index != -1; index = strSource.IndexOf(strToCount))
+            for (var index = strSource.IndexOf(strToCount, StringComparison.Ordinal); index != -1; index = strSource.IndexOf(strToCount, StringComparison.Ordinal))
             {
                 ++num;
                 strSource = strSource.Substring(index + 1);
@@ -155,11 +156,9 @@ namespace CraigLib.Data
             return num;
         }
 
-        public static int CharCount(string strSource, string strToCount, bool IgnoreCase)
+        public static int CharCount(string strSource, string strToCount, bool ignoreCase)
         {
-            if (!IgnoreCase)
-                return CharCount(strSource, strToCount);
-            return CharCount(strSource.ToLower(), strToCount.ToLower());
+            return !ignoreCase ? CharCount(strSource, strToCount) : CharCount(strSource.ToLower(), strToCount.ToLower());
         }
 
         public static string ToSingleSpace(string strParam)
@@ -174,7 +173,7 @@ namespace CraigLib.Data
         {
             var length = strText.IndexOf(strFind, StringComparison.Ordinal);
             var str = "";
-            for (; length != -1; length = strText.IndexOf(strFind))
+            for (; length != -1; length = strText.IndexOf(strFind, StringComparison.Ordinal))
             {
                 str = str + strText.Substring(0, length) + strReplace;
                 strText = strText.Substring(length + strFind.Length);
@@ -279,7 +278,7 @@ namespace CraigLib.Data
             if (IsNullOrEmpty(o))
                 return true;
             if (IsNumericValue(o))
-                return Convert.ToDouble(o) == 0.0;
+                return Math.Abs(Convert.ToDouble(o)) < Double.Epsilon;
             return false;
         }
 
@@ -325,13 +324,13 @@ namespace CraigLib.Data
             return Regex.Replace(xmlString, "(?<DATE>\\d{4}-\\d{2}-\\d{2})(?<TIME>T(\\d{2}:\\d{2}:\\d{2}.\\d{7}|\\d{2}:\\d{2}:\\d{2}))(?<TZ>[+-]\\d{2}:\\d{2})", "${DATE}${TIME}");
         }
 
-        public static StringDictionary ParseArguments(string[] Args)
+        public static StringDictionary ParseArguments(string[] args)
         {
             var stringDictionary = new StringDictionary();
             var regex1 = new Regex("^-{1,2}|^/|=", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             var regex2 = new Regex("^['\"]?(.*?)['\"]?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             var key1 = (string)null;
-            foreach (var input in Args)
+            foreach (var input in args)
             {
                 var strArray = regex1.Split(input, 3);
                 switch (strArray.Length)
@@ -345,7 +344,6 @@ namespace CraigLib.Data
                                 stringDictionary.Add(key1, strArray[0]);
                             }
                             key1 = null;
-                            break;
                         }
                         break;
                     case 2:
@@ -400,7 +398,7 @@ namespace CraigLib.Data
         public static int ParseColumnClause(string columnClause, List<string> columnList)
         {
             columnList.Clear();
-            var strArray = columnClause.Split(new char[1]
+            var strArray = columnClause.Split(new[]
       {
         ','
       });
@@ -408,10 +406,10 @@ namespace CraigLib.Data
             var str1 = string.Empty;
             foreach (var str2 in strArray)
             {
-                num = num + (str2.Split(new char[1]
+                num = num + (str2.Split(new[]
         {
           '('
-        }).Length - 1) - (str2.Split(new char[1]
+        }).Length - 1) - (str2.Split(new[]
         {
           ')'
         }).Length - 1);
@@ -433,6 +431,7 @@ namespace CraigLib.Data
 
         public static bool ParseSelectSql(string selectSql, ref string select, ref string from, ref string where, ref string groupBy, ref string having, ref string orderBy)
         {
+            if (@select == null) throw new ArgumentNullException("select");
             selectSql = selectSql.Replace("\n", " ").Replace("\r", " ");
             select = from = where = groupBy = having = orderBy = string.Empty;
             var startIndex = selectSql.ToUpper().IndexOf("SELECT ", StringComparison.Ordinal);
@@ -474,10 +473,9 @@ namespace CraigLib.Data
 
         public static object ConvertToType(string value, Type type)
         {
-            var obj = (object)null;
             if (string.IsNullOrEmpty(value))
             {
-                return obj;
+                return null;
             }
             DateTime result1;
             int result2;

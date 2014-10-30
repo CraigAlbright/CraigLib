@@ -46,9 +46,6 @@ namespace CraigLib.Data
                 xmlDocument.Load(stringReader);
                 LoadXml(xmlDocument.DocumentElement);
             }
-            catch
-            {
-            }
             finally
             {
                 stringReader.Close();

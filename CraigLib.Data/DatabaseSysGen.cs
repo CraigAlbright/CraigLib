@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 
@@ -11,7 +12,7 @@ namespace CraigLib.Data
         public static long SetSurrogate(DataTable dtUpdate, string tableName)
         {
             var num1 = 0L;
-            var index1 = "surrogate";
+            const string index1 = "surrogate";
             var dataRowArray = dtUpdate.Select(null, null, DataViewRowState.Added);
             if (dataRowArray.Length > 0 && DatabaseContent.GetDbColumn(tableName, index1) != null)
             {
@@ -42,7 +43,12 @@ namespace CraigLib.Data
                     var dataRowArray = dtUpdate.Select(filterExpression, null, DataViewRowState.Added);
                     if (dataRowArray.Length != 0)
                     {
-                        var obj = dbColumnRow.DbType.IndexOf("char") >= 0 || dbColumnRow.DbType.IndexOf("text") >= 0 ? dbColumnRow.DbDefault : (dbColumnRow.DbType.IndexOf("date") < 0 ? Convert.ToInt32(dbColumnRow.DbDefault) : (object)DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified));
+                        var obj = dbColumnRow.DbType.IndexOf("char", StringComparison.Ordinal) >= 0 ||
+                                  dbColumnRow.DbType.IndexOf("text", StringComparison.Ordinal) >= 0
+                            ? dbColumnRow.DbDefault
+                            : (dbColumnRow.DbType.IndexOf("date", StringComparison.Ordinal) < 0
+                                ? Convert.ToInt32(dbColumnRow.DbDefault)
+                                : (object) DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified));
                         foreach (var dataRow in dataRowArray)
                         {
                             dataRow[column] = obj;
@@ -123,7 +129,10 @@ namespace CraigLib.Data
                         foreach (var dataRow in list)
                         {
                             ++num;
-                            dataRow[column] = dbColumnRow.DbType.IndexOf("char") >= 0 || dbColumnRow.DbType.IndexOf("text") >= 0 ? num.ToString() : (object)num;
+                            dataRow[column] = dbColumnRow.DbType.IndexOf("char", StringComparison.Ordinal) >= 0 ||
+                                              dbColumnRow.DbType.IndexOf("text", StringComparison.Ordinal) >= 0
+                                ? num.ToString(CultureInfo.InvariantCulture)
+                                : (object) num;
                             dataRow.SetColumnError(column, "");
                         }
                     }
@@ -136,19 +145,23 @@ namespace CraigLib.Data
             var flag = false;
             if (Expr.IsNull(colValue))
                 flag = true;
-            else if (colValue is string)
+            else
             {
-                var strNumber = (string)colValue;
-                if (Expr.IsInteger(strNumber))
+                var s = colValue as string;
+                if (s != null)
                 {
-                    if (Convert.ToDouble(strNumber) <= 0.0 || strNumber.StartsWith("0"))
+                    var strNumber = s;
+                    if (Expr.IsInteger(strNumber))
+                    {
+                        if (Convert.ToDouble(strNumber) <= 0.0 || strNumber.StartsWith("0"))
+                            flag = true;
+                    }
+                    else if (strNumber.Length == 0)
                         flag = true;
                 }
-                else if (strNumber.Length == 0)
+                else if (Expr.IsNumericValue(colValue) && Convert.ToDouble(colValue) <= 0.0)
                     flag = true;
             }
-            else if (Expr.IsNumericValue(colValue) && Convert.ToDouble(colValue) <= 0.0)
-                flag = true;
             return flag;
         }
 
@@ -227,10 +240,8 @@ namespace CraigLib.Data
                                     if (obj != null)
                                     {
                                         str = obj.ToString();
-                                        break;
                                     }
-                                    else
-                                        break;
+                                    break;
                                 }
                             }
                         }
@@ -244,24 +255,6 @@ namespace CraigLib.Data
                     }
                 }
             }
-            return str;
-        }
-
-        
-        private static string GetMaxNumberSql(string tablename, string columnname, string exprcol, string expr)
-        {
-            var str = "";
-            switch (DatabaseHelper.DbSyntax)
-            {
-                case DatabaseType.MSSQL:
-                    str = "SELECT max(replicate('0',16 -len(" + columnname + "))+" + columnname + ") FROM " + tablename + " WHERE " + columnname + "<'A' AND " + columnname + " not like '%[A-Z-a-z]%' ";
-                    break;
-                case DatabaseType.ORACLE:
-                    str = " SELECT max(lpad(" + columnname + ",16 -length(" + columnname + "),'0')) FROM " + tablename + " WHERE ltrim(rtrim(translate(" + columnname + ", '0123456789', '          '))) IS NULL AND " + columnname + " NOT LIKE '% %'  ";
-                    break;
-            }
-            if (exprcol.Length > 0 && expr.Length > 0)
-                str = str + " AND " + exprcol + "=" + DatabaseHelper.SqlChar(expr);
             return str;
         }
     }

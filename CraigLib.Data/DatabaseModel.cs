@@ -13,7 +13,7 @@ namespace CraigLib.Data
         {
             if (_dbSchema == null || _cacheChanged)
             {
-                _dbSchema = (DatabaseSchema)CacheMachine.Get("DatabaseModel", new string[4]
+                _dbSchema = (DatabaseSchema)CacheMachine.Get("DatabaseModel", new[]
         {
           "dbtable",
           "dbview",

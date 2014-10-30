@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Principal;
 
 namespace CraigLib.Data
 {
@@ -14,25 +12,27 @@ namespace CraigLib.Data
     {
         public static void WriteToServer(DbTransaction tran, DataRow[] rows)
         {
-            SqlBulkCopy bc = new SqlBulkCopy((SqlConnection)tran.Connection, SqlBulkCopyOptions.CheckConstraints, (SqlTransaction)tran);
-            bc.BulkCopyTimeout = ApplicationConfig.DbCommandTimeout;
+            var bc = new SqlBulkCopy((SqlConnection)tran.Connection, SqlBulkCopyOptions.CheckConstraints, (SqlTransaction)tran)
+            {
+                BulkCopyTimeout = ApplicationConfig.DbCommandTimeout
+            };
             if (rows.Length == 0)
                 return;
-            DataTable table = rows[0].Table;
-            bool[] flagArray = BulkCopy.MapColumns(bc, table);
+            var table = rows[0].Table;
+            var flagArray = MapColumns(bc, table);
             if (flagArray[0])
             {
-                var windowsIdentity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                var windowsIdentity = WindowsIdentity.GetCurrent();
                 if (windowsIdentity != null)
                     table.Columns.Add("creationname", typeof(string), Expr.Value(windowsIdentity.Name));
                 bc.ColumnMappings.Add("creationname", "creationname");
             }
             if (flagArray[1])
             {
-                table.Columns.Add("creationdate", typeof(DateTime), Expr.Value((object)DatabaseHelper.GetServerDate()));
+                table.Columns.Add("creationdate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate()));
                 bc.ColumnMappings.Add("creationdate", "creationdate");
             }
-            bc.DestinationTableName = DataSetHelper.GetDbTable(table);
+            bc.DestinationTableName = table.GetDbTable();
             bc.WriteToServer(rows);
             bc.Close();
             if (flagArray[0])
@@ -44,27 +44,27 @@ namespace CraigLib.Data
 
         private static bool[] MapColumns(SqlBulkCopy bc, DataTable dt)
         {
-            string dbTable = DataSetHelper.GetDbTable(dt);
-            bool[] flagArray = new bool[2]
+            var dbTable = dt.GetDbTable();
+            var flagArray = new[]
       {
         false,
         false
       };
-            foreach (DatabaseSchema.DbColumnRow dbColumnRow in DatabaseModel.GetDbColumns(dbTable, "", ""))
+            foreach (var dbColumnRow in DatabaseModel.GetDbColumns(dbTable, "", ""))
             {
                 if (dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase))
                     flagArray[0] = true;
                 else if (dbColumnRow.DbColumn.Equals("creationdate", StringComparison.OrdinalIgnoreCase))
                     flagArray[1] = true;
-                foreach (DataColumn dc in (InternalDataCollectionBase)dt.Columns)
+                foreach (DataColumn dc in dt.Columns)
                 {
                     if (dc.ColumnName.Equals("creationname", StringComparison.OrdinalIgnoreCase))
                         flagArray[0] = false;
                     else if (dc.ColumnName.Equals("creationdate", StringComparison.OrdinalIgnoreCase))
                         flagArray[1] = false;
-                    if (dbColumnRow.DbColumn.Equals(DataSetHelper.GetDbColumn(dc), StringComparison.OrdinalIgnoreCase))
+                    if (dbColumnRow.DbColumn.Equals(dc.GetDbColumn(), StringComparison.OrdinalIgnoreCase))
                     {
-                        bc.ColumnMappings.Add(dc.ColumnName, DataSetHelper.GetDbColumn(dc));
+                        bc.ColumnMappings.Add(dc.ColumnName, dc.GetDbColumn());
                         break;
                     }
                 }
@@ -76,47 +76,47 @@ namespace CraigLib.Data
         {
             if (rows.Length == 0)
                 return false;
-            DataTable table = rows[0].Table;
-            string dbTable = DataSetHelper.GetDbTable(table);
-            DataRowState rowState = rows[0].RowState;
-            Type type1 = tran.GetType();
-            Type type2 = type1.FullName == "Oracle.DataAccess.Client.OracleTransaction" ? type1.Assembly.GetType("Oracle.DataAccess.Client.OracleBulkCopy") : (Type)null;
-            if (!(tran is SqlTransaction) && !(type2 != (Type)null))
+            var table = rows[0].Table;
+            var dbTable = table.GetDbTable();
+            var rowState = rows[0].RowState;
+            var type1 = tran.GetType();
+            var type2 = type1.FullName == "Oracle.DataAccess.Client.OracleTransaction" ? type1.Assembly.GetType("Oracle.DataAccess.Client.OracleBulkCopy") : null;
+            if (!(tran is SqlTransaction) && !(type2 != null))
                 return false;
-            DbConnection conn = tran is SqlTransaction ? tran.Connection : DatabaseHelper.GetNewConnection(true);
+            var conn = tran is SqlTransaction ? tran.Connection : DatabaseHelper.GetNewConnection(true);
             try
             {
-                DatabaseSchema.DbColumnRow[] dbColumns = DatabaseContent.GetDbColumns(dbTable, "", "DbSeq");
-                SqlTransaction externalTransaction = tran as SqlTransaction;
+                var dbColumns = DatabaseContent.GetDbColumns(dbTable, "", "DbSeq");
+                var externalTransaction = tran as SqlTransaction;
                 if (externalTransaction != null)
                 {
-                    SqlBulkCopy sqlBulkCopy = new SqlBulkCopy((SqlConnection)conn, SqlBulkCopyOptions.CheckConstraints, externalTransaction)
+                    var sqlBulkCopy = new SqlBulkCopy((SqlConnection)conn, SqlBulkCopyOptions.CheckConstraints, externalTransaction)
                     {
                         DestinationTableName = dbTable,
                         BulkCopyTimeout = ApplicationConfig.DbCommandTimeout
                     };
-                    IEnumerable<DataColumn> addedColumns = BulkCopy.MapColumns((object)sqlBulkCopy, table, (IEnumerable<DatabaseSchema.DbColumnRow>)dbColumns, rowState);
+                    var addedColumns = MapColumns(sqlBulkCopy, table, dbColumns, rowState);
                     sqlBulkCopy.WriteToServer(rows);
                     sqlBulkCopy.Close();
-                    BulkCopy.UnmapColumns(table, addedColumns);
+                    UnmapColumns(table, addedColumns);
                 }
-                else if (type2 != (Type)null)
+                else
                 {
-                    object instance = Activator.CreateInstance(type2, new object[1]
-          {
-            (object) conn
-          });
-                    type2.GetProperty("DestinationTableName").SetValue(instance, (object)dbTable, (object[])null);
-                    type2.GetProperty("BulkCopyTimeout").SetValue(instance, (object)ApplicationConfig.DbCommandTimeout, (object[])null);
-                    BulkCopy.OracleRowsReader oracleRowsReader = new BulkCopy.OracleRowsReader(conn, dbTable, rows);
-                    type2.GetMethod("WriteToServer", new Type[1]
-          {
-            typeof (IDataReader)
-          }).Invoke(instance, new object[1]
-          {
-            (object) oracleRowsReader
-          });
-                    type2.GetMethod("Close").Invoke(instance, (object[])null);
+                    var instance = Activator.CreateInstance(type2, new object[]
+                    {
+                        conn
+                    });
+                    type2.GetProperty("DestinationTableName").SetValue(instance, dbTable, null);
+                    type2.GetProperty("BulkCopyTimeout").SetValue(instance, ApplicationConfig.DbCommandTimeout, null);
+                    var oracleRowsReader = new OracleRowsReader(conn, dbTable, rows);
+                    type2.GetMethod("WriteToServer", new[]
+                    {
+                        typeof (IDataReader)
+                    }).Invoke(instance, new object[]
+                    {
+                        oracleRowsReader
+                    });
+                    type2.GetMethod("Close").Invoke(instance, null);
                 }
             }
             catch (TargetInvocationException ex)
@@ -127,7 +127,7 @@ namespace CraigLib.Data
             }
             finally
             {
-                if (type2 != (Type)null)
+                if (type2 != null)
                     conn.Close();
             }
             return true;
@@ -135,16 +135,16 @@ namespace CraigLib.Data
 
         private static IEnumerable<DataColumn> MapColumns(object bc, DataTable dt, IEnumerable<DatabaseSchema.DbColumnRow> cols, DataRowState rowState)
         {
-            object obj = bc.GetType().GetProperty("ColumnMappings").GetValue(bc, new object[0]);
-            MethodInfo method = obj.GetType().GetMethod("Add", new Type[2]
+            var obj = bc.GetType().GetProperty("ColumnMappings").GetValue(bc, new object[0]);
+            var method = obj.GetType().GetMethod("Add", new[]
       {
         typeof (string),
         typeof (string)
       });
-            List<DataColumn> list = new List<DataColumn>();
-            foreach (DatabaseSchema.DbColumnRow dbColumnRow in cols)
+            var list = new List<DataColumn>();
+            foreach (var dbColumnRow in cols)
             {
-                DataColumn dc = dt.Columns[dbColumnRow.DbColumn];
+                var dc = dt.Columns[dbColumnRow.DbColumn];
                 if (rowState != DataRowState.Deleted || dbColumnRow.DbPrimaryKey == 1)
                 {
                     if (dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) || dbColumnRow.DbColumn.Equals("creationdate", StringComparison.OrdinalIgnoreCase))
@@ -153,9 +153,9 @@ namespace CraigLib.Data
                         {
                             if (rowState == DataRowState.Added && dc == null)
                             {
-                                var windowsIdentity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                                var windowsIdentity = WindowsIdentity.GetCurrent();
                                 if (windowsIdentity != null)
-                                    list.Add(dc = dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("creationname", typeof(string), Expr.Value(windowsIdentity.Name)) : dt.Columns.Add("creationdate", typeof(DateTime), Expr.Value((object)DatabaseHelper.GetServerDate())));
+                                    list.Add(dc = dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("creationname", typeof(string), Expr.Value(windowsIdentity.Name)) : dt.Columns.Add("creationdate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate())));
                             }
                         }
                         else
@@ -167,45 +167,44 @@ namespace CraigLib.Data
                         {
                             if (rowState == DataRowState.Modified && dc == null)
                             {
-                                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                                var identity = WindowsIdentity.GetCurrent();
                                 if (identity != null)
-                                    list.Add(dc = dbColumnRow.DbColumn.Equals("revisionname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("revisionname", typeof(string), Expr.Value(identity.Name)) : dt.Columns.Add("revisiondate", typeof(DateTime), Expr.Value((object)DatabaseHelper.GetServerDate())));
+                                    list.Add(dc = dbColumnRow.DbColumn.Equals("revisionname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("revisionname", typeof(string), Expr.Value(identity.Name)) : dt.Columns.Add("revisiondate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate())));
                             }
                         }
                         else
                             continue;
                     }
                     if (dc != null)
-                        method.Invoke(obj, new object[2]
+                        method.Invoke(obj, new object[]
             {
-              (object) dc.ColumnName,
-              (object) DataSetHelper.GetDbColumn(dc)
+              dc.ColumnName,
+              dc.GetDbColumn()
             });
                 }
             }
-            return (IEnumerable<DataColumn>)list;
+            return list;
         }
 
         private static void UnmapColumns(DataTable dt, IEnumerable<DataColumn> addedColumns)
         {
-            foreach (DataColumn column in addedColumns)
+            foreach (var column in addedColumns)
                 dt.Columns.Remove(column);
         }
 
-        private class OracleRowsReader : IDataReader, IDisposable, IDataRecord
+        private class OracleRowsReader : IDataReader
         {
             private readonly Dictionary<string, int> _mapping = new Dictionary<string, int>();
             private bool _open = true;
             private int _rowPos = -1;
             private readonly DataTable _schemaTable;
             private readonly DataRow[] _rows;
-            private readonly DataTable _rowTable;
 
             public object this[string name]
             {
                 get
                 {
-                    return this[this.GetOrdinal(name)];
+                    return this[GetOrdinal(name)];
                 }
             }
 
@@ -213,7 +212,7 @@ namespace CraigLib.Data
             {
                 get
                 {
-                    return this.GetRowValue(i);
+                    return GetRowValue(i);
                 }
             }
 
@@ -229,7 +228,7 @@ namespace CraigLib.Data
             {
                 get
                 {
-                    return !this._open;
+                    return !_open;
                 }
             }
 
@@ -237,7 +236,7 @@ namespace CraigLib.Data
             {
                 get
                 {
-                    return this._rows.Length;
+                    return _rows.Length;
                 }
             }
 
@@ -245,57 +244,57 @@ namespace CraigLib.Data
             {
                 get
                 {
-                    return this._schemaTable.Columns.Count;
+                    return _schemaTable.Columns.Count;
                 }
             }
 
             public OracleRowsReader(DbConnection conn, string dbTable, DataRow[] rows)
             {
-                using (DbDataAdapter newDataAdapter = DatabaseHelper.GetNewDataAdapter("SELECT * FROM " + dbTable + " WHERE 0=1", conn))
+                using (var newDataAdapter = DatabaseHelper.GetNewDataAdapter("SELECT * FROM " + dbTable + " WHERE 0=1", conn))
                 {
-                    this._schemaTable = new DataTable(dbTable);
-                    newDataAdapter.Fill(this._schemaTable);
+                    _schemaTable = new DataTable(dbTable);
+                    newDataAdapter.Fill(_schemaTable);
                 }
-                this._rows = rows;
-                this._rowTable = this._rows.Length > 0 ? this._rows[0].Table : new DataTable(dbTable);
-                foreach (DataColumn dc in (InternalDataCollectionBase)this._rowTable.Columns)
-                    this._mapping[DataSetHelper.GetDbColumnOrDefault(dc).ToUpper()] = dc.Ordinal;
+                _rows = rows;
+                DataTable rowTable = _rows.Length > 0 ? _rows[0].Table : new DataTable(dbTable);
+                foreach (DataColumn dc in rowTable.Columns)
+                    _mapping[dc.GetDbColumnOrDefault().ToUpper()] = dc.Ordinal;
             }
 
             public void Close()
             {
-                this._open = false;
+                _open = false;
             }
 
             public DataTable GetSchemaTable()
             {
-                return this._schemaTable;
+                return _schemaTable;
             }
 
             public bool NextResult()
             {
-                return this._rowPos < this._rows.Length - 1;
+                return _rowPos < _rows.Length - 1;
             }
 
             public bool Read()
             {
-                return ++this._rowPos < this._rows.Length;
+                return ++_rowPos < _rows.Length;
             }
 
             public void Dispose()
             {
-                this.Dispose(true);
-                GC.SuppressFinalize((object)this);
+                Dispose(true);
+                GC.SuppressFinalize(this);
             }
 
             public bool GetBoolean(int i)
             {
-                return (bool)this.GetRowValue(i);
+                return (bool)GetRowValue(i);
             }
 
             public byte GetByte(int i)
             {
-                return (byte)this.GetRowValue(i);
+                return (byte)GetRowValue(i);
             }
 
             public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
@@ -305,7 +304,7 @@ namespace CraigLib.Data
 
             public char GetChar(int i)
             {
-                return (char)this.GetRowValue(i);
+                return (char)GetRowValue(i);
             }
 
             public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
@@ -315,85 +314,85 @@ namespace CraigLib.Data
 
             public IDataReader GetData(int i)
             {
-                return (IDataReader)null;
+                return null;
             }
 
             public string GetDataTypeName(int i)
             {
-                return this._schemaTable.Columns[i].DataType.Name;
+                return _schemaTable.Columns[i].DataType.Name;
             }
 
             public DateTime GetDateTime(int i)
             {
-                return (DateTime)this.GetRowValue(i);
+                return (DateTime)GetRowValue(i);
             }
 
             public Decimal GetDecimal(int i)
             {
-                return (Decimal)this.GetRowValue(i);
+                return (Decimal)GetRowValue(i);
             }
 
             public double GetDouble(int i)
             {
-                return (double)this.GetRowValue(i);
+                return (double)GetRowValue(i);
             }
 
             public Type GetFieldType(int i)
             {
-                return this._schemaTable.Columns[i].DataType;
+                return _schemaTable.Columns[i].DataType;
             }
 
             public float GetFloat(int i)
             {
-                return (float)this.GetRowValue(i);
+                return (float)GetRowValue(i);
             }
 
             public Guid GetGuid(int i)
             {
-                return (Guid)this.GetRowValue(i);
+                return (Guid)GetRowValue(i);
             }
 
             public short GetInt16(int i)
             {
-                return (short)this.GetRowValue(i);
+                return (short)GetRowValue(i);
             }
 
             public int GetInt32(int i)
             {
-                return (int)this.GetRowValue(i);
+                return (int)GetRowValue(i);
             }
 
             public long GetInt64(int i)
             {
-                return (long)this.GetRowValue(i);
+                return (long)GetRowValue(i);
             }
 
             public string GetName(int i)
             {
-                return this._schemaTable.Columns[i].ColumnName;
+                return _schemaTable.Columns[i].ColumnName;
             }
 
             public int GetOrdinal(string name)
             {
-                return this._schemaTable.Columns[name].Ordinal;
+                return _schemaTable.Columns[name].Ordinal;
             }
 
             public string GetString(int i)
             {
-                return (string)this.GetRowValue(i);
+                return (string)GetRowValue(i);
             }
 
             public object GetValue(int i)
             {
-                return this.GetRowValue(i);
+                return GetRowValue(i);
             }
 
             public int GetValues(object[] values)
             {
-                int index = 0;
-                for (int i = 0; index < values.Length && i < this._schemaTable.Columns.Count; ++i)
+                var index = 0;
+                for (var i = 0; index < values.Length && i < _schemaTable.Columns.Count; ++i)
                 {
-                    values[index] = this.GetRowValue(i);
+                    values[index] = GetRowValue(i);
                     ++index;
                 }
                 return index;
@@ -401,7 +400,7 @@ namespace CraigLib.Data
 
             public bool IsDBNull(int i)
             {
-                return this.GetRowValue(i) == DBNull.Value;
+                return GetRowValue(i) == DBNull.Value;
             }
 
             private void Dispose(bool disposing)
@@ -410,22 +409,21 @@ namespace CraigLib.Data
                     return;
                 try
                 {
-                    this.Close();
-                    this._schemaTable.Dispose();
+                    Close();
+                    _schemaTable.Dispose();
                 }
                 catch (Exception ex)
                 {
-                    throw new SystemException("An exception of type " + (object)ex.GetType() + " was encountered while closing the OracleRowsReader.");
+                    throw new SystemException("An exception of type " + ex.GetType() + " was encountered while closing the OracleRowsReader.");
                 }
             }
 
             private object GetRowValue(int i)
             {
-                string columnName = this._schemaTable.Columns[i].ColumnName;
-                if (!this._mapping.ContainsKey(columnName))
-                    return (object)DBNull.Value;
-                else
-                    return this._rows[this._rowPos][this._mapping[columnName]];
+                var columnName = _schemaTable.Columns[i].ColumnName;
+                if (!_mapping.ContainsKey(columnName))
+                    return DBNull.Value;
+                return _rows[_rowPos][_mapping[columnName]];
             }
         }
     }

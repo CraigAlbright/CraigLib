@@ -64,10 +64,7 @@ namespace CraigLib.Data
                 xmlDocument.Load(stringReader);
                 LoadXml(xmlDocument.DocumentElement);
             }
-            catch
-            {
-            }
-            finally
+           finally
             {
                 stringReader.Close();
             }
@@ -129,7 +126,7 @@ namespace CraigLib.Data
 
         public int AddDbCriteria(string logOperator, string openParen, string dbTable, string dbColumn, string relOperator, string dbValue, string closeParen)
         {
-            return AddDbCriteria(new DatabaseCriteria[1]
+            return AddDbCriteria(new[]
       {
         new DatabaseCriteria(logOperator, openParen, dbTable, dbColumn, relOperator, dbValue, closeParen)
       });
@@ -148,7 +145,7 @@ namespace CraigLib.Data
             newDatabaseCriteria[0].Copy();
             var list = new List<DatabaseCriteria>(DatabaseCriteria);
             var index1 = 0;
-            var strArray1 = newDatabaseCriteria[0].DbValue.Split(new char[1]
+            var strArray1 = newDatabaseCriteria[0].DbValue.Split(new[]
       {
         ','
       });
@@ -208,7 +205,7 @@ namespace CraigLib.Data
 
         public int AddDatabaseJoin(string dbTable, string dbColumn, string joinRelation, string joinTable, string joinColumn)
         {
-            return AddDatabaseJoin(new DatabaseJoin[1]
+            return AddDatabaseJoin(new[]
       {
         new DatabaseJoin(dbTable, dbColumn, joinRelation, joinTable, joinColumn)
       });

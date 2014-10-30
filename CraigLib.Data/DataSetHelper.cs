@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -96,12 +97,7 @@ namespace CraigLib.Data
         public static string GetJoinSql(this DataRelation relation)
         {
             var str1 = string.Empty;
-            var list = new List<DataRelation>();
-            foreach (DataRelation dataRelation in relation.ChildTable.ParentRelations)
-            {
-                if (dataRelation.ParentTable == relation.ParentTable)
-                    list.Add(dataRelation);
-            }
+            var list = relation.ChildTable.ParentRelations.Cast<DataRelation>().Where(dataRelation => dataRelation.ParentTable == relation.ParentTable).ToList();
             foreach (var dataRelation in list)
             {
                 var str2 = string.Empty;
@@ -131,21 +127,21 @@ namespace CraigLib.Data
                 }
                 if (str2.Length > 0)
                 {
-                    if (str2.IndexOf(" AND ") > 0)
+                    if (str2.IndexOf(" AND ", StringComparison.Ordinal) > 0)
                         str2 = "(" + str2 + ")";
                     if (str1.Length > 0)
                         str1 = str1 + " OR ";
                     str1 = str1 + str2;
                 }
             }
-            if (str1.IndexOf(" OR ") > 0)
+            if (str1.IndexOf(" OR ", StringComparison.Ordinal) > 0)
                 str1 = "(" + str1 + ")";
             return str1;
         }
 
         public static bool IsDynamicColumn(this DataColumn dc)
         {
-            var flag = dc.ColumnName.LastIndexOf("-") > 0;
+            var flag = dc.ColumnName.LastIndexOf("-", StringComparison.Ordinal) > 0;
             return flag;
         }
 
@@ -298,7 +294,7 @@ namespace CraigLib.Data
             if (rowsLimit <= 0)
                 dt.ExtendedProperties.Remove("RowsLimit");
             else
-                dt.ExtendedProperties["RowsLimit"] = rowsLimit.ToString();
+                dt.ExtendedProperties["RowsLimit"] = rowsLimit.ToString(CultureInfo.InvariantCulture);
         }
 
         public static object GetDefaultValue(string defaultString, Type dataType)
@@ -308,15 +304,30 @@ namespace CraigLib.Data
             {
                 if (defaultString.Length != 0)
                 {
-                    try
-                    {
-                        defaultString = defaultString.Trim();
-                        obj = !(defaultString == "<null>") ? (!(dataType == typeof(bool)) ? (!(dataType == typeof(DateTime)) ? (!(dataType == typeof(int)) ? (!(dataType == typeof(long)) ? (!(dataType == typeof(Decimal)) ? (!(dataType == typeof(double)) ? (!(dataType == typeof(string)) ? Convert.ChangeType(defaultString, dataType) : defaultString) : Convert.ToDouble(defaultString)) : Convert.ToDecimal(defaultString)) : Convert.ToInt64(defaultString)) : Convert.ToInt32(defaultString)) : (!(defaultString.ToLower() == "now") ? (!(defaultString.ToLower() == "today") ? Convert.ToDateTime(defaultString) : (object)DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified)) : DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified))) : (!(defaultString == "0") ? (!(defaultString == "1") ? (bool.Parse(defaultString)) : true) : false)) : DBNull.Value;
-                    }
-                    catch 
-                    {
-                        throw;
-                    }
+
+                    defaultString = defaultString.Trim();
+                    obj = defaultString != "<null>"
+                        ? (!(dataType == typeof (bool))
+                            ? (!(dataType == typeof (DateTime))
+                                ? (!(dataType == typeof (int))
+                                    ? (!(dataType == typeof (long))
+                                        ? (!(dataType == typeof (Decimal))
+                                            ? (!(dataType == typeof (double))
+                                                ? (!(dataType == typeof (string))
+                                                    ? Convert.ChangeType(defaultString, dataType)
+                                                    : defaultString)
+                                                : Convert.ToDouble(defaultString))
+                                            : Convert.ToDecimal(defaultString))
+                                        : Convert.ToInt64(defaultString))
+                                    : Convert.ToInt32(defaultString))
+                                : (defaultString.ToLower() != "now"
+                                    ? (defaultString.ToLower() != "today"
+                                        ? Convert.ToDateTime(defaultString)
+                                        : (object) DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified))
+                                    : DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified)))
+                            : (defaultString != "0" && (defaultString == "1" || (bool.Parse(defaultString)))))
+                        : DBNull.Value;
+
                     return obj;
                 }
             }
@@ -337,8 +348,7 @@ namespace CraigLib.Data
             var str2 = dc.ExtendedProperties["proxycolumn"] as string;
             if (!string.IsNullOrEmpty(str1))
                 return !string.IsNullOrEmpty(str2);
-            else
-                return false;
+            return false;
         }
 
         public static void JoinByMatchColumnsOnly(this DataTable dt, bool byMatchColumnsOnly)
@@ -378,7 +388,7 @@ namespace CraigLib.Data
             if (pageSize <= 0)
                 dt.ExtendedProperties.Remove("PageSize");
             else
-                dt.ExtendedProperties["PageSize"] = pageSize.ToString();
+                dt.ExtendedProperties["PageSize"] = pageSize.ToString(CultureInfo.InvariantCulture);
         }
 
         public static void SetPageNumber(this DataTable dt, int pageNumber)
@@ -386,7 +396,7 @@ namespace CraigLib.Data
             if (pageNumber <= 0)
                 dt.ExtendedProperties.Remove("PageNumber");
             else
-                dt.ExtendedProperties["PageNumber"] = pageNumber.ToString();
+                dt.ExtendedProperties["PageNumber"] = pageNumber.ToString(CultureInfo.InvariantCulture);
         }
 
         public static void SetDbTable(this DataColumn dc, string dbtable)
@@ -416,9 +426,7 @@ namespace CraigLib.Data
                 str = "begtime < '" + criteria.EndTime.ToString("yyyy-MM-dd HH:mm:ss") + "' and endtime > '" + criteria.BegTime.ToString("yyyy-MM-dd HH:mm:ss") + "'";
             else
                 str = criteria.DateColumn + " >= '" + criteria.BegTime.ToString("yyyy-MM-dd HH:mm:ss") + "' and " + criteria.DateColumn + " < '" + criteria.EndTime.ToString("yyyy-MM-dd HH:mm:ss") + "'";
-            foreach (var dbCriteria in criteria.DatabaseCriteria)
-                str = str + " " + dbCriteria.LogOperator + " " + dbCriteria.OpenParen + dbCriteria.DbTable + (string.IsNullOrEmpty(dbCriteria.DbTable) ? "" : ".") + dbCriteria.DbColumn + dbCriteria.RelOperator + "'" + dbCriteria.DbValue + "'" + dbCriteria.CloseParen;
-            return str;
+            return criteria.DatabaseCriteria.Aggregate(str, (current, dbCriteria) => current + " " + dbCriteria.LogOperator + " " + dbCriteria.OpenParen + dbCriteria.DbTable + (string.IsNullOrEmpty(dbCriteria.DbTable) ? "" : ".") + dbCriteria.DbColumn + dbCriteria.RelOperator + "'" + dbCriteria.DbValue + "'" + dbCriteria.CloseParen);
         }
 
         public static string GetColumnByPartialName(this DataTable dt, string colname)
@@ -427,19 +435,15 @@ namespace CraigLib.Data
             {
                 if (dt.Columns.Contains(colname))
                     return colname;
-                else
-                    return "";
-            }
-            else
-            {
-                var str = "_" + colname;
-                foreach (DataColumn dataColumn in dt.Columns)
-                {
-                    if (dataColumn.ColumnName.Equals(colname, StringComparison.OrdinalIgnoreCase) || dataColumn.ColumnName.EndsWith(str, StringComparison.OrdinalIgnoreCase))
-                        return dataColumn.ColumnName;
-                }
                 return "";
             }
+            var str = "_" + colname;
+            foreach (DataColumn dataColumn in dt.Columns)
+            {
+                if (dataColumn.ColumnName.Equals(colname, StringComparison.OrdinalIgnoreCase) || dataColumn.ColumnName.EndsWith(str, StringComparison.OrdinalIgnoreCase))
+                    return dataColumn.ColumnName;
+            }
+            return "";
         }
 
         public static Type SetDataType(this DataColumn dc, DatabaseSchema.DbColumnRow dbColumnRow)
@@ -447,7 +451,7 @@ namespace CraigLib.Data
             var type = typeof(string);
             if (dbColumnRow != null)
             {
-                type = DataSetHelper.GetDataType(dbColumnRow);
+                type = GetDataType(dbColumnRow);
                 if (dc.DataType != type)
                 {
                     var table = dc.Table;
@@ -464,13 +468,13 @@ namespace CraigLib.Data
         public static Type GetDataType(DatabaseSchema.DbColumnRow dbColumnRow)
         {
             var type = typeof(string);
-            if (dbColumnRow.DbType.IndexOf("date") >= 0)
+            if (dbColumnRow.DbType.IndexOf("date", StringComparison.Ordinal) >= 0)
                 type = typeof(DateTime);
-            else if (dbColumnRow.DbType.IndexOf("bool") >= 0)
+            else if (dbColumnRow.DbType.IndexOf("bool", StringComparison.Ordinal) >= 0)
                 type = typeof(bool);
-            else if (dbColumnRow.DbType.IndexOf("image") >= 0)
+            else if (dbColumnRow.DbType.IndexOf("image", StringComparison.Ordinal) >= 0)
                 type = typeof(byte[]);
-            else if (dbColumnRow.DbType.IndexOf("number") >= 0)
+            else if (dbColumnRow.DbType.IndexOf("number", StringComparison.Ordinal) >= 0)
                 type = typeof(Decimal);
             else if (dbColumnRow.DbType.StartsWith("int"))
                 type = typeof(int);
@@ -504,7 +508,7 @@ namespace CraigLib.Data
                     stringBuilder.Append(dbCriteria.OpenParen + " 1=1 " + dbCriteria.CloseParen);
                     continue;
                 }
-                var columnByPartialName = DataSetHelper.GetColumnByPartialName(dt, dbCriteria.DbColumn);
+                var columnByPartialName = GetColumnByPartialName(dt, dbCriteria.DbColumn);
                 if (columnByPartialName.Length > 0)
                 {
                     if (dbCriteria.RelOperator.Equals("in", StringComparison.OrdinalIgnoreCase))
@@ -517,7 +521,7 @@ namespace CraigLib.Data
                         {
                             stringBuilder.Append(dbCriteria.OpenParen + columnByPartialName + " in (");
                             var str1 = dbCriteria.DbValue;
-                            var chArray = new char[1]
+                            var chArray = new[]
               {
                 ','
               };
@@ -536,12 +540,7 @@ namespace CraigLib.Data
             return stringBuilder.ToString();
         }
 
-        public static string ReplaceNamespace(string s)
-        {
-            return s.Replace("http://tempuri.org/", "http://craigalbright.com/");
-        }
-
-        public static DataTable[] SortDataTables(DataSet dataSet, bool descending)
+       public static DataTable[] SortDataTables(DataSet dataSet, bool descending)
         {
             var list = new List<DataTable>();
             var maxTableLevel = GetMaxTableLevel(dataSet);
@@ -579,11 +578,7 @@ namespace CraigLib.Data
                 var tablesFromLevel = GetTablesFromLevel(ds, level);
                 if (tableNames != null)
                 {
-                    foreach (var dataTable in tablesFromLevel)
-                    {
-                        if (tableNames.Contains(dataTable.TableName))
-                            list.Add(dataTable);
-                    }
+                    list.AddRange(tablesFromLevel.Where(dataTable => tableNames.Contains(dataTable.TableName)));
                 }
                 else
                     list.AddRange(tablesFromLevel);

@@ -2383,7 +2383,6 @@ namespace CraigLib.Data
 
         public static void InitializeDataSet(this DataSet ds)
         {
-            ds.Namespace = DataSetHelper.ReplaceNamespace(ds.Namespace);
             ds.CaseSensitive = DbSyntax == DatabaseType.ORACLE;
             ds.EnforceConstraints = false;
             foreach (DataTable dataTable in ds.Tables)

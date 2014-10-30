@@ -437,14 +437,14 @@ namespace CraigLib.Data
         {
             sqlcolName = sqlcolName.Replace("(", string.Empty);
             sqlcolName = sqlcolName.Replace(")", string.Empty);
-            var length1 = sqlcolName.LastIndexOf(" ");
+            var length1 = sqlcolName.LastIndexOf(" ", System.StringComparison.Ordinal);
             if (length1 > 0)
             {
                 sourceName = sqlcolName.Substring(length1 + 1);
                 sourceName = DatabaseHelper.RemoveReservedWordQuote(sourceName);
                 sqlcolName = sqlcolName.Substring(0, length1);
             }
-            var length2 = sqlcolName.LastIndexOf(".");
+            var length2 = sqlcolName.LastIndexOf(".", System.StringComparison.Ordinal);
             if (length2 <= 0)
                 return;
             sqltblName = sqlcolName.Substring(0, length2);

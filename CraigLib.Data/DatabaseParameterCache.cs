@@ -7,7 +7,7 @@ namespace CraigLib.Data
 {
     public static class DbParameterCache
     {
-        private static Hashtable paramCache = Hashtable.Synchronized(new Hashtable());
+        private static readonly Hashtable ParamCache = Hashtable.Synchronized(new Hashtable());
 
         static DbParameterCache()
         {
@@ -28,7 +28,7 @@ namespace CraigLib.Data
                     var fullName = type.Assembly.FullName;
                     var type1 = Type.GetType(type.FullName.Replace("Command", "CommandBuilder") + "," + fullName);
                     if (type1 != null)
-                        type1.GetMethod("DeriveParameters").Invoke(null, new object[1]
+                        type1.GetMethod("DeriveParameters").Invoke(null, new object[]
                         {
                             command
                         });
@@ -53,13 +53,13 @@ namespace CraigLib.Data
         public static void CacheParameterSet(string commandText, params DbParameter[] commandParameters)
         {
             var str = ApplicationConfig.DbConnectInfo.ConnectionString + ":" + commandText;
-            paramCache[str] = commandParameters;
+            ParamCache[str] = commandParameters;
         }
 
         public static DbParameter[] GetCachedParameterSet(string commandText)
         {
             var str = ApplicationConfig.DbConnectInfo.ConnectionString + ":" + commandText;
-            var originalParameters = (DbParameter[])paramCache[str];
+            var originalParameters = (DbParameter[])ParamCache[str];
             if (originalParameters == null)
                 return null;
             return CloneParameters(originalParameters);
@@ -73,7 +73,7 @@ namespace CraigLib.Data
         public static DbParameter[] GetSpParameterSet(string spName, bool includeReturnValueParameter)
         {
             var str = ApplicationConfig.DbConnectInfo.ConnectionString + ":" + spName + (includeReturnValueParameter ? ":include ReturnValue Parameter" : string.Empty);
-            return CloneParameters((DbParameter[])paramCache[str] ?? (DbParameter[])(paramCache[str] = DiscoverSpParameterSet(spName, includeReturnValueParameter)));
+            return CloneParameters((DbParameter[])ParamCache[str] ?? (DbParameter[])(ParamCache[str] = DiscoverSpParameterSet(spName, includeReturnValueParameter)));
         }
     }
 }

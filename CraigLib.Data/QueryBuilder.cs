@@ -40,7 +40,7 @@ namespace CraigLib.Data
                 HavingList.Clear();
                 OrderList.Clear();
                 var selectSql = value;
-                if (selectSql.ToUpper().IndexOf("SELECT ", System.StringComparison.Ordinal) >= 0)
+                if (selectSql.ToUpper().IndexOf("SELECT ", StringComparison.Ordinal) >= 0)
                 {
                     var select = "";
                     var from = "";
@@ -74,12 +74,11 @@ namespace CraigLib.Data
             {
                 if (_columnList.Count <= 0)
                     return _select;
-                var str1 = string.Empty;
                 var str2 = "SELECT ";
                 if (_selectDistinct)
                     str2 = str2 + "DISTINCT ";
                 if (_rowsLimit > 0 && DatabaseHelper.DbSyntax == DatabaseType.MSSQL)
-                    str2 = string.Concat(new object[4]
+                    str2 = string.Concat(new object[]
           {
             str2,
             "TOP ",
@@ -91,7 +90,7 @@ namespace CraigLib.Data
             set
             {
                 _select = value.Trim();
-                _selectDistinct = _select.ToUpper().IndexOf(" DISTINCT ", System.StringComparison.Ordinal) > 0;
+                _selectDistinct = _select.ToUpper().IndexOf(" DISTINCT ", StringComparison.Ordinal) > 0;
                 _rowsLimit = 0;
                 _columnList.Clear();
             }
@@ -144,7 +143,6 @@ namespace CraigLib.Data
             }
             set
             {
-                var columnList = ColumnList;
                 _selectDistinct = value;
             }
         }
@@ -157,7 +155,6 @@ namespace CraigLib.Data
             }
             set
             {
-                var columnList = ColumnList;
                 _rowsLimit = value;
             }
         }
@@ -171,7 +168,7 @@ namespace CraigLib.Data
                 {
                     foreach (var key in TableList)
                     {
-                        var str2 = "";
+                        string str2;
                         if (JoinList.TryGetValue(key, out str2))
                         {
                             str1 = str1 + str2;
@@ -195,7 +192,7 @@ namespace CraigLib.Data
                 TableList.Clear();
                 JoinList.Clear();
                 var str2 = str1;
-                var separator = new char[1]
+                var separator = new[]
         {
           ','
         };
@@ -304,11 +301,10 @@ namespace CraigLib.Data
                     num = -1;
                     if (str1.Length > 3)
                     {
-                        num = str1.ToUpper().IndexOf(" AND ", 3);
+                        num = str1.ToUpper().IndexOf(" AND ", 3, StringComparison.Ordinal);
                         if (num < 0)
-                            num = str1.ToUpper().IndexOf(" OR ", 3);
+                            num = str1.ToUpper().IndexOf(" OR ", 3, StringComparison.Ordinal);
                     }
-                    var str2 = string.Empty;
                     string str3;
                     if (num >= 0)
                     {
@@ -346,11 +342,10 @@ namespace CraigLib.Data
                     num = -1;
                     if (str1.Length > 3)
                     {
-                        num = str1.ToUpper().IndexOf(" AND ", 3);
+                        num = str1.ToUpper().IndexOf(" AND ", 3, StringComparison.Ordinal);
                         if (num < 0)
-                            num = str1.ToUpper().IndexOf(" OR ", 3);
+                            num = str1.ToUpper().IndexOf(" OR ", 3, StringComparison.Ordinal);
                     }
-                    var str2 = string.Empty;
                     string str3;
                     if (num >= 0)
                     {
@@ -399,7 +394,7 @@ namespace CraigLib.Data
         {
             var num1 = -1;
             var str1 = "";
-            var strArray = new string[4]
+            var strArray = new[]
       {
         " INNER JOIN ",
         " CROSS JOIN ",
@@ -420,7 +415,7 @@ namespace CraigLib.Data
             if (startIndex >= 0)
             {
                 from = from.Substring(num1 + str1.Length).Trim();
-                var length = @from.IndexOf(" ", System.StringComparison.Ordinal);
+                var length = @from.IndexOf(" ", StringComparison.Ordinal);
                 str3 = length < 0 ? from : from.Substring(0, length);
             }
             return str3.Trim();
@@ -494,7 +489,7 @@ namespace CraigLib.Data
                     stringBuilder2.Append(" ").Append(dbCriteriaClause);
                     stringBuilder2.Append(" ").Append(dbCriteria1.CloseParen);
                     WhereList.Add(stringBuilder2.ToString());
-                    stringBuilder1.Append(stringBuilder2.ToString());
+                    stringBuilder1.Append(stringBuilder2);
                 }
             }
             if (stringBuilder1.Length > 0)
@@ -574,27 +569,27 @@ namespace CraigLib.Data
                 var tablename1 = string.Empty;
                 var columnname = string.Empty;
                 var str2 = ColumnList[index].Trim().ToLower();
-                var length1 = str2.LastIndexOf(" ");
+                var length1 = str2.LastIndexOf(" ", StringComparison.Ordinal);
                 if (length1 > 0)
                 {
                     str1 = str2.Substring(length1 + 1).Trim();
                     str2 = str2.Substring(0, length1).Trim();
                 }
-                var length2 = str2.LastIndexOf(".");
+                var length2 = str2.LastIndexOf(".", StringComparison.Ordinal);
                 if (length2 > 0)
                 {
                     tablename1 = str2.Substring(0, length2).Trim();
-                    var num1 = Math.Max(tablename1.LastIndexOf("("), tablename1.LastIndexOf(" "));
+                    var num1 = Math.Max(tablename1.LastIndexOf("(", StringComparison.Ordinal), tablename1.LastIndexOf(" ", StringComparison.Ordinal));
                     if (num1 >= 0)
                         tablename1 = tablename1.Substring(num1 + 1);
                     var str3 = str2.Substring(length2 + 1).Trim();
                     var num2 = str3.Length;
-                    var val2_1 = str3.IndexOf(" ");
-                    if (val2_1 >= 0)
-                        num2 = Math.Min(num2, val2_1);
-                    var val2_2 = str3.IndexOf(")");
-                    if (val2_2 >= 0)
-                        num2 = Math.Min(num2, val2_2);
+                    var val21 = str3.IndexOf(" ", StringComparison.Ordinal);
+                    if (val21 >= 0)
+                        num2 = Math.Min(num2, val21);
+                    var val22 = str3.IndexOf(")", StringComparison.Ordinal);
+                    if (val22 >= 0)
+                        num2 = Math.Min(num2, val22);
                     columnname = str3.Substring(0, num2);
                     if (str1.Length == 0)
                         str1 = columnname;
@@ -603,7 +598,7 @@ namespace CraigLib.Data
                     str1 = str2;
                 if (columnname.Length == 0)
                     columnname = str1;
-                if (!(str2 == "''") && !(str2 == "' '") && (str2.IndexOf(" 0 ") < 0 && str2.IndexOf("null") < 0) && (!str2.StartsWith("max(") && !str2.StartsWith("sum(") && !str2.StartsWith("avg(")))
+                if (str2 != "''" && str2 != "' '" && (str2.IndexOf(" 0 ", StringComparison.Ordinal) < 0 && str2.IndexOf("null", StringComparison.Ordinal) < 0) && (!str2.StartsWith("max(") && !str2.StartsWith("sum(") && !str2.StartsWith("avg(")))
                 {
                     if (str2.Length == 0 || str2.EndsWith("."))
                         str2 = str2 + str1;
@@ -670,7 +665,6 @@ namespace CraigLib.Data
                     }
                 }
             }
-            var query = Query;
             return GroupList.Count;
         }
 
@@ -692,17 +686,15 @@ namespace CraigLib.Data
                             return 0;
                     }
                 }
-                catch
+                finally
                 {
-                    //Todo: handle this
-                    throw;
+                    var str = queryBuilder.Order;
+                    if (str.Length > 0)
+                        queryBuilder.Order = "";
+                    else
+                        str = "ORDER BY " + ColumnList[0];
+                    queryBuilder.ColumnList.Add("ROW_NUMBER() OVER (" + str + ") RowNumber");
                 }
-                var str = queryBuilder.Order;
-                if (str.Length > 0)
-                    queryBuilder.Order = "";
-                else
-                    str = "ORDER BY " + ColumnList[0];
-                queryBuilder.ColumnList.Add("ROW_NUMBER() OVER (" + str + ") RowNumber");
             }
             else
             {
@@ -713,7 +705,7 @@ namespace CraigLib.Data
             var query1 = queryBuilder.Query;
             Select = "SELECT * ";
             From = "FROM (" + query1 + ") " + DataTableName;
-            Where = string.Concat(new object[4]
+            Where = string.Concat(new object[]
       {
         "WHERE RowNumber>",
         pageSize * (pageNumber - 1),
@@ -723,7 +715,6 @@ namespace CraigLib.Data
             Group = "";
             Having = "";
             Order = "";
-            var query2 = Query;
             return pageNumber;
         }
 
