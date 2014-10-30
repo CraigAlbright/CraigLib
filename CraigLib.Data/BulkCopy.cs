@@ -62,11 +62,9 @@ namespace CraigLib.Data
                         flagArray[0] = false;
                     else if (dc.ColumnName.Equals("creationdate", StringComparison.OrdinalIgnoreCase))
                         flagArray[1] = false;
-                    if (dbColumnRow.DbColumn.Equals(dc.GetDbColumn(), StringComparison.OrdinalIgnoreCase))
-                    {
-                        bc.ColumnMappings.Add(dc.ColumnName, dc.GetDbColumn());
-                        break;
-                    }
+                    if (!dbColumnRow.DbColumn.Equals(dc.GetDbColumn(), StringComparison.OrdinalIgnoreCase)) continue;
+                    bc.ColumnMappings.Add(dc.ColumnName, dc.GetDbColumn());
+                    break;
                 }
             }
             return flagArray;
@@ -145,43 +143,41 @@ namespace CraigLib.Data
             foreach (var dbColumnRow in cols)
             {
                 var dc = dt.Columns[dbColumnRow.DbColumn];
-                if (rowState != DataRowState.Deleted || dbColumnRow.DbPrimaryKey == 1)
+                if (rowState == DataRowState.Deleted && dbColumnRow.DbPrimaryKey != 1) continue;
+                if (dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) || dbColumnRow.DbColumn.Equals("creationdate", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) || dbColumnRow.DbColumn.Equals("creationdate", StringComparison.OrdinalIgnoreCase))
+                    if (rowState != DataRowState.Modified)
                     {
-                        if (rowState != DataRowState.Modified)
+                        if (rowState == DataRowState.Added && dc == null)
                         {
-                            if (rowState == DataRowState.Added && dc == null)
-                            {
-                                var windowsIdentity = WindowsIdentity.GetCurrent();
-                                if (windowsIdentity != null)
-                                    list.Add(dc = dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("creationname", typeof(string), Expr.Value(windowsIdentity.Name)) : dt.Columns.Add("creationdate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate())));
-                            }
+                            var windowsIdentity = WindowsIdentity.GetCurrent();
+                            if (windowsIdentity != null)
+                                list.Add(dc = dbColumnRow.DbColumn.Equals("creationname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("creationname", typeof(string), Expr.Value(windowsIdentity.Name)) : dt.Columns.Add("creationdate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate())));
                         }
-                        else
-                            continue;
                     }
-                    else if (dbColumnRow.DbColumn.Equals("revisionname", StringComparison.OrdinalIgnoreCase) || dbColumnRow.DbColumn.Equals("revisiondate", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (rowState != DataRowState.Added)
-                        {
-                            if (rowState == DataRowState.Modified && dc == null)
-                            {
-                                var identity = WindowsIdentity.GetCurrent();
-                                if (identity != null)
-                                    list.Add(dc = dbColumnRow.DbColumn.Equals("revisionname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("revisionname", typeof(string), Expr.Value(identity.Name)) : dt.Columns.Add("revisiondate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate())));
-                            }
-                        }
-                        else
-                            continue;
-                    }
-                    if (dc != null)
-                        method.Invoke(obj, new object[]
-            {
-              dc.ColumnName,
-              dc.GetDbColumn()
-            });
+                    else
+                        continue;
                 }
+                else if (dbColumnRow.DbColumn.Equals("revisionname", StringComparison.OrdinalIgnoreCase) || dbColumnRow.DbColumn.Equals("revisiondate", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (rowState != DataRowState.Added)
+                    {
+                        if (rowState == DataRowState.Modified && dc == null)
+                        {
+                            var identity = WindowsIdentity.GetCurrent();
+                            if (identity != null)
+                                list.Add(dc = dbColumnRow.DbColumn.Equals("revisionname", StringComparison.OrdinalIgnoreCase) ? dt.Columns.Add("revisionname", typeof(string), Expr.Value(identity.Name)) : dt.Columns.Add("revisiondate", typeof(DateTime), Expr.Value(DatabaseHelper.GetServerDate())));
+                        }
+                    }
+                    else
+                        continue;
+                }
+                if (dc != null)
+                    method.Invoke(obj, new object[]
+                    {
+                        dc.ColumnName,
+                        dc.GetDbColumn()
+                    });
             }
             return list;
         }
@@ -256,7 +252,7 @@ namespace CraigLib.Data
                     newDataAdapter.Fill(_schemaTable);
                 }
                 _rows = rows;
-                DataTable rowTable = _rows.Length > 0 ? _rows[0].Table : new DataTable(dbTable);
+                var rowTable = _rows.Length > 0 ? _rows[0].Table : new DataTable(dbTable);
                 foreach (DataColumn dc in rowTable.Columns)
                     _mapping[dc.GetDbColumnOrDefault().ToUpper()] = dc.Ordinal;
             }
@@ -421,9 +417,7 @@ namespace CraigLib.Data
             private object GetRowValue(int i)
             {
                 var columnName = _schemaTable.Columns[i].ColumnName;
-                if (!_mapping.ContainsKey(columnName))
-                    return DBNull.Value;
-                return _rows[_rowPos][_mapping[columnName]];
+                return !_mapping.ContainsKey(columnName) ? DBNull.Value : _rows[_rowPos][_mapping[columnName]];
             }
         }
     }
