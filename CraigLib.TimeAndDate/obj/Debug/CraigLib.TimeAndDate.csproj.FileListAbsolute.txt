@@ -6,3 +6,4 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\bin\Debug
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\bin\Debug\CraigLib.TimeAndDate.pdb
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\obj\Debug\CraigLib.TimeAndDate.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\obj\Debug\CraigLib.TimeAndDate.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate\obj\Debug\CraigLib.TimeAndDate.csprojResolveAssemblyReference.cache

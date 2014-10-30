@@ -73,7 +73,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>Xcopy $(TargetPath) $(SolutionDir)$(OutDir) /Y</PostBuildEvent>
+    <PostBuildEvent>Xcopy $(TargetPath) $(SolutionDir)$(OutDir) /Y
+Xcopy $(TargetDir)*.dll $(SolutionDir)$(OutDir) /Y
+Xcopy $(TargetDir)*.pdb $(SolutionDir)$(OutDir) /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

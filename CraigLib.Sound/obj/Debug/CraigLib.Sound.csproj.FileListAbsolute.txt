@@ -7,3 +7,4 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\Craig
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.pdb
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.csprojResolveAssemblyReference.cache

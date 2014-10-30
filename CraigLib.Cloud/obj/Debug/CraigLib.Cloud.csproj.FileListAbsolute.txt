@@ -51,3 +51,4 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\AWSSD
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\System.Spatial.xml
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.csprojResolveAssemblyReference.cache
