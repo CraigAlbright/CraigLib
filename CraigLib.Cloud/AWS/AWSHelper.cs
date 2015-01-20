@@ -1,4 +1,5 @@
-﻿using Amazon.AutoScaling;
+﻿using Amazon;
+using Amazon.AutoScaling;
 using Amazon.AWSSupport;
 using Amazon.CloudFormation;
 using Amazon.CloudFront;
@@ -26,6 +27,7 @@ using Amazon.OpsWorks;
 using Amazon.RDS;
 using Amazon.Redshift;
 using Amazon.Route53;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.SecurityToken;
 using Amazon.SimpleDB;
@@ -185,7 +187,7 @@ namespace CraigLib.Cloud.AWS
 
         public AmazonS3Client GetS3Client()
         {
-            return new AmazonS3Client();
+            return new AmazonS3Client(@"AKIAITQ5DZJV2BS6C5FQ", @"i7CCiL8kju5S72qzr/dg3J9ZHCj4FMj4Q3f7QaTb", RegionEndpoint.USWest2);
         }
 
         public AmazonSecurityTokenServiceClient GetAmazonSecurityTokenServiceClient()

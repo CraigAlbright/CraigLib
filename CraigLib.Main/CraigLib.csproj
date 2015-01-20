@@ -177,7 +177,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
-    <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -266,9 +265,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>Xcopy $(TargetPath) $(SolutionDir)$(OutDir) /Y
-Xcopy $(TargetDir)*.dll $(SolutionDir)$(OutDir) /Y
-Xcopy $(TargetDir)*.pdb $(SolutionDir)$(OutDir) /Y</PostBuildEvent>
+    <PostBuildEvent>Xcopy "$(TargetPath)" "$(SolutionDir)$(SolutionName)\$(OutDir)" /Y
+Xcopy "$(TargetDir)*.dll" "$(SolutionDir)$(SolutionName)\$(OutDir)" /Y
+Xcopy "$(TargetDir)*.pdb" "$(SolutionDir)$(SolutionName)\$(OutDir)" /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
