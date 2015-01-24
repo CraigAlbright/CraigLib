@@ -8,13 +8,12 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CraigLib.Data
 {
     public static class DatabaseHelper
     {
-        private static readonly List<string> BinaryTypeNames = new List<string>(new string[9]
+        private static readonly List<string> BinaryTypeNames = new List<string>(new[]
         {
             "Text",
             "NText",
@@ -28,195 +27,196 @@ namespace CraigLib.Data
         });
         public static DateTime SqlMinDate = new DateTime(1753, 1, 1);
         public static DateTime SqlMaxDate = new DateTime(9999, 12, 31);
-        public static List<string> SqlReservedWords = new List<string>()
-    {
-      "ADD",
-      "EXTERNAL",
-      "PROCEDURE",
-      "ALL",
-      "FETCH",
-      "PUBLIC",
-      "ALTER",
-      "FILE",
-      "RAISERROR",
-      "AND",
-      "FILLFACTOR",
-      "READ",
-      "ANY",
-      "FOR",
-      "READTEXT",
-      "AS",
-      "FOREIGN",
-      "RECONFIGURE",
-      "ASC",
-      "FREETEXT",
-      "REFERENCES",
-      "AUTHORIZATION",
-      "FREETEXTTABLE",
-      "REPLICATION",
-      "BACKUP",
-      "FROM",
-      "RESTORE",
-      "BEGIN",
-      "FULL",
-      "RESTRICT",
-      "BETWEEN",
-      "FUNCTION",
-      "RETURN",
-      "BREAK",
-      "GOTO",
-      "REVERT",
-      "BROWSE",
-      "GRANT",
-      "REVOKE",
-      "BULK",
-      "GROUP",
-      "RIGHT",
-      "BY",
-      "HAVING",
-      "ROLLBACK",
-      "CASCADE",
-      "HOLDLOCK",
-      "ROWCOUNT",
-      "CASE",
-      "IDENTITY",
-      "ROWGUIDCOL",
-      "CHECK",
-      "IDENTITY_INSERT",
-      "RULE",
-      "CHECKPOINT",
-      "IDENTITYCOL",
-      "SAVE",
-      "CLOSE",
-      "IF",
-      "SCHEMA",
-      "CLUSTERED",
-      "IN",
-      "SECURITYAUDIT",
-      "COALESCE",
-      "INDEX",
-      "SELECT",
-      "COLLATE",
-      "INNER",
-      "SEMANTICKEYPHRASETABLE",
-      "COLUMN",
-      "INSERT",
-      "SEMANTICSIMILARITYDETAILSTABLE",
-      "COMMIT",
-      "INTERSECT",
-      "SEMANTICSIMILARITYTABLE",
-      "COMPUTE",
-      "INTO",
-      "SESSION_USER",
-      "CONSTRAINT",
-      "IS",
-      "SET",
-      "CONTAINS",
-      "JOIN",
-      "SETUSER",
-      "CONTAINSTABLE",
-      "KEY",
-      "SHUTDOWN",
-      "CONTINUE",
-      "KILL",
-      "SOME",
-      "CONVERT",
-      "LEFT",
-      "STATISTICS",
-      "CREATE",
-      "LIKE",
-      "SYSTEM_USER",
-      "CROSS",
-      "LINENO",
-      "TABLE",
-      "CURRENT",
-      "LOAD",
-      "TABLESAMPLE",
-      "CURRENT_DATE",
-      "MERGE",
-      "TEXTSIZE",
-      "CURRENT_TIME",
-      "NATIONAL",
-      "THEN",
-      "CURRENT_TIMESTAMP",
-      "NOCHECK",
-      "TO",
-      "CURRENT_USER",
-      "NONCLUSTERED",
-      "TOP",
-      "CURSOR",
-      "NOT",
-      "TRAN",
-      "DATABASE",
-      "NULL",
-      "TRANSACTION",
-      "DBCC",
-      "NULLIF",
-      "TRIGGER",
-      "DEALLOCATE",
-      "OF",
-      "TRUNCATE",
-      "DECLARE",
-      "OFF",
-      "TRY_CONVERT",
-      "DEFAULT",
-      "OFFSETS",
-      "TSEQUAL",
-      "DELETE",
-      "ON",
-      "UNION",
-      "DENY",
-      "OPEN",
-      "UNIQUE",
-      "DESC",
-      "OPENDATASOURCE",
-      "UNPIVOT",
-      "DISK",
-      "OPENQUERY",
-      "UPDATE",
-      "DISTINCT",
-      "OPENROWSET",
-      "UPDATETEXT",
-      "DISTRIBUTED",
-      "OPENXML",
-      "USE",
-      "DOUBLE",
-      "OPTION",
-      "USER",
-      "DROP",
-      "OR",
-      "VALUES",
-      "DUMP",
-      "ORDER",
-      "VARYING",
-      "ELSE",
-      "OUTER",
-      "VIEW",
-      "END",
-      "OVER",
-      "WAITFOR",
-      "ERRLVL",
-      "PERCENT",
-      "WHEN",
-      "ESCAPE",
-      "PIVOT",
-      "WHERE",
-      "EXCEPT",
-      "PLAN",
-      "WHILE",
-      "EXEC",
-      "PRECISION",
-      "WITH",
-      "EXECUTE",
-      "PRIMARY",
-      "WITHIN GROUP",
-      "EXISTS",
-      "PRINT",
-      "WRITETEXT",
-      "EXIT",
-      "PROC"
-    };
-        private static FileInfo sqlLogFile;
+
+        public static List<string> SqlReservedWords = new List<string>
+        {
+            "ADD",
+            "EXTERNAL",
+            "PROCEDURE",
+            "ALL",
+            "FETCH",
+            "PUBLIC",
+            "ALTER",
+            "FILE",
+            "RAISERROR",
+            "AND",
+            "FILLFACTOR",
+            "READ",
+            "ANY",
+            "FOR",
+            "READTEXT",
+            "AS",
+            "FOREIGN",
+            "RECONFIGURE",
+            "ASC",
+            "FREETEXT",
+            "REFERENCES",
+            "AUTHORIZATION",
+            "FREETEXTTABLE",
+            "REPLICATION",
+            "BACKUP",
+            "FROM",
+            "RESTORE",
+            "BEGIN",
+            "FULL",
+            "RESTRICT",
+            "BETWEEN",
+            "FUNCTION",
+            "RETURN",
+            "BREAK",
+            "GOTO",
+            "REVERT",
+            "BROWSE",
+            "GRANT",
+            "REVOKE",
+            "BULK",
+            "GROUP",
+            "RIGHT",
+            "BY",
+            "HAVING",
+            "ROLLBACK",
+            "CASCADE",
+            "HOLDLOCK",
+            "ROWCOUNT",
+            "CASE",
+            "IDENTITY",
+            "ROWGUIDCOL",
+            "CHECK",
+            "IDENTITY_INSERT",
+            "RULE",
+            "CHECKPOINT",
+            "IDENTITYCOL",
+            "SAVE",
+            "CLOSE",
+            "IF",
+            "SCHEMA",
+            "CLUSTERED",
+            "IN",
+            "SECURITYAUDIT",
+            "COALESCE",
+            "INDEX",
+            "SELECT",
+            "COLLATE",
+            "INNER",
+            "SEMANTICKEYPHRASETABLE",
+            "COLUMN",
+            "INSERT",
+            "SEMANTICSIMILARITYDETAILSTABLE",
+            "COMMIT",
+            "INTERSECT",
+            "SEMANTICSIMILARITYTABLE",
+            "COMPUTE",
+            "INTO",
+            "SESSION_USER",
+            "CONSTRAINT",
+            "IS",
+            "SET",
+            "CONTAINS",
+            "JOIN",
+            "SETUSER",
+            "CONTAINSTABLE",
+            "KEY",
+            "SHUTDOWN",
+            "CONTINUE",
+            "KILL",
+            "SOME",
+            "CONVERT",
+            "LEFT",
+            "STATISTICS",
+            "CREATE",
+            "LIKE",
+            "SYSTEM_USER",
+            "CROSS",
+            "LINENO",
+            "TABLE",
+            "CURRENT",
+            "LOAD",
+            "TABLESAMPLE",
+            "CURRENT_DATE",
+            "MERGE",
+            "TEXTSIZE",
+            "CURRENT_TIME",
+            "NATIONAL",
+            "THEN",
+            "CURRENT_TIMESTAMP",
+            "NOCHECK",
+            "TO",
+            "CURRENT_USER",
+            "NONCLUSTERED",
+            "TOP",
+            "CURSOR",
+            "NOT",
+            "TRAN",
+            "DATABASE",
+            "NULL",
+            "TRANSACTION",
+            "DBCC",
+            "NULLIF",
+            "TRIGGER",
+            "DEALLOCATE",
+            "OF",
+            "TRUNCATE",
+            "DECLARE",
+            "OFF",
+            "TRY_CONVERT",
+            "DEFAULT",
+            "OFFSETS",
+            "TSEQUAL",
+            "DELETE",
+            "ON",
+            "UNION",
+            "DENY",
+            "OPEN",
+            "UNIQUE",
+            "DESC",
+            "OPENDATASOURCE",
+            "UNPIVOT",
+            "DISK",
+            "OPENQUERY",
+            "UPDATE",
+            "DISTINCT",
+            "OPENROWSET",
+            "UPDATETEXT",
+            "DISTRIBUTED",
+            "OPENXML",
+            "USE",
+            "DOUBLE",
+            "OPTION",
+            "USER",
+            "DROP",
+            "OR",
+            "VALUES",
+            "DUMP",
+            "ORDER",
+            "VARYING",
+            "ELSE",
+            "OUTER",
+            "VIEW",
+            "END",
+            "OVER",
+            "WAITFOR",
+            "ERRLVL",
+            "PERCENT",
+            "WHEN",
+            "ESCAPE",
+            "PIVOT",
+            "WHERE",
+            "EXCEPT",
+            "PLAN",
+            "WHILE",
+            "EXEC",
+            "PRECISION",
+            "WITH",
+            "EXECUTE",
+            "PRIMARY",
+            "WITHIN GROUP",
+            "EXISTS",
+            "PRINT",
+            "WRITETEXT",
+            "EXIT",
+            "PROC"
+        };
+        private static readonly FileInfo SqlLogFile;
 
         public static string SqlConcat
         {
@@ -329,20 +329,13 @@ namespace CraigLib.Data
             {
                 if (ApplicationConfig.DbConnectInfo != null)
                     return ApplicationConfig.DbConnectInfo.DbSyntax;
-                else
-                    return DatabaseType.MSSQL;
+                return DatabaseType.MSSQL;
             }
         }
 
         static DatabaseHelper()
         {
-            try
-            {
-                sqlLogFile = new FileInfo(Path.Combine(ApplicationConfig.LogPath, "sql.log"));
-            }
-            catch
-            {
-            }
+            SqlLogFile = new FileInfo(Path.Combine(ApplicationConfig.LogPath, "sql.log"));
         }
 
         private static void AttachParameters(DbCommand command, IEnumerable<DbParameter> commandParameters)
@@ -366,7 +359,7 @@ namespace CraigLib.Data
                 commandParameters[index].Value = parameterValues[index];
         }
 
-        private static void PrepareCommand(DbCommand command, DbConnection connection, DbTransaction transaction, CommandType commandType, string commandText, DbParameter[] commandParameters)
+        private static void PrepareCommand(DbCommand command, DbConnection connection, DbTransaction transaction, CommandType commandType, string commandText, IEnumerable<DbParameter> commandParameters)
         {
             if (connection.State != ConnectionState.Open)
                 OpenConnection(connection);
@@ -383,12 +376,12 @@ namespace CraigLib.Data
 
         public static DbConnection GetNewConnection()
         {
-            return DatabaseHelper.GetNewConnection(ApplicationConfig.DbConnectInfo);
+            return GetNewConnection(ApplicationConfig.DbConnectInfo);
         }
 
         public static DbConnection GetNewConnection(bool open)
         {
-            DbConnection newConnection = DatabaseHelper.GetNewConnection(ApplicationConfig.DbConnectInfo);
+            var newConnection = GetNewConnection(ApplicationConfig.DbConnectInfo);
             if (open)
                 OpenConnection(newConnection);
             return newConnection;
@@ -396,7 +389,11 @@ namespace CraigLib.Data
 
         public static DbConnection GetNewConnection(ConnectionInfo connInfo)
         {
-            DbConnection connection = DbProviderFactories.GetFactory(connInfo.DbProvider).CreateConnection();
+            var connection = DbProviderFactories.GetFactory(connInfo.DbProvider).CreateConnection();
+            if (connection == null)
+            {
+                return null;
+            }
             connection.ConnectionString = connInfo.ConnectionString;
             return connection;
         }
@@ -440,11 +437,14 @@ namespace CraigLib.Data
         {
             var type = selectCommand.GetType();
             var fullName = type.Assembly.FullName;
-            var dbDataAdapter = (DbDataAdapter)Activator.CreateInstance(Type.GetType(type.FullName.Replace("Command", "DataAdapter") + "," + fullName), new object[1]
-      {
-        selectCommand
-      });
-            
+            var dbDataAdapter =
+                (DbDataAdapter)
+                    Activator.CreateInstance(
+                        Type.GetType(type.FullName.Replace("Command", "DataAdapter") + "," + fullName), new object[]
+                        {
+                            selectCommand
+                        });
+
             return dbDataAdapter;
         }
 
@@ -457,7 +457,7 @@ namespace CraigLib.Data
         {
             parameterName = parameterName.TrimStart('@', ':', '?');
             var type = dataParameter.GetType();
-            parameterName = !(type.Name == "SqlParameter") ? (!(type.Name == "OracleParameter") ? "?" : ":" + parameterName) : "@" + parameterName;
+            parameterName = type.Name != "SqlParameter" ? (type.Name != "OracleParameter" ? "?" : ":" + parameterName) : "@" + parameterName;
             return parameterName;
         }
 
@@ -469,7 +469,7 @@ namespace CraigLib.Data
         public static string SetParameterName(DbParameter dataParameter, string parameterName)
         {
             parameterName = parameterName.TrimStart('@', ':', '?');
-            dataParameter.ParameterName = !(dataParameter.GetType().Name == "SqlParameter") ? parameterName : "@" + parameterName;
+            dataParameter.ParameterName = dataParameter.GetType().Name != "SqlParameter" ? parameterName : "@" + parameterName;
             return parameterName;
         }
 
@@ -484,7 +484,7 @@ namespace CraigLib.Data
             if (type.Name == "OracleParameter")
             {
                 var str = "";
-                PropertyInfo property1 = type.GetProperty("OracleDbType");
+                var property1 = type.GetProperty("OracleDbType");
                 if (property1 != null)
                 {
                     if (dbType == "text")
@@ -507,7 +507,7 @@ namespace CraigLib.Data
                     {
                         var obj = Enum.Parse(property1.PropertyType, str);
                         property1.SetValue(parameter, obj, null);
-                        if (!(str == "Varchar2") && !(str == "NVarchar2"))
+                        if (str != "Varchar2" && str != "NVarchar2")
                             return;
                         parameter.Size = dbLen;
                     }
@@ -516,30 +516,41 @@ namespace CraigLib.Data
                 }
                 else
                 {
-                    PropertyInfo property2 = type.GetProperty("OracleType");
+                    var property2 = type.GetProperty("OracleType");
                     if (!(property2 != null))
                         return;
-                    if (dbType == "text")
-                        str = "Clob";
-                    else if (dbType == "ntext")
-                        str = "NClob";
-                    else if (dbType == "image")
-                        str = "Blob";
-                    else if (dbType == "long")
-                        str = "LongVarChar";
-                    else if (dbType == "date")
-                        str = "DateTime";
-                    else if (dbType == "boolean")
-                        str = "Byte";
-                    else if (dbType == "varchar")
-                        str = "VarChar";
-                    else if (dbType == "nvarchar")
-                        str = "NVarChar";
+                    switch (dbType)
+                    {
+                        case "text":
+                            str = "Clob";
+                            break;
+                        case "ntext":
+                            str = "NClob";
+                            break;
+                        case "image":
+                            str = "Blob";
+                            break;
+                        case "long":
+                            str = "LongVarChar";
+                            break;
+                        case "date":
+                            str = "DateTime";
+                            break;
+                        case "boolean":
+                            str = "Byte";
+                            break;
+                        case "varchar":
+                            str = "VarChar";
+                            break;
+                        case "nvarchar":
+                            str = "NVarChar";
+                            break;
+                    }
                     if (str.Length <= 0)
                         return;
                     var obj = Enum.Parse(property2.PropertyType, str);
                     property2.SetValue(parameter, obj, null);
-                    if (!(str == "VarChar") && !(str == "NVarChar"))
+                    if (str != "VarChar" && str != "NVarChar")
                         return;
                     parameter.Size = dbLen;
                 }
@@ -547,49 +558,65 @@ namespace CraigLib.Data
             else if (type.Name == "SqlParameter")
             {
                 var str = "";
-                if (dbType == "text")
-                    str = "Text";
-                else if (dbType == "ntext")
-                    str = "NText";
-                else if (dbType == "image")
-                    str = "Image";
-                else if (dbType == "date")
-                    str = "DateTime";
-                else if (dbType == "boolean")
-                    str = "Bit";
-                else if (dbType == "varchar")
-                    str = "VarChar";
-                else if (dbType == "nvarchar")
-                    str = "NVarChar";
+                switch (dbType)
+                {
+                    case "text":
+                        str = "Text";
+                        break;
+                    case "ntext":
+                        str = "NText";
+                        break;
+                    case "image":
+                        str = "Image";
+                        break;
+                    case "date":
+                        str = "DateTime";
+                        break;
+                    case "boolean":
+                        str = "Bit";
+                        break;
+                    case "varchar":
+                        str = "VarChar";
+                        break;
+                    case "nvarchar":
+                        str = "NVarChar";
+                        break;
+                }
                 if (str.Length <= 0)
                     return;
-                PropertyInfo property = type.GetProperty("SqlDbType");
+                var property = type.GetProperty("SqlDbType");
                 var obj = Enum.Parse(property.PropertyType, str);
                 property.SetValue(parameter, obj, null);
-                if (!(str == "VarChar"))
+                if (str != "VarChar")
                     return;
                 parameter.Size = dbLen;
             }
             else
             {
-                if (!(type.Name == "OleDbParameter"))
+                if (type.Name != "OleDbParameter")
                     return;
-                if (dbType == "text" || dbType == "ntext" || dbType == "long")
+                switch (dbType)
                 {
-                    PropertyInfo property = type.GetProperty("OleDbType");
-                    var obj = Enum.Parse(property.PropertyType, "LongVarChar");
-                    property.SetValue(parameter, obj, null);
-                }
-                else if (dbType == "image")
-                {
-                    PropertyInfo property = type.GetProperty("OleDbType");
-                    var obj = Enum.Parse(property.PropertyType, "LongVarBinary");
-                    property.SetValue(parameter, obj, null);
-                }
-                else
-                {
-                    parameter.Size = dbLen;
-                    type.GetProperty("Scale").SetValue(parameter, (byte)dbPrecision, null);
+                    case "long":
+                    case "ntext":
+                    case "text":
+                    {
+                        var property = type.GetProperty("OleDbType");
+                        var obj = Enum.Parse(property.PropertyType, "LongVarChar");
+                        property.SetValue(parameter, obj, null);
+                    }
+                        break;
+                    case "image":
+                    {
+                        var property = type.GetProperty("OleDbType");
+                        var obj = Enum.Parse(property.PropertyType, "LongVarBinary");
+                        property.SetValue(parameter, obj, null);
+                    }
+                        break;
+                    default:
+                        parameter.Size = dbLen;
+                        type.GetProperty("Scale").SetValue(parameter, (byte)dbPrecision, null);
+                        break;
                 }
             }
         }
@@ -604,23 +631,23 @@ namespace CraigLib.Data
             var flag = false;
             var type = parameter.GetType();
             var propertyInfo = (PropertyInfo)null;
-            if (type.Name == "OracleParameter")
+            switch (type.Name)
             {
-                propertyInfo = type.GetProperty("OracleDbType");
-                if (propertyInfo == null)
-                    propertyInfo = type.GetProperty("OracleType");
+                case "OracleParameter":
+                    propertyInfo = type.GetProperty("OracleDbType") ?? type.GetProperty("OracleType");
+                    break;
+                case "SqlParameter":
+                    propertyInfo = type.GetProperty("SqlDbType");
+                    break;
+                case "OleDbParameter":
+                    propertyInfo = type.GetProperty("OleDbType");
+                    break;
             }
-            else if (type.Name == "SqlParameter")
-                propertyInfo = type.GetProperty("SqlDbType");
-            else if (type.Name == "OleDbParameter")
-                propertyInfo = type.GetProperty("OleDbType");
-            if (propertyInfo != null)
-            {
-                object obj = propertyInfo.GetValue(parameter, null);
-                var name = Enum.GetName(propertyInfo.PropertyType, obj);
-                if (BinaryTypeNames.Contains(name))
-                    flag = true;
-            }
+            if (propertyInfo == null) return false;
+            var obj = propertyInfo.GetValue(parameter, null);
+            var name = Enum.GetName(propertyInfo.PropertyType, obj);
+            if (BinaryTypeNames.Contains(name))
+                flag = true;
             return flag;
         }
 
@@ -643,13 +670,13 @@ namespace CraigLib.Data
         {
             var newParameter = GetNewParameter(connInfo);
             SetParameterName(newParameter, parameterName);
-            newParameter.Value = value != null ? value : DBNull.Value;
+            newParameter.Value = value ?? DBNull.Value;
             return newParameter;
         }
 
         public static int ExecuteNonQuery(string commandText)
         {
-            return DatabaseHelper.ExecuteNonQuery(CommandType.Text, commandText);
+            return ExecuteNonQuery(CommandType.Text, commandText);
         }
 
         public static int ExecuteNonQuery(CommandType commandType, string commandText)
@@ -671,15 +698,15 @@ namespace CraigLib.Data
         public static int ExecuteNonQuery(string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteNonQuery(CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteNonQuery(CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteNonQuery(CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteNonQuery(CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static int ExecuteNonQuery(DbConnection connection, string commandText)
         {
-            return DatabaseHelper.ExecuteNonQuery(connection, CommandType.Text, commandText);
+            return ExecuteNonQuery(connection, CommandType.Text, commandText);
         }
 
         public static int ExecuteNonQuery(DbConnection connection, CommandType commandType, string commandText)
@@ -700,15 +727,15 @@ namespace CraigLib.Data
         public static int ExecuteNonQuery(DbConnection connection, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteNonQuery(connection, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteNonQuery(connection, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static int ExecuteNonQuery(DbTransaction transaction, string commandText)
         {
-            return DatabaseHelper.ExecuteNonQuery(transaction, CommandType.Text, commandText);
+            return ExecuteNonQuery(transaction, CommandType.Text, commandText);
         }
 
         public static int ExecuteNonQuery(DbTransaction transaction, CommandType commandType, string commandText)
@@ -729,15 +756,15 @@ namespace CraigLib.Data
         public static int ExecuteNonQuery(DbTransaction transaction, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteNonQuery(transaction, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteNonQuery(transaction, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteNonQuery(transaction, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteNonQuery(transaction, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static DataSet ExecuteDataset(string commandText)
         {
-            return DatabaseHelper.ExecuteDataset(CommandType.Text, commandText);
+            return ExecuteDataset(CommandType.Text, commandText);
         }
 
         public static DataSet ExecuteDataset(CommandType commandType, string commandText)
@@ -759,15 +786,15 @@ namespace CraigLib.Data
         public static DataSet ExecuteDataset(string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteDataset(CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteDataset(CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteDataset(CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteDataset(CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static DataSet ExecuteDataset(DbConnection connection, string commandText)
         {
-            return DatabaseHelper.ExecuteDataset(connection, CommandType.Text, commandText);
+            return ExecuteDataset(connection, CommandType.Text, commandText);
         }
 
         public static DataSet ExecuteDataset(DbConnection connection, CommandType commandType, string commandText)
@@ -790,15 +817,15 @@ namespace CraigLib.Data
         public static DataSet ExecuteDataset(DbConnection connection, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteDataset(connection, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteDataset(connection, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteDataset(connection, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteDataset(connection, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static DataSet ExecuteDataset(DbTransaction transaction, string commandText)
         {
-            return DatabaseHelper.ExecuteDataset(transaction, CommandType.Text, commandText);
+            return ExecuteDataset(transaction, CommandType.Text, commandText);
         }
 
         public static DataSet ExecuteDataset(DbTransaction transaction, CommandType commandType, string commandText)
@@ -821,10 +848,10 @@ namespace CraigLib.Data
         public static DataSet ExecuteDataset(DbTransaction transaction, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteDataset(transaction, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteDataset(transaction, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteDataset(transaction, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteDataset(transaction, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static int FillDataSet(DataSet dataSet, string tableName, string sqlCommand)
@@ -851,7 +878,7 @@ namespace CraigLib.Data
 
         public static int FillDataSet(DataSet dataSet, string tableName, string sqlCommand, DbConnection conn)
         {
-            var rows = 0;
+            int rows;
             using (var newCommand = GetNewCommand(sqlCommand, conn))
             {
                 using (var newDataAdapter = GetNewDataAdapter(newCommand))
@@ -865,9 +892,6 @@ namespace CraigLib.Data
                     {
                         rows = -1;
                         WriteSqlLog(ex.Message);
-                    }
-                    finally
-                    {
                     }
                 }
             }
@@ -913,13 +937,13 @@ namespace CraigLib.Data
 
         public static int FillDataTable(DataTable dataTable, string sqlCommand, bool acceptChangesDuringFill, DbConnection conn, bool log)
         {
-            var rows = 0;
+            int rows;
             using (var newCommand = GetNewCommand(sqlCommand, conn))
             {
                 var type = newCommand.GetType();
                 if (type.Name == "OracleCommand")
                 {
-                    PropertyInfo property = type.GetProperty("InitialLONGFetchSize");
+                    var property = type.GetProperty("InitialLONGFetchSize");
                     if (property != null)
                         property.SetValue(newCommand, 2048, null);
                 }
@@ -932,6 +956,7 @@ namespace CraigLib.Data
                             WriteSqlLog(sqlCommand, 2);
                         }
                         dataTable.BeginLoadData();
+                        newDataAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                         newDataAdapter.AcceptChangesDuringFill = acceptChangesDuringFill;
                         rows = newDataAdapter.Fill(dataTable);
                         dataTable.EndLoadData();
@@ -942,10 +967,7 @@ namespace CraigLib.Data
                         if (log)
                             WriteSqlLog(ex.Message);
                     }
-                    finally
-                    {
-                        
-                    }
+                    
                 }
             }
             return rows;
@@ -992,33 +1014,26 @@ namespace CraigLib.Data
         public static IEnumerable<DbDataReader> ExecuteSelect(string sql, bool preinit)
         {
             var count = 0;
-            try
+            if (!preinit)
             {
-                if (!preinit)
+                WriteSqlLog(sql);
+            }
+            using (var newConnection = GetNewConnection(true))
+            {
+                using (var dbDataReader = ExecuteReader(newConnection, sql))
                 {
-                    WriteSqlLog(sql);
-                }
-                using (var newConnection = GetNewConnection(true))
-                {
-                    using (var dbDataReader = ExecuteReader(newConnection, sql))
+                    while (dbDataReader.Read())
                     {
-                        while (dbDataReader.Read())
-                        {
-                            ++count;
-                            yield return dbDataReader;
-                        }
+                        ++count;
+                        yield return dbDataReader;
                     }
                 }
-            }
-            finally
-            {
-               
             }
         }
 
         public static DbDataReader ExecuteReader(DbConnection connection, string commandText)
         {
-            return DatabaseHelper.ExecuteReader(connection, CommandType.Text, commandText);
+            return ExecuteReader(connection, CommandType.Text, commandText);
         }
 
         public static DbDataReader ExecuteReader(DbConnection connection, CommandType commandType, string commandText)
@@ -1034,15 +1049,15 @@ namespace CraigLib.Data
         public static DbDataReader ExecuteReader(DbConnection connection, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteReader(connection, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteReader(connection, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteReader(connection, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteReader(connection, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static DbDataReader ExecuteReader(DbTransaction transaction, string commandText)
         {
-            return DatabaseHelper.ExecuteReader(transaction, CommandType.Text, commandText, null);
+            return ExecuteReader(transaction, CommandType.Text, commandText, null);
         }
 
         public static DbDataReader ExecuteReader(DbTransaction transaction, CommandType commandType, string commandText)
@@ -1058,15 +1073,15 @@ namespace CraigLib.Data
         public static DbDataReader ExecuteReader(DbTransaction transaction, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteReader(transaction, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteReader(transaction, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteReader(transaction, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteReader(transaction, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static object ExecuteScalar(string commandText)
         {
-            return DatabaseHelper.ExecuteScalar(CommandType.Text, commandText);
+            return ExecuteScalar(CommandType.Text, commandText);
         }
 
         public static object ExecuteScalar(CommandType commandType, string commandText)
@@ -1088,15 +1103,15 @@ namespace CraigLib.Data
         public static object ExecuteScalar(string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteScalar(CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteScalar(CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteScalar(CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteScalar(CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static object ExecuteScalar(DbConnection connection, string commandText)
         {
-            return DatabaseHelper.ExecuteScalar(connection, CommandType.Text, commandText);
+            return ExecuteScalar(connection, CommandType.Text, commandText);
         }
 
         public static object ExecuteScalar(DbConnection connection, CommandType commandType, string commandText)
@@ -1117,15 +1132,15 @@ namespace CraigLib.Data
         public static object ExecuteScalar(DbConnection connection, string spName, params object[] parameterValues)
         {
             if (parameterValues == null || parameterValues.Length <= 0)
-                return DatabaseHelper.ExecuteScalar(connection, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+                return ExecuteScalar(connection, CommandType.StoredProcedure, spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
-            return DatabaseHelper.ExecuteScalar(connection, CommandType.StoredProcedure, spName, spParameterSet);
+            return ExecuteScalar(connection, CommandType.StoredProcedure, spName, spParameterSet);
         }
 
         public static object ExecuteScalar(DbTransaction transaction, string commandText)
         {
-            return DatabaseHelper.ExecuteScalar(transaction, CommandType.Text, commandText);
+            return ExecuteScalar(transaction, CommandType.Text, commandText);
         }
 
         public static object ExecuteScalar(DbTransaction transaction, CommandType commandType, string commandText)
@@ -1147,7 +1162,7 @@ namespace CraigLib.Data
         {
             if (parameterValues == null || parameterValues.Length <= 0)
                 return ExecuteScalar(transaction, CommandType.StoredProcedure, spName);
-            DbParameter[] spParameterSet = DbParameterCache.GetSpParameterSet(spName);
+            var spParameterSet = DbParameterCache.GetSpParameterSet(spName);
             AssignParameterValues(spParameterSet, parameterValues);
             return ExecuteScalar(transaction, CommandType.StoredProcedure, spName, spParameterSet);
         }
@@ -1175,19 +1190,16 @@ namespace CraigLib.Data
 
         public static string SqlValue(string value, string dbType)
         {
-            var str = string.Empty;
-            return value == null || value == "<null>" ? "NULL" : (!(value == "<blank>") ? (dbType.IndexOf("char") >= 0 || dbType.IndexOf("text") >= 0 ? SqlChar(value) : (dbType.IndexOf("date") < 0 ? (dbType.IndexOf("bool") < 0 ? value : SqlBool(value)) : SqlTime(value))) : "''");
+            return value == null || value == "<null>" ? "NULL" : (value != "<blank>" ? (dbType.IndexOf("char", StringComparison.Ordinal) >= 0 || dbType.IndexOf("text", StringComparison.Ordinal) >= 0 ? SqlChar(value) : (dbType.IndexOf("date", StringComparison.Ordinal) < 0 ? (dbType.IndexOf("bool", StringComparison.Ordinal) < 0 ? value : SqlBool(value)) : SqlTime(value))) : "''");
         }
 
         public static string SqlValue(object value)
         {
-            var str = string.Empty;
             return !Expr.IsNull(value) ? (!(value is string) ? (!(value is DateTime) ? (!(value is bool) ? (!(value is Decimal) ? (!(value is double) ? value.ToString() : ((double)value).ToString(CultureInfo.InvariantCulture)) : ((Decimal)value).ToString(CultureInfo.InvariantCulture)) : SqlBool((bool)value)) : SqlTime((DateTime)value)) : SqlChar((string)value)) : "null";
         }
 
         public static string SqlChar(string charValue)
         {
-            var str = string.Empty;
             charValue = charValue.Replace("'", "''");
             return "'" + charValue + "'";
         }
@@ -1195,18 +1207,14 @@ namespace CraigLib.Data
         public static string SqlDate(string dateString)
         {
             var dateValue = SqlMinDate;
-            try
+
+            if (dateString.Equals("today", StringComparison.OrdinalIgnoreCase))
+                dateValue = GetServerDate().Date;
+            else if (dateString.Equals("now", StringComparison.OrdinalIgnoreCase))
             {
-                if (dateString.Equals("today", StringComparison.OrdinalIgnoreCase))
-                    dateValue = GetServerDate().Date;
-                else if (dateString.Equals("now", StringComparison.OrdinalIgnoreCase))
-                {
-                    dateValue = GetServerDate();
-                }
+                dateValue = GetServerDate();
             }
-            catch
-            {
-            }
+
             return SqlDate(dateValue);
         }
 
@@ -1233,22 +1241,17 @@ namespace CraigLib.Data
         public static string SqlTime(string timeString)
         {
             var timeValue = SqlMinDate;
-            try
+
+            if (timeString.Equals("today", StringComparison.OrdinalIgnoreCase))
+                timeValue = GetServerDate().Date;
+            else if (timeString.Equals("now", StringComparison.OrdinalIgnoreCase))
             {
-                if (timeString.Equals("today", StringComparison.OrdinalIgnoreCase))
-                    timeValue = GetServerDate().Date;
-                else if (timeString.Equals("now", StringComparison.OrdinalIgnoreCase))
-                {
-                    timeValue = GetServerDate();
-                }
-                else
-                {
-                    if (timeString == DbCurrentDate)
-                        return timeString;
-                }
+                timeValue = GetServerDate();
             }
-            catch
+            else
             {
+                if (timeString == DbCurrentDate)
+                    return timeString;
             }
             return SqlTime(timeValue);
         }
@@ -1275,15 +1278,9 @@ namespace CraigLib.Data
 
         public static string SqlBool(string boolString)
         {
-            var b = false;
-            try
-            {
-                boolString = boolString.Trim();
-                b = !(boolString == "0") && !(boolString == "N") && (boolString == "1" || boolString == "Y" || Convert.ToBoolean(boolString));
-            }
-            catch
-            {
-            }
+            boolString = boolString.Trim();
+                var b = boolString != "0" && boolString != "N" && (boolString == "1" || boolString == "Y" || Convert.ToBoolean(boolString));
+
             return SqlBool(b);
         }
 
@@ -1312,8 +1309,7 @@ namespace CraigLib.Data
         {
             if (DbSyntax == DatabaseType.ORACLE)
                 return "Nvl(" + col + ", " + def + ")";
-            else
-                return "isnull(" + col + ", " + def + ")";
+            return "isnull(" + col + ", " + def + ")";
         }
 
         public static string GetDefaultDate(DatabaseType dbSyntax)
@@ -1334,120 +1330,116 @@ namespace CraigLib.Data
 
         public static string GetSelectSql(DataTable dt, params string[] dbtables)
         {
-            var queryBuilder = new QueryBuilder(DataSetHelper.GetSelectSql(dt));
+            var queryBuilder = new QueryBuilder(dt.GetSelectSql());
             var tableList = new List<string>();
             foreach (DataColumn dataColumn in dt.Columns)
             {
                 var dc = dataColumn;
-                if (string.IsNullOrEmpty(dc.Expression) && queryBuilder.ColumnList.FindIndex(s =>
+                if(string.IsNullOrEmpty(dc.Expression))
+                    continue;
+                var indexCount = queryBuilder.ColumnList.FindIndex(s =>
                 {
-                    var local_0 = s.TrimEnd(' ', ')');
-                    if (!local_0.Equals(dc.ColumnName, StringComparison.OrdinalIgnoreCase) && !local_0.EndsWith(" " + dc.ColumnName, StringComparison.OrdinalIgnoreCase))
-                        return local_0.EndsWith("." + dc.ColumnName, StringComparison.OrdinalIgnoreCase);
-                    else
-                        return true;
-                }) < 0)
+                    var local0 = s.TrimEnd(' ', ')');
+
+                    if (!local0.Equals(dc.ColumnName, StringComparison.OrdinalIgnoreCase) &&
+                        !local0.EndsWith(" " + dc.ColumnName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return local0.EndsWith("." +dc.ColumnName,StringComparison
+                                        .OrdinalIgnoreCase);
+                    }
+                    return true;
+                }
+                );
+                if (indexCount >= 0)
+                    continue;
+                var dbTable = dc.GetDbTable();
+                var dbcolumn = dc.GetDbColumn();
+                //var dbExpr = dc.GetDbExpr();
+                if (dbtables.Length > 0)
                 {
-                    string str1 = DataSetHelper.GetDbTable(dc);
-                    string str2 = DataSetHelper.GetDbColumn(dc);
-                    string dbExpr = DataSetHelper.GetDbExpr(dc);
-                    if (dbtables.Length > 0)
+                    if (dbcolumn.Length == 0)
+                        dbcolumn = dc.ColumnName;
+                    if (dbTable.Length == 0 || !IsMatch(dc, dbTable, dbcolumn) || Array.IndexOf(dbtables, dbTable) < 0)
                     {
-                        if (str2.Length == 0)
-                            str2 = dc.ColumnName;
-                        if (str1.Length == 0 || !IsMatch(dc, str1, str2) || Array.IndexOf<string>(dbtables, str1) < 0)
+                        dbTable = "";
+                        foreach (var dbtable in dbtables.Where(dbtable => IsMatch(dc, dbtable, dbcolumn)))
                         {
-                            str1 = "";
-                            foreach (var dbtable in dbtables)
-                            {
-                                if (IsMatch(dc, dbtable, str2))
-                                {
-                                    str1 = dbtable;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    var str3 = "";
-                    var str4 = "";
-                    DatabaseSchema.DbColumnRow dbColumn = DatabaseContent.GetDbColumn(str1, str2);
-                    var str5 = CheckSqlReservedWord(str1);
-                    var str6 = CheckSqlReservedWord(str2);
-                    var str7 = CheckSqlReservedWord(dc.ColumnName);
-                    if (!string.IsNullOrEmpty(dbExpr))
-                    {
-                        str3 = "(" + dbExpr + ") " + str7;
-                        str4 = str5;
-                    }
-                    else if (dbColumn != null)
-                    {
-                        if (DataSetHelper.IsProxy(dc))
-                        {
-                            if (dc.DefaultValue != null && dc.DefaultValue != DBNull.Value)
-                                str3 = "(null) " + str7;
-                        }
-                        else
-                        {
-                            string dbCrosstab = DataSetHelper.GetDbCrosstab(dc);
-                            if (string.IsNullOrEmpty(dbCrosstab))
-                                str3 = str5 + "." + str6 + " " + str7;
-                            else
-                                str3 = "SUM(CASE WHEN " + dbCrosstab + " THEN " + str5 + "." + str6 + " ELSE 0 END) " + str7;
-                            str4 = str5;
-                        }
-                    }
-                    else if (dc.DefaultValue != null && dc.DefaultValue != DBNull.Value && !DataSetHelper.IsDynamicColumn(dc))
-                        str3 = "(null) " + str7;
-                    if (str3.Length > 0)
-                    {
-                        queryBuilder.ColumnList.Add(str3);
-                        if (str4.Length > 0 && !queryBuilder.TableList.Contains(str4) && !queryBuilder.TableList.Contains(str4.ToUpper()))
-                        {
-                            queryBuilder.TableList.Add(str4);
-                            tableList.Add(str4);
+                            dbTable = dbtable;
+                            break;
                         }
                     }
                 }
+                var str3 = "";
+                //var dbColumn = DatabaseContent.GetDbColumn(dbTable, dbcolumn);
+                var str5 = CheckSqlReservedWord(dbTable);
+                //var str6 = CheckSqlReservedWord(dbcolumn);
+                var str7 = CheckSqlReservedWord(dc.ColumnName);
+                //if (!string.IsNullOrEmpty(dbExpr))
+                //{
+                //    str3 = "(" + dbExpr + ") " + str7;
+                //    str4 = str5;
+                //}
+                //else if (dbColumn != null)
+                //{
+                    //if (dc.IsProxy())
+                    //{
+                    //    if (dc.DefaultValue != null && dc.DefaultValue != DBNull.Value)
+                    //        str3 = "(null) " + str7;
+                    //}
+                    //else
+                    //{
+                    //var dbCrosstab = dc.GetDbCrosstab();
+                    //if (string.IsNullOrEmpty(dbCrosstab))
+                    //    str3 = str5 + "." + str6 + " " + str7;
+                    //else
+                    //    str3 = "SUM(CASE WHEN " + dbCrosstab + " THEN " + str5 + "." + str6 + " ELSE 0 END) " + str7;
+                    string str4 = str5;
+                    //}
+                //}
+                //else 
+                if (dc.DefaultValue != null && dc.DefaultValue != DBNull.Value && !dc.IsDynamicColumn())
+                    str3 = "(null) " + str7;
+                if (str3.Length <= 0) continue;
+                queryBuilder.ColumnList.Add(str3);
+                if (str4.Length <= 0 || queryBuilder.TableList.Contains(str4) ||queryBuilder.TableList.Contains(str4.ToUpper())) 
+                    continue;
+                queryBuilder.TableList.Add(str4);
+                tableList.Add(str4);
             }
-            string str;
             if (queryBuilder.TableList.Count == 0)
-            {
-                str = "";
-            }
-            else
-            {
-                if (DataSetHelper.IsSelectDistinct(dt))
-                    queryBuilder.SelectDistinct = true;
-                var joinSql = GetJoinSql(tableList, DataSetHelper.JoinByMatchColumnsOnly(dt));
-                if (!string.IsNullOrEmpty(joinSql))
-                    queryBuilder.AddWhereClause(joinSql);
-                string dbWhere = DataSetHelper.GetDbWhere(dt);
-                if (!string.IsNullOrEmpty(dbWhere))
-                    queryBuilder.AddWhereClause(dbWhere);
-                if (string.IsNullOrEmpty(joinSql) && string.IsNullOrEmpty(dbWhere))
-                {
-                    var count = tableList.Count;
-                }
+                return string.Empty;
+            if (dt.IsSelectDistinct())
+                queryBuilder.SelectDistinct = true;
+            var joinSql = GetJoinSql(tableList, dt.JoinByMatchColumnsOnly());
+            if (!string.IsNullOrEmpty(joinSql))
+                queryBuilder.AddWhereClause(joinSql);
+            var dbWhere = dt.GetDbWhere();
+            if (!string.IsNullOrEmpty(dbWhere))
+                queryBuilder.AddWhereClause(dbWhere);
                
-                int pageSize = DataSetHelper.GetPageSize(dt);
-                int rowsLimit = DataSetHelper.GetRowsLimit(dt);
-                if (pageSize > 0)
-                {
-                    int pageNumber1 = DataSetHelper.GetPageNumber(dt);
-                    int pageNumber2 = queryBuilder.ToPagingSql(pageSize, pageNumber1);
-                    DataSetHelper.SetPageNumber(dt, pageNumber2);
-                }
-                else if (rowsLimit > 0)
-                    queryBuilder.RowsLimit = rowsLimit;
-                str = queryBuilder.Query;
+            var pageSize = dt.GetPageSize();
+            var rowsLimit = dt.GetRowsLimit();
+            if (pageSize > 0)
+            {
+                var pageNumber1 = dt.GetPageNumber();
+                var pageNumber2 = queryBuilder.ToPagingSql(pageSize, pageNumber1);
+                dt.SetPageNumber(pageNumber2);
             }
-            return str;
+            else if (rowsLimit > 0)
+                queryBuilder.RowsLimit = rowsLimit;
+            return queryBuilder.Query;
         }
 
         private static bool IsMatch(DataColumn dc, string dbtable, string dbcolumn)
         {
-            DatabaseSchema.DbColumnRow dbColumn = DatabaseContent.GetDbColumn(dbtable, dbcolumn);
-            return dbColumn != null && (!(dc.DataType == typeof(string)) || dbColumn.DbType.IndexOf("char") >= 0 || dbColumn.DbType.IndexOf("text") >= 0) && ((!(dc.DataType == typeof(bool)) || dbColumn.DbType.IndexOf("bool") >= 0) && (!(dc.DataType == typeof(DateTime)) || dbColumn.DbType.IndexOf("date") >= 0) && (!DataSetHelper.IsNumericColumn(dc) || !(dbColumn.DbType != "number") || !(dbColumn.DbType != "int")));
+            var dbColumn = DatabaseContent.GetDbColumn(dbtable, dbcolumn);
+            return dbColumn != null &&
+                   (!(dc.DataType == typeof (string)) || dbColumn.DbType.IndexOf("char", StringComparison.Ordinal) >= 0 ||
+                    dbColumn.DbType.IndexOf("text", StringComparison.Ordinal) >= 0) &&
+                   ((!(dc.DataType == typeof (bool)) || dbColumn.DbType.IndexOf("bool", StringComparison.Ordinal) >= 0) &&
+                    (!(dc.DataType == typeof (DateTime)) ||
+                     dbColumn.DbType.IndexOf("date", StringComparison.Ordinal) >= 0) &&
+                    (!dc.IsNumericColumn() || dbColumn.DbType == "number" || dbColumn.DbType == "int"));
         }
 
         public static string GetSelectSql(DataTable dt, SelectCriteria criteria, params string[] dbtables)
@@ -1458,10 +1450,7 @@ namespace CraigLib.Data
 
         public static string CleanSqlString(string sql)
         {
-            var strArray = sql.Split(new string[1]
-      {
-        "\r\n"
-      }, StringSplitOptions.RemoveEmptyEntries);
+            var strArray = sql.Split(new[]{"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
             var stringBuilder = new StringBuilder();
             for (var index = 0; index < strArray.Length; ++index)
             {
@@ -1477,7 +1466,7 @@ namespace CraigLib.Data
             var list = new List<DatabaseSchema.DbFKeyRow>();
             if (trailList == null)
                 trailList = new List<DatabaseSchema.DbFKeyRow>();
-            foreach (DatabaseSchema.DbFKeyRow dbFkeyRow in direction == JoinDirection.Parent ? DatabaseContent.GetForeignKeys(tablename1) : DatabaseContent.GetReferencedForeignKeys(tablename1))
+            foreach (var dbFkeyRow in direction == JoinDirection.Parent ? DatabaseContent.GetForeignKeys(tablename1) : DatabaseContent.GetReferencedForeignKeys(tablename1))
             {
                 if (!trailList.Contains(dbFkeyRow))
                 {
@@ -1486,16 +1475,13 @@ namespace CraigLib.Data
                         list.Add(dbFkeyRow);
                         break;
                     }
-                    else
+                    trailList.Add(dbFkeyRow);
+                    var foreignKeysForJoin = GetForeignKeysForJoin(direction == JoinDirection.Parent ? dbFkeyRow.DbRefTable : dbFkeyRow.DbFKeyTable, tablename2, direction, trailList);
+                    if (foreignKeysForJoin.Count > 0)
                     {
-                        trailList.Add(dbFkeyRow);
-                        var foreignKeysForJoin = GetForeignKeysForJoin(direction == JoinDirection.Parent ? dbFkeyRow.DbRefTable : dbFkeyRow.DbFKeyTable, tablename2, direction, trailList);
-                        if (foreignKeysForJoin.Count > 0)
-                        {
-                            list.AddRange(foreignKeysForJoin);
-                            list.Add(dbFkeyRow);
-                            break;
-                        }
+                        list.AddRange(foreignKeysForJoin);
+                        list.Add(dbFkeyRow);
+                        break;
                     }
                 }
             }
@@ -1504,16 +1490,16 @@ namespace CraigLib.Data
 
         public static string GetDbCriteriaClause(List<string> tableList, DatabaseCriteria databaseCriteria)
         {
-            var str1 = "";
+            const string str1 = "";
             if (string.IsNullOrEmpty(databaseCriteria.DbColumn) || string.IsNullOrEmpty(databaseCriteria.DbValue))
                 return str1;
             var str2 = "";
             var dbType = "";
             if (!string.IsNullOrEmpty(databaseCriteria.DbTable))
             {
-                if (Enumerable.Contains<string>(tableList, databaseCriteria.DbTable, StringComparer.OrdinalIgnoreCase))
+                if (tableList.Contains(databaseCriteria.DbTable, StringComparer.OrdinalIgnoreCase))
                 {
-                    DatabaseSchema.DbColumnRow dbColumn = DatabaseContent.GetDbColumn(databaseCriteria.DbTable, databaseCriteria.DbColumn);
+                    var dbColumn = DatabaseContent.GetDbColumn(databaseCriteria.DbTable, databaseCriteria.DbColumn);
                     if (dbColumn != null)
                     {
                         str2 = CheckSqlReservedWord(dbColumn.DbTable) + "." + CheckSqlReservedWord(dbColumn.DbColumn);
@@ -1523,33 +1509,29 @@ namespace CraigLib.Data
             }
             else
             {
-                foreach (var tablename in tableList)
+                foreach (var dbColumn in tableList.Select(tablename => DatabaseContent.GetDbColumn(tablename, databaseCriteria.DbColumn)).Where(dbColumn => dbColumn != null))
                 {
-                    DatabaseSchema.DbColumnRow dbColumn = DatabaseContent.GetDbColumn(tablename, databaseCriteria.DbColumn);
-                    if (dbColumn != null)
-                    {
-                        str2 = CheckSqlReservedWord(dbColumn.DbTable) + "." + CheckSqlReservedWord(dbColumn.DbColumn);
-                        dbType = dbColumn.DbType;
-                        break;
-                    }
+                    str2 = CheckSqlReservedWord(dbColumn.DbTable) + "." + CheckSqlReservedWord(dbColumn.DbColumn);
+                    dbType = dbColumn.DbType;
+                    break;
                 }
             }
             if (string.IsNullOrEmpty(str2))
                 return str1;
-            string str3 = databaseCriteria.RelOperator.ToUpper();
-            string sqlParamValue = databaseCriteria.DbValue;
+            var str3 = databaseCriteria.RelOperator.ToUpper();
+            var sqlParamValue = databaseCriteria.DbValue;
             if (sqlParamValue == "<blank>")
                 sqlParamValue = "";
             var timeperiod = SqlParamValue(sqlParamValue);
             if (timeperiod == "<null>")
             {
-                str3 = str3.IndexOf("IS") < 0 ? (str3.IndexOf("<") >= 0 || str3.IndexOf(">") >= 0 || str3.IndexOf("NOT") >= 0 ? "IS NOT" : "IS") : databaseCriteria.RelOperator;
+                str3 = str3.IndexOf("IS", StringComparison.Ordinal) < 0 ? (str3.IndexOf("<", StringComparison.Ordinal) >= 0 || str3.IndexOf(">", StringComparison.Ordinal) >= 0 || str3.IndexOf("NOT", StringComparison.Ordinal) >= 0 ? "IS NOT" : "IS") : databaseCriteria.RelOperator;
                 timeperiod = "NULL";
             }
-            else if (str3.IndexOf("IS") < 0)
+            else if (str3.IndexOf("IS", StringComparison.Ordinal) < 0)
             {
                 
-                if (str3.IndexOf("IN") >= 0)
+                if (str3.IndexOf("IN", StringComparison.Ordinal) >= 0)
                 {
                     var str4 = timeperiod.Trim();
                     if (str4.StartsWith("(") && str4.EndsWith(")"))
@@ -1559,10 +1541,7 @@ namespace CraigLib.Data
                     }
                     if (!str4.Trim().StartsWith("SELECT ", StringComparison.OrdinalIgnoreCase))
                     {
-                        var strArray = str4.Split(new char[1]
-            {
-              ','
-            });
+                        var strArray = str4.Split(new[]{','});
                         for (var index = 0; index < strArray.Length; ++index)
                         {
                             strArray[index] = strArray[index].Trim();
@@ -1580,14 +1559,11 @@ namespace CraigLib.Data
                             strArray[index] = SqlValue(strArray[index], dbType);
                         }
                         str4 = "";
-                        foreach (var str5 in strArray)
+                        foreach (var str5 in strArray.Where(str5 => !string.IsNullOrEmpty(str5)))
                         {
-                            if (!string.IsNullOrEmpty(str5))
-                            {
-                                if (str4.Length > 0)
-                                    str4 = str4 + ",";
-                                str4 = str4 + str5;
-                            }
+                            if (str4.Length > 0)
+                                str4 = str4 + ",";
+                            str4 = str4 + str5;
                         }
                     }
                     timeperiod = "(" + str4 + ")";
@@ -1600,7 +1576,7 @@ namespace CraigLib.Data
                 else
                     timeperiod = SqlValue(timeperiod, dbType);
             }
-            if (dbType.IndexOf("text") >= 0 && DbSyntax == DatabaseType.ORACLE && timeperiod != "NULL")
+            if (dbType.IndexOf("text", StringComparison.Ordinal) >= 0 && DbSyntax == DatabaseType.ORACLE && timeperiod != "NULL")
                 str2 = "dbms_lob.substr(" + str2 + ")";
             if (databaseCriteria.DbValue.Trim().ToUpper() == ":USERID")
             {
@@ -1651,17 +1627,14 @@ namespace CraigLib.Data
             var list1 = new List<string>();
             foreach (var tablename1 in tableList)
             {
-                DatabaseSchema.DbFKeyRow[] foreignKeys = DatabaseContent.GetForeignKeys(tablename1);
+                var foreignKeys = DatabaseContent.GetForeignKeys(tablename1);
                 var dictionary = new Dictionary<string, List<DatabaseSchema.DbFKeyRow>>();
-                foreach (var dbFkeyRow in foreignKeys)
+                foreach (var dbFkeyRow in foreignKeys.Where(dbFkeyRow => dbFkeyRow.DbRefTable != tablename1 && tableList.Contains(dbFkeyRow.DbRefTable)))
                 {
-                    if (!(dbFkeyRow.DbRefTable == tablename1) && tableList.Contains(dbFkeyRow.DbRefTable))
-                    {
-                        var list2 = (List<DatabaseSchema.DbFKeyRow>)null;
-                        if (!dictionary.TryGetValue(dbFkeyRow.DbRefTable, out list2))
-                            dictionary[dbFkeyRow.DbRefTable] = list2 = new List<DatabaseSchema.DbFKeyRow>();
-                        list2.Add(dbFkeyRow);
-                    }
+                    List<DatabaseSchema.DbFKeyRow> list2;
+                    if (!dictionary.TryGetValue(dbFkeyRow.DbRefTable, out list2))
+                        dictionary[dbFkeyRow.DbRefTable] = list2 = new List<DatabaseSchema.DbFKeyRow>();
+                    list2.Add(dbFkeyRow);
                 }
                 foreach (var keyValuePair in dictionary)
                 {
@@ -1669,11 +1642,8 @@ namespace CraigLib.Data
                     foreach (var dbFkeyRow in keyValuePair.Value)
                     {
                         var str2 = "";
-                        DatabaseSchema.DbColumnRow[] primaryKeys = DatabaseContent.GetPrimaryKeys(dbFkeyRow.DbRefTable);
-                        string[] strArray = dbFkeyRow.DbFKeyColumn.Split(new char[1]
-            {
-              ','
-            });
+                        var primaryKeys = DatabaseContent.GetPrimaryKeys(dbFkeyRow.DbRefTable);
+                        var strArray = dbFkeyRow.DbFKeyColumn.Split(new[]{','});
                         if (primaryKeys.Length != 0 && primaryKeys.Length == strArray.Length)
                         {
                             var flag = true;
@@ -1687,7 +1657,7 @@ namespace CraigLib.Data
                             }
                             if ((!byMatchColumnsOnly || flag) && str2.Length > 0)
                             {
-                                if (str2.IndexOf(" AND ") > 0)
+                                if (str2.IndexOf(" AND ", StringComparison.Ordinal) > 0)
                                     str2 = "(" + str2 + ")";
                                 if (str1.Length > 0)
                                     str1 = str1 + " OR ";
@@ -1701,7 +1671,7 @@ namespace CraigLib.Data
                     }
                     if (str1.Length > 0)
                     {
-                        if (str1.IndexOf(" OR ") > 0)
+                        if (str1.IndexOf(" OR ", StringComparison.Ordinal) > 0)
                             str1 = "(" + str1 + ")";
                         if (stringBuilder.Length > 0)
                             stringBuilder.Append(" AND ");
@@ -1710,19 +1680,38 @@ namespace CraigLib.Data
                 }
                 if (!list1.Contains(tablename1))
                 {
-                    DatabaseSchema.DbColumnRow[] dbColumns1 = DatabaseContent.GetDbColumns(tablename1);
-                    DatabaseSchema.DbColumnRow[] primaryKeys = DatabaseContent.GetPrimaryKeys(tablename1);
+                    var dbColumns1 = DatabaseContent.GetDbColumns(tablename1);
+                    var primaryKeys = DatabaseContent.GetPrimaryKeys(tablename1);
                     foreach (var tablename2 in tableList)
                     {
-                        if (!(tablename2 == tablename1))
+                        if (tablename2 == tablename1) continue;
+                        var list2 = new List<DatabaseSchema.DbColumnRow>();
+                        var list3 = new List<DatabaseSchema.DbColumnRow>();
+                        foreach (var dbColumnRow1 in DatabaseContent.GetPrimaryKeys(tablename2))
                         {
-                            var list2 = new List<DatabaseSchema.DbColumnRow>();
-                            var list3 = new List<DatabaseSchema.DbColumnRow>();
-                            foreach (DatabaseSchema.DbColumnRow dbColumnRow1 in DatabaseContent.GetPrimaryKeys(tablename2))
+                            if (!dbColumnRow1.DbColumn.Equals("surrogate", StringComparison.OrdinalIgnoreCase))
+                            {
+                                foreach (var dbColumnRow2 in dbColumns1.Where(dbColumnRow2 => dbColumnRow1.DbColumn.Equals(dbColumnRow2.DbColumn,
+                                    StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    list2.Add(dbColumnRow1);
+                                    list3.Add(dbColumnRow2);
+                                    break;
+                                }
+                            }
+                            else
+                                break;
+                        }
+                        if (list2.Count == 0 || list2.Count != list3.Count)
+                        {
+                            list2.Clear();
+                            list3.Clear();
+                            var dbColumns2 = DatabaseContent.GetDbColumns(tablename2);
+                            foreach (var dbColumnRow1 in primaryKeys)
                             {
                                 if (!dbColumnRow1.DbColumn.Equals("surrogate", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    foreach (var dbColumnRow2 in dbColumns1)
+                                    foreach (var dbColumnRow2 in dbColumns2)
                                     {
                                         if (dbColumnRow1.DbColumn.Equals(dbColumnRow2.DbColumn, StringComparison.OrdinalIgnoreCase))
                                         {
@@ -1735,44 +1724,21 @@ namespace CraigLib.Data
                                 else
                                     break;
                             }
-                            if (list2.Count == 0 || list2.Count != list3.Count)
+                        }
+                        if (list2.Count > 0 && list2.Count == list3.Count)
+                        {
+                            for (var index = 0; index < list2.Count; ++index)
                             {
-                                list2.Clear();
-                                list3.Clear();
-                                DatabaseSchema.DbColumnRow[] dbColumns2 = DatabaseContent.GetDbColumns(tablename2);
-                                foreach (var dbColumnRow1 in primaryKeys)
-                                {
-                                    if (!dbColumnRow1.DbColumn.Equals("surrogate", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        foreach (var dbColumnRow2 in dbColumns2)
-                                        {
-                                            if (dbColumnRow1.DbColumn.Equals(dbColumnRow2.DbColumn, StringComparison.OrdinalIgnoreCase))
-                                            {
-                                                list2.Add(dbColumnRow1);
-                                                list3.Add(dbColumnRow2);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    else
-                                        break;
-                                }
+                                if (stringBuilder.Length > 0)
+                                    stringBuilder.Append(" AND ");
+                                var dbColumnRow1 = list2[index];
+                                var dbColumnRow2 = list3[index];
+                                stringBuilder.Append(dbColumnRow1.DbTable).Append(".").Append(dbColumnRow1.DbColumn).Append("=").Append(dbColumnRow2.DbTable).Append(".").Append(dbColumnRow2.DbColumn);
                             }
-                            if (list2.Count > 0 && list2.Count == list3.Count)
-                            {
-                                for (var index = 0; index < list2.Count; ++index)
-                                {
-                                    if (stringBuilder.Length > 0)
-                                        stringBuilder.Append(" AND ");
-                                    var dbColumnRow1 = list2[index];
-                                    var dbColumnRow2 = list3[index];
-                                    stringBuilder.Append(dbColumnRow1.DbTable).Append(".").Append(dbColumnRow1.DbColumn).Append("=").Append(dbColumnRow2.DbTable).Append(".").Append(dbColumnRow2.DbColumn);
-                                }
-                                if (!list1.Contains(tablename1))
-                                    list1.Add(tablename1);
-                                if (!list1.Contains(tablename2))
-                                    list1.Add(tablename2);
-                            }
+                            if (!list1.Contains(tablename1))
+                                list1.Add(tablename1);
+                            if (!list1.Contains(tablename2))
+                                list1.Add(tablename2);
                         }
                     }
                 }
@@ -1786,13 +1752,12 @@ namespace CraigLib.Data
                 return new string[0];
             var str1 = new QueryBuilder(sql).From + " ";
             var dictionary = new Dictionary<string, string>();
-            foreach (DataRow dataRow in (InternalDataCollectionBase)((DataSet)CacheMachine.Get("DatabaseModel")).Tables["dbtable"].Rows)
+            foreach (var str2 in from DataRow dataRow in (InternalDataCollectionBase)((DataSet)CacheMachine.Get("DatabaseModel")).Tables["dbtable"].Rows select " " + 
+                                     (string)dataRow["dbtable"] + " " into str2 where str1.IndexOf(str2, StringComparison.OrdinalIgnoreCase) >= 0 select str2)
             {
-                var str2 = " " + (string)dataRow["dbtable"] + " ";
-                if (str1.IndexOf(str2, StringComparison.OrdinalIgnoreCase) >= 0)
-                    dictionary[str2.Trim()] = "";
+                dictionary[str2.Trim()] = "";
             }
-            return Enumerable.ToArray<string>(dictionary.Keys);
+            return dictionary.Keys.ToArray();
         }
 
         public static string[] GetViewTables(string dbviewname)
@@ -1816,28 +1781,25 @@ namespace CraigLib.Data
                     if (dbColumnRow != null)
                         break;
                 }
-                if (dbColumnRow != null)
+                if (dbColumnRow == null) return str1;
+                string str2;
+                if (endtime < SqlMaxDate)
                 {
-                    if (endtime < SqlMaxDate)
-                    {
-                        var str2 = dbColumnRow.DbTable + "." + dbColumnRow.DbColumn;
-                        if (addIsNull)
-                            str1 = str1 + "(" + str2 + "<" + SqlTime(endtime) + " OR " + str2 + " is null)";
-                        else
-                            str1 = str1 + str2 + "<" + SqlTime(endtime);
-                    }
-                    DatabaseSchema.DbColumnRow dbColumn = DatabaseContent.GetDbColumn(dbColumnRow.DbTable, "endtime");
-                    if (dbColumn != null && begtime > SqlMinDate)
-                    {
-                        var str2 = dbColumn.DbTable + "." + dbColumn.DbColumn;
-                        if (str1.Length > 0)
-                            str1 = str1 + " AND ";
-                        if (addIsNull)
-                            str1 = str1 + "(" + str2 + ">" + SqlTime(begtime) + " OR " + str2 + " is null)";
-                        else
-                            str1 = str1 + str2 + ">" + SqlTime(begtime);
-                    }
+                    str2 = dbColumnRow.DbTable + "." + dbColumnRow.DbColumn;
+                    if (addIsNull)
+                        str1 = str1 + "(" + str2 + "<" + SqlTime(endtime) + " OR " + str2 + " is null)";
+                    else
+                        str1 = str1 + str2 + "<" + SqlTime(endtime);
                 }
+                var dbColumn = DatabaseContent.GetDbColumn(dbColumnRow.DbTable, "endtime");
+                if (dbColumn == null || begtime <= SqlMinDate) return str1;
+                str2 = dbColumn.DbTable + "." + dbColumn.DbColumn;
+                if (str1.Length > 0)
+                    str1 = str1 + " AND ";
+                if (addIsNull)
+                    str1 = str1 + "(" + str2 + ">" + SqlTime(begtime) + " OR " + str2 + " is null)";
+                else
+                    str1 = str1 + str2 + ">" + SqlTime(begtime);
             }
             else
             {
@@ -1855,83 +1817,76 @@ namespace CraigLib.Data
                 {
                     if (begtime > SqlMinDate)
                         str1 = str1 + "(" + str2 + ">=" + SqlTime(begtime) + " OR " + str2 + " is null)";
-                    if (endtime < SqlMaxDate)
-                    {
-                        if (str1.Length > 0)
-                            str1 = str1 + " AND ";
-                        str1 = str1 + "(" + str2 + "<" + SqlTime(endtime) + " OR " + str2 + " is null)";
-                    }
+                    if (endtime >= SqlMaxDate) return str1;
+                    if (str1.Length > 0)
+                        str1 = str1 + " AND ";
+                    str1 = str1 + "(" + str2 + "<" + SqlTime(endtime) + " OR " + str2 + " is null)";
                 }
                 else
                 {
                     if (begtime > SqlMinDate)
                         str1 = str1 + str2 + ">=" + SqlTime(begtime);
-                    if (endtime < SqlMaxDate)
-                    {
-                        if (str1.Length > 0)
-                            str1 = str1 + " AND ";
-                        str1 = str1 + str2 + "<" + SqlTime(endtime);
-                    }
+                    if (endtime >= SqlMaxDate) return str1;
+                    if (str1.Length > 0)
+                        str1 = str1 + " AND ";
+                    str1 = str1 + str2 + "<" + SqlTime(endtime);
                 }
             }
             return str1;
         }
 
-        private static string GetDateCriteriaClauseFromRelation(DataTable dt, string timeColumn, DateTime begtime, DateTime endtime, bool addIsNull, JoinDirection direction, QueryBuilder qb)
-        {
-            var list = new List<string>();
-            foreach (DataRelation relation in direction == JoinDirection.Parent ? dt.ParentRelations : dt.ChildRelations)
-            {
-                if (!DataSetHelper.IsRecursive(relation))
-                {
-                    var dt1 = direction == JoinDirection.Parent ? relation.ParentTable : relation.ChildTable;
-                    if (!(relation.RelationName == dt1.TableName) || !dt1.TableName.StartsWith(dt.TableName + "_"))
-                    {
-                        var selectSql = GetSelectSql(dt1, new string[0]);
-                        if (selectSql.Length != 0)
-                        {
-                            var qb1 = new QueryBuilder(selectSql);
-                            var additionalWhere = GetDateCriteriaClause(qb1.TableList, timeColumn, begtime, endtime, addIsNull);
-                            if (additionalWhere.Length == 0)
-                                additionalWhere = GetDateCriteriaClauseFromRelation(dt1, timeColumn, begtime, endtime, addIsNull, direction, qb1);
-                            if (additionalWhere.Length > 0)
-                            {
-                                foreach (string str in qb.TableList)
-                                {
-                                    if (qb1.TableList.Contains(str))
-                                        qb1.TableList.Remove(str);
-                                }
-                                if (qb1.TableList.Count > 0)
-                                {
-                                    qb1.Select = "SELECT 1";
-                                    qb1.Where = "";
-                                    qb1.AddWhereClause(DataSetHelper.GetJoinSql(relation));
-                                    qb1.AddWhereClause(GetJoinSql(qb1.TableList));
-                                    qb1.AddWhereClause(additionalWhere);
-                                    additionalWhere = "EXISTS ( " + qb1.Query + " )";
-                                }
-                                list.Add(additionalWhere);
-                            }
-                        }
-                    }
-                }
-            }
-            var str1 = "";
-            if (list.Count > 0)
-            {
-                str1 = string.Join(" OR ", list.ToArray());
-                if (list.Count > 1)
-                    str1 = "(" + str1 + ")";
-            }
-            return str1;
-        }
+        //private static string GetDateCriteriaClauseFromRelation(DataTable dt, string timeColumn, DateTime begtime, DateTime endtime, bool addIsNull, JoinDirection direction, QueryBuilder qb)
+        //{
+        //    var list = new List<string>();
+        //    foreach (DataRelation relation in direction == JoinDirection.Parent ? dt.ParentRelations : dt.ChildRelations)
+        //    {
+        //        if (!DataSetHelper.IsRecursive(relation))
+        //        {
+        //            var dt1 = direction == JoinDirection.Parent ? relation.ParentTable : relation.ChildTable;
+        //            if (!(relation.RelationName == dt1.TableName) || !dt1.TableName.StartsWith(dt.TableName + "_"))
+        //            {
+        //                var selectSql = GetSelectSql(dt1, new string[0]);
+        //                if (selectSql.Length != 0)
+        //                {
+        //                    var qb1 = new QueryBuilder(selectSql);
+        //                    var additionalWhere = GetDateCriteriaClause(qb1.TableList, timeColumn, begtime, endtime, addIsNull);
+        //                    if (additionalWhere.Length == 0)
+        //                        additionalWhere = GetDateCriteriaClauseFromRelation(dt1, timeColumn, begtime, endtime, addIsNull, direction, qb1);
+        //                    if (additionalWhere.Length > 0)
+        //                    {
+        //                        foreach (var str in qb.TableList)
+        //                        {
+        //                            if (qb1.TableList.Contains(str))
+        //                                qb1.TableList.Remove(str);
+        //                        }
+        //                        if (qb1.TableList.Count > 0)
+        //                        {
+        //                            qb1.Select = "SELECT 1";
+        //                            qb1.Where = "";
+        //                            qb1.AddWhereClause(DataSetHelper.GetJoinSql(relation));
+        //                            qb1.AddWhereClause(GetJoinSql(qb1.TableList));
+        //                            qb1.AddWhereClause(additionalWhere);
+        //                            additionalWhere = "EXISTS ( " + qb1.Query + " )";
+        //                        }
+        //                        list.Add(additionalWhere);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    var str1 = "";
+        //    if (list.Count > 0)
+        //    {
+        //        str1 = string.Join(" OR ", list.ToArray());
+        //        if (list.Count > 1)
+        //            str1 = "(" + str1 + ")";
+        //    }
+        //    return str1;
+        //}
 
         public static bool Exists(string objectname)
         {
-            var strArray = objectname.Split(new char[1]
-      {
-        '.'
-      });
+            var strArray = objectname.Split(new[]{'.'});
             return strArray.Length != 2 ? DatabaseContent.GetDbColumns(objectname.Trim()).Length > 0 : DatabaseContent.GetDbColumn(strArray[0].Trim(), strArray[1].Trim()) != null;
         }
 
@@ -1990,31 +1945,31 @@ namespace CraigLib.Data
             WriteSqlLog(commandText, null, logLevel);
         }
 
-        private static void WriteSqlLog(string commandText, DbParameter[] commandParameters, int logLevel)
+        private static void WriteSqlLog(string commandText, IEnumerable<DbParameter> commandParameters, int logLevel)
         {
             if (!ApplicationConfig.SqlLogEnabled)
                 return;
             if (ApplicationConfig.SqlLogLevel < logLevel)
                 return;
-            try
+
+            var stringBuilder = new StringBuilder(commandText);
+            if (commandParameters != null)
             {
-                var stringBuilder = new StringBuilder(commandText);
-                if (commandParameters != null)
-                {
-                    foreach (var dbParameter in commandParameters)
-                        stringBuilder.Append(" ").Append(dbParameter.ParameterName).Append(" = ").Append(SqlValue(dbParameter.Value));
-                }
-                lock (sqlLogFile)
-                {
-                    using (var resource_1 = sqlLogFile.Open(FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-                    {
-                        using (var resource_0 = new StreamWriter(resource_1))
-                            resource_0.WriteLine(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified).ToString("yyyy-MM-dd HH:mm:ss.ff") + (object)"\t" + (string)(object)stringBuilder);
-                    }
-                }
+                foreach (var dbParameter in commandParameters)
+                    stringBuilder.Append(" ")
+                        .Append(dbParameter.ParameterName)
+                        .Append(" = ")
+                        .Append(SqlValue(dbParameter.Value));
             }
-            catch
+            lock (SqlLogFile)
             {
+                using (var resource1 = SqlLogFile.Open(FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    using (var resource0 = new StreamWriter(resource1))
+                        resource0.WriteLine(
+                            DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified)
+                                .ToString("yyyy-MM-dd HH:mm:ss.ff") + "\t" + stringBuilder);
+                }
             }
         }
 
@@ -2031,21 +1986,21 @@ namespace CraigLib.Data
                     str2 = "?";
                 else if (type.Name == "OracleCommand")
                     str2 = ":" + str2;
-                var length = str1.IndexOf(str2);
+                var length = str1.IndexOf(str2, StringComparison.Ordinal);
                 if (length >= 0)
                     str1 = str1.Substring(0, length) + SqlValue(dbParameter.Value) + str1.Substring(length + str2.Length);
             }
             return str1;
         }
 
-        public static string GetDbType(DatabaseSchema.DbColumnRow ColRow, DatabaseType targetSyntax)
+        public static string GetDbType(DatabaseSchema.DbColumnRow colRow, DatabaseType targetSyntax)
         {
-            return GetDbType(ColRow.DbType, ColRow.DbLen, ColRow.DbPrecision, targetSyntax);
+            return GetDbType(colRow.DbType, colRow.DbLen, colRow.DbPrecision, targetSyntax);
         }
 
         public static string GetDbType(string dbtype, int dblen, int dbprecision, DatabaseType targetSyntax)
         {
-            var length = dbtype.IndexOf(",");
+            var length = dbtype.IndexOf(",", StringComparison.Ordinal);
             if (length > 0)
                 dbtype = dbtype.Substring(0, length);
             if (dbtype == "identity")
@@ -2129,43 +2084,43 @@ namespace CraigLib.Data
             AlterOracleSession(conn, ApplicationConfig.DbConnectInfo.Database);
         }
 
-        private static void OnOracleFailover(Type eventType, object[] args)
-        {
-            var conn = (DbConnection)args[0];
-            var obj1 = args[1];
-            var obj2 = args[2];
-            var type1 = obj1.GetType();
-            PropertyInfo property = type1.GetProperty("FailoverEvent");
-            object obj3 = property.GetValue(obj1, new object[0]);
-            var name = Enum.GetName(property.PropertyType, obj3);
-            var fullName = type1.Assembly.FullName;
-            var type2 = Type.GetType(type1.FullName.Replace("FailoverEvent", "FailoverReturnCode") + "," + fullName);
-            switch (name)
-            {
-                case "Begin":
-                    WriteSqlLog("Callback method called :Failover Begin");
-                    break;
-                case "Abort":
-                    WriteSqlLog("Callback method called :Failover Aborted");
-                    break;
-                case "End":
-                    WriteSqlLog("Callback method called :Failover End");
-                    AlterOracleSession(conn, ApplicationConfig.DbConnectInfo.Database);
-                    WriteSqlLog("Set session on re-established connection :Failover End");
-                    break;
-                case "Error":
-                    WriteSqlLog("Failover Error -Sleeping and Retrying to connect to database");
-                    Enum.Parse(type2, "Retry");
-                    break;
-                case "Reauth":
-                    WriteSqlLog("Callback method called :Failover reauthenticating");
-                    break;
-                default:
-                    WriteSqlLog("Bad Failover");
-                    break;
-            }
-            Enum.Parse(type2, "Success");
-        }
+        //private static void OnOracleFailover(Type eventType, object[] args)
+        //{
+        //    var conn = (DbConnection)args[0];
+        //    var obj1 = args[1];
+        //    var obj2 = args[2];
+        //    var type1 = obj1.GetType();
+        //    var property = type1.GetProperty("FailoverEvent");
+        //    var obj3 = property.GetValue(obj1, new object[0]);
+        //    var name = Enum.GetName(property.PropertyType, obj3);
+        //    var fullName = type1.Assembly.FullName;
+        //    var type2 = Type.GetType(type1.FullName.Replace("FailoverEvent", "FailoverReturnCode") + "," + fullName);
+        //    switch (name)
+        //    {
+        //        case "Begin":
+        //            WriteSqlLog("Callback method called :Failover Begin");
+        //            break;
+        //        case "Abort":
+        //            WriteSqlLog("Callback method called :Failover Aborted");
+        //            break;
+        //        case "End":
+        //            WriteSqlLog("Callback method called :Failover End");
+        //            AlterOracleSession(conn, ApplicationConfig.DbConnectInfo.Database);
+        //            WriteSqlLog("Set session on re-established connection :Failover End");
+        //            break;
+        //        case "Error":
+        //            WriteSqlLog("Failover Error -Sleeping and Retrying to connect to database");
+        //            Enum.Parse(type2, "Retry");
+        //            break;
+        //        case "Reauth":
+        //            WriteSqlLog("Callback method called :Failover reauthenticating");
+        //            break;
+        //        default:
+        //            WriteSqlLog("Bad Failover");
+        //            break;
+        //    }
+        //    Enum.Parse(type2, "Success");
+        //}
 
         private static void AlterOracleSession(DbConnection conn, string schemaname)
         {
@@ -2188,8 +2143,8 @@ namespace CraigLib.Data
         public static string ChangeDbPassword(string newPassword)
         {
             var commandText = string.Empty;
-            ConnectionInfo dbConnectInfo = ApplicationConfig.DbConnectInfo;
-            string str = dbConnectInfo.Password;
+            var dbConnectInfo = ApplicationConfig.DbConnectInfo;
+            var str = dbConnectInfo.Password;
             if (str == null || str.Trim().Length == 0)
                 str = "null";
             else if (DbSyntax == DatabaseType.MSSQL)
@@ -2214,7 +2169,7 @@ namespace CraigLib.Data
             }
             catch (Exception ex)
             {
-                return ex.Message.ToString();
+                return ex.Message;
             }
         }
 
@@ -2223,10 +2178,7 @@ namespace CraigLib.Data
             var type = conn.GetType();
             if (type.Name == "SqlConnection")
                 return DatabaseType.MSSQL;
-            if (type.Name.IndexOf("Oracle") >= 0)
-                return DatabaseType.ORACLE;
-            else
-                return new ConnectionInfo(conn.ConnectionString).DbSyntax;
+            return type.Name.IndexOf("Oracle", StringComparison.Ordinal) >= 0 ? DatabaseType.ORACLE : new ConnectionInfo(conn.ConnectionString).DbSyntax;
         }
 
         public static string GetSysConfig(string configKey)
@@ -2271,10 +2223,7 @@ namespace CraigLib.Data
         {
             if (DatabaseContent.GetDbTable(tableName) == null)
                 return 0;
-            var criteriaClause = GetCriteriaClause(new List<string>()
-      {
-        tableName
-      }, criteria);
+            var criteriaClause = GetCriteriaClause(new List<string> {tableName}, criteria);
             var selectSql = "SELECT 1 FROM " + tableName;
             if (criteriaClause.Length > 0)
                 selectSql = selectSql + " WHERE " + criteriaClause;
@@ -2299,8 +2248,7 @@ namespace CraigLib.Data
             }
             if (str.Length <= 0)
                 return list.Count;
-            else
-                return -1;
+            return -1;
         }
 
         public static string GetCriteriaClause(List<string> tableList, SelectCriteria criteria)
@@ -2309,22 +2257,20 @@ namespace CraigLib.Data
             var str1 = GetDateCriteriaClause(tableList, criteria.DateColumn, criteria.BegTime, criteria.EndTime, addIsNull);
             for (var index = 0; index < criteria.DatabaseCriteria.Length; ++index)
             {
-                DatabaseCriteria databaseCriteria1 = criteria.DatabaseCriteria[index];
+                var databaseCriteria1 = criteria.DatabaseCriteria[index];
                 DatabaseCriteria.AdjustParen(databaseCriteria1);
                 var str2 = "";
-                if (databaseCriteria1.DbColumn != null && databaseCriteria1.DbColumn.Length > 0 && databaseCriteria1.DbValue != null || databaseCriteria1.DbValue.Length > 0)
+                if (databaseCriteria1.DbValue != null && (!string.IsNullOrEmpty(databaseCriteria1.DbColumn) && databaseCriteria1.DbValue != null || databaseCriteria1.DbValue.Length > 0))
                     str2 = GetDbCriteriaClause(tableList, databaseCriteria1);
                 if (str2.Length == 0)
                 {
                     if (databaseCriteria1.OpenParen.Length > 0)
                     {
-                        if (index + 1 < criteria.DatabaseCriteria.Length)
-                        {
-                            criteria.DatabaseCriteria[index + 1].LogOperator = databaseCriteria1.LogOperator;
-                            DatabaseCriteria databaseCriteria2 = criteria.DatabaseCriteria[index + 1];
-                            string str3 = databaseCriteria2.OpenParen + databaseCriteria1.OpenParen;
-                            databaseCriteria2.OpenParen = str3;
-                        }
+                        if (index + 1 >= criteria.DatabaseCriteria.Length) continue;
+                        criteria.DatabaseCriteria[index + 1].LogOperator = databaseCriteria1.LogOperator;
+                        var databaseCriteria2 = criteria.DatabaseCriteria[index + 1];
+                        var str3 = databaseCriteria2.OpenParen + databaseCriteria1.OpenParen;
+                        databaseCriteria2.OpenParen = str3;
                     }
                     else if (databaseCriteria1.CloseParen.Length > 0)
                         str1 = str1 + databaseCriteria1.CloseParen;
@@ -2332,7 +2278,7 @@ namespace CraigLib.Data
                 else
                 {
                     var str3 = databaseCriteria1.LogOperator + " " + databaseCriteria1.OpenParen + str2 + databaseCriteria1.CloseParen;
-                    str1 = (str1.Length <= 0 || !(databaseCriteria1.LogOperator == "") ? str1 + " " : str1 + " AND ") + str3;
+                    str1 = (str1.Length <= 0 || databaseCriteria1.LogOperator != "" ? str1 + " " : str1 + " AND ") + str3;
                 }
             }
             return str1;
@@ -2341,26 +2287,20 @@ namespace CraigLib.Data
         private static List<string> CascadeDelete(DatabaseSchema dbContent, string tableName, string selectSql)
         {
             var list1 = new List<string>();
-            var dbColumnRowArray = (DatabaseSchema.DbColumnRow[])dbContent.DbColumn.Select(Expr.Format("DbTable={0} AND DbPrimaryKey=1", new object[1]
-      {
-        tableName
-      }), "DbSysGen");
+            var dbColumnRowArray =
+                (DatabaseSchema.DbColumnRow[])
+                    dbContent.DbColumn.Select(Expr.Format("DbTable={0} AND DbPrimaryKey=1", new object[] {tableName}),
+                        "DbSysGen");
             if (dbColumnRowArray.Length > 0)
             {
                 var strArray1 = new string[dbColumnRowArray.Length];
                 for (var index = 0; index < dbColumnRowArray.Length; ++index)
                     strArray1[index] = dbColumnRowArray[index].DbColumn;
-                DatabaseSchema.DbFKeyDataTable dbFkey = dbContent.DbFKey;
-                string filterExpression = Expr.Format("DbRefTable={0}", new object[1]
-        {
-          tableName
-        });
+                var dbFkey = dbContent.DbFKey;
+                var filterExpression = Expr.Format("DbRefTable={0}", new object[]{tableName});
                 foreach (var dbFkeyRow in (DatabaseSchema.DbFKeyRow[])dbFkey.Select(filterExpression))
                 {
-                    string[] strArray2 = dbFkeyRow.DbFKeyColumn.Split(new char[1]
-          {
-            ','
-          });
+                    var strArray2 = dbFkeyRow.DbFKeyColumn.Split(new[]{','});
                     if (strArray2.Length == dbColumnRowArray.Length)
                     {
                         var queryBuilder = new QueryBuilder(selectSql);
@@ -2390,41 +2330,33 @@ namespace CraigLib.Data
                 var list = new List<DataColumn>(dataTable.PrimaryKey);
                 foreach (DataColumn dc in dataTable.Columns)
                 {
-                    DatabaseSchema.DbColumnRow dbColumn = DatabaseModel.GetDbColumn(DataSetHelper.GetDbTable(dc), DataSetHelper.GetDbColumn(dc));
-                    try
+                    var dbColumn = DatabaseModel.GetDbColumn(dc.GetDbTable(), dc.GetDbColumn());
+
+                    if (dbColumn != null && !dbColumn.IsLabelNull() && !string.IsNullOrEmpty(dbColumn.Label))
+                        dc.Caption = dbColumn.Label;
+                    if (!dc.AllowDBNull)
+                        dc.AllowDBNull = true;
+                    if (dc.ColumnName == "surrogate" && list.Contains(dc))
                     {
-                        if (dbColumn != null && !dbColumn.IsLabelNull() && !string.IsNullOrEmpty(dbColumn.Label))
-                            dc.Caption = dbColumn.Label;
-                        if (!dc.AllowDBNull)
-                            dc.AllowDBNull = true;
-                        if (dc.ColumnName == "surrogate" && list.Contains(dc))
-                        {
-                            dc.AutoIncrement = true;
-                            dc.AutoIncrementSeed = 0L;
-                            dc.AutoIncrementStep = -1L;
-                        }
-                        else if (dbColumn != null && dbColumn.DbDefault.Length > 0)
-                            dc.DefaultValue = DataSetHelper.GetDefaultValue(dbColumn.DbDefault, dc.DataType);
-                        else if (dc.DataType == typeof(bool))
-                            dc.DefaultValue = false;
-                        else if (list.Contains(dc))
-                        {
-                            if (!dc.AutoIncrement)
-                            {
-                                if (dc.DataType == typeof(string))
-                                    dc.DefaultValue = string.Empty;
-                                else if (dc.DataType == typeof(bool))
-                                    dc.DefaultValue = false;
-                                else if (dc.DataType == typeof(DateTime))
-                                    dc.DefaultValue = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified);
-                                else if (DataSetHelper.IsNumericColumn(dc))
-                                    dc.DefaultValue = 0;
-                            }
-                        }
+                        dc.AutoIncrement = true;
+                        dc.AutoIncrementSeed = 0L;
+                        dc.AutoIncrementStep = -1L;
                     }
-                    catch 
+                    else if (dbColumn != null && dbColumn.DbDefault.Length > 0)
+                        dc.DefaultValue = DataSetHelper.GetDefaultValue(dbColumn.DbDefault, dc.DataType);
+                    else if (dc.DataType == typeof (bool))
+                        dc.DefaultValue = false;
+                    else if (list.Contains(dc))
                     {
-                        throw ;
+                        if (dc.AutoIncrement) continue;
+                        if (dc.DataType == typeof (string))
+                            dc.DefaultValue = string.Empty;
+                        else if (dc.DataType == typeof (bool))
+                            dc.DefaultValue = false;
+                        else if (dc.DataType == typeof (DateTime))
+                            dc.DefaultValue = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified);
+                        else if (dc.IsNumericColumn())
+                            dc.DefaultValue = 0;
                     }
                 }
             }
@@ -2449,20 +2381,8 @@ namespace CraigLib.Data
 
         public static int GetErrorCode(Exception e)
         {
-            var propertyInfo = (PropertyInfo)null;
-            try
-            {
-                propertyInfo = e.GetType().GetProperty("Code");
-                if (propertyInfo == null)
-                    propertyInfo = e.GetType().GetProperty("Number");
-            }
-            catch
-            {
-            }
-            if (!(propertyInfo == null))
-                return Convert.ToInt32(propertyInfo.GetValue(e, null));
-            else
-                return 0;
+            var propertyInfo = e.GetType().GetProperty("Code") ?? e.GetType().GetProperty("Number");
+            return !(propertyInfo == null) ? Convert.ToInt32(propertyInfo.GetValue(e, null)) : 0;
         }
 
         public static string CheckSqlReservedWord(string word)
@@ -2494,12 +2414,11 @@ namespace CraigLib.Data
 
         public static string RemoveReservedWordQuote(string word)
         {
-            if (word.StartsWith("\"") && word.EndsWith("\"") || word.StartsWith("[") && word.EndsWith("]") || word.StartsWith("'") && word.EndsWith("'"))
-            {
-                var word1 = word.Substring(1, word.Length - 2);
-                if (word.Equals(CheckSqlReservedWord(word1), StringComparison.OrdinalIgnoreCase))
-                    word = word1;
-            }
+            if ((!word.StartsWith("\"") || !word.EndsWith("\"")) && (!word.StartsWith("[") || !word.EndsWith("]")) &&
+                (!word.StartsWith("'") || !word.EndsWith("'"))) return word;
+            var word1 = word.Substring(1, word.Length - 2);
+            if (word.Equals(CheckSqlReservedWord(word1), StringComparison.OrdinalIgnoreCase))
+                word = word1;
             return word;
         }
 
@@ -2510,15 +2429,14 @@ namespace CraigLib.Data
             switch (DbSyntax)
             {
                 case DatabaseType.MSSQL:
-                    return Enumerable.Any<DbDataReader>(ExecuteSelect(" SELECT TOP 1 1 FROM " + tableName));
+                    return ExecuteSelect(" SELECT TOP 1 1 FROM " + tableName).Any();
                 case DatabaseType.ORACLE:
-                    return Enumerable.Any<DbDataReader>(ExecuteSelect(" SELECT 1 FROM " + tableName + " WHERE rownum < 2 "));
+                    return ExecuteSelect(" SELECT 1 FROM " + tableName + " WHERE rownum < 2 ").Any();
                 default:
                     var obj = ExecuteScalar(" SELECT COUNT(*) FROM " + tableName);
                     if (obj != null)
                         return Convert.ToInt32(obj) > 0;
-                    else
-                        return false;
+                    return false;
             }
         }
 

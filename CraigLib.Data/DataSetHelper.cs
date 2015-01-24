@@ -7,6 +7,10 @@ using System.Text;
 
 namespace CraigLib.Data
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static class DataSetHelper
     {
 

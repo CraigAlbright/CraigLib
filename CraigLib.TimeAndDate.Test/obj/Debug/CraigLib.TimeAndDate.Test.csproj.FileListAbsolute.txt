@@ -48,3 +48,48 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate.Test\bin\
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.csprojResolveAssemblyReference.cache
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\ExternalLibraries\libsndfile-1.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\ExternalLibraries\libsndfile-1.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.Test.dll.config
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.Test.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.Test.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Autofac.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Cirrious.CrossCore.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Cirrious.MvvmCross.Wpf.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.Cloud.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.File.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.Sound.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\System.Windows.Interactivity.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Cirrious.MvvmCross.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\AWSSDK.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Management.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Management.Compute.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Management.Sql.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Management.Storage.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Management.TrafficManager.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Management.WebSites.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.WindowsAzure.Common.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Microsoft.Threading.Tasks.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.TimeAndDate.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\Autofac.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.Cloud.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.File.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\CraigLib.Sound.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\System.Windows.Interactivity.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\AWSSDK.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\de\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\en\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\es\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\it\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.TimeAndDate.Test\obj\Debug\CraigLib.TimeAndDate.Test.pdb

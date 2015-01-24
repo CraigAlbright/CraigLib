@@ -7,4 +7,11 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\Craig
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.pdb
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\bin\Debug\ExternalLibraries\libsndfile-1.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.Sound\bin\Debug\ExternalLibraries\libsndfile-1.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Sound\bin\Debug\CraigLib.Sound.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Sound\obj\Debug\CraigLib.Sound.pdb

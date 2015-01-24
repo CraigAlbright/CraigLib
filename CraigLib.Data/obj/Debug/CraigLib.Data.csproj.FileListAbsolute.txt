@@ -70,3 +70,47 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Data\bin\Debug\zh-Han
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Data\obj\Debug\CraigLib.Data.csprojResolveAssemblyReference.cache
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Data\obj\Debug\CraigLib.Data.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Data\obj\Debug\CraigLib.Data.pdb
+C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Data\bin\Debug\ExternalLibraries\libsndfile-1.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Data.dll.config
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Data.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Data.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Cirrious.CrossCore.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Cirrious.MvvmCross.Wpf.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Autofac.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Cloud.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.File.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.TimeAndDate.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Sound.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\System.Windows.Interactivity.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Cirrious.MvvmCross.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\AWSSDK.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Management.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Management.Compute.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Management.Sql.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Management.Storage.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Management.TrafficManager.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Management.WebSites.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.WindowsAzure.Common.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Microsoft.Threading.Tasks.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\Autofac.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Cloud.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.File.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.TimeAndDate.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\CraigLib.Sound.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\System.Windows.Interactivity.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\AWSSDK.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\de\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\en\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\es\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\it\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\obj\Debug\CraigLib.Data.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\obj\Debug\CraigLib.Data.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Data\obj\Debug\CraigLib.Data.pdb

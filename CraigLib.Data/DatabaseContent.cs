@@ -26,6 +26,10 @@ namespace CraigLib.Data
                 _dbSchema = (DatabaseSchema)CacheMachine.Get("DbContent", new string[0], null);
                 _cacheChanged = false;
             }
+            if (_dbSchema == null)
+            {
+                _dbSchema = new DatabaseSchema();
+            }
             return _dbSchema;
         }
 
@@ -56,7 +60,13 @@ namespace CraigLib.Data
 
         public static DatabaseSchema.DbTableRow GetDbTable(string tablename)
         {
-            return GetCurrentDbContent().DbTable.FindByDbTable(tablename);
+            var schema = GetCurrentDbContent();
+            if (schema == null )
+            {
+                schema = new DatabaseSchema();
+                return schema.DbTable.FindByDbTable(tablename);
+            }
+            return schema != null ? schema.DbTable.FindByDbTable(tablename) : null;
         }
 
         public static DatabaseSchema.DbColumnRow[] GetDbColumns(string tablename)
@@ -108,14 +118,14 @@ namespace CraigLib.Data
                 var currentDbContent = GetCurrentDbContent();
                 lock (currentDbContent)
                 {
-                    var local1 = (DatabaseSchema.DbColumnRow[])currentDbContent.DbColumn.Select("DbColumn = " + Expr.Value(columnname.ToLower()));
-                    if (local1.Length > 0)
-                        return local1[0].DbType;
-                    foreach (var item0 in FindDbTablesByDbColumn(columnname))
+                    var dbColumnRow = (DatabaseSchema.DbColumnRow[])currentDbContent.DbColumn.Select("DbColumn = " + Expr.Value(columnname.ToLower()));
+                    if (dbColumnRow.Length > 0)
+                        return dbColumnRow[0].DbType;
+                    foreach (var tableName in FindDbTablesByDbColumn(columnname))
                     {
-                        var local4 = GetDbColumn(item0, columnname);
-                        if (local4 != null)
-                            return local4.DbType;
+                        var databaseColumnRow = GetDbColumn(tableName, columnname);
+                        if (databaseColumnRow != null)
+                            return databaseColumnRow.DbType;
                     }
                     throw new Exception("Couldn't find column " + columnname);
                 }
@@ -126,7 +136,7 @@ namespace CraigLib.Data
             return dbColumn.DbType;
         }
 
-        private static string[] FindDbTablesByDbColumn(string columnname)
+        private static IEnumerable<string> FindDbTablesByDbColumn(string columnname)
         {
             var list = new List<string>();
             using (var newConnection = DatabaseHelper.GetNewConnection())

@@ -147,10 +147,10 @@ namespace CraigLib.Data
                 else
                 {
                     var dateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified);
-                    CacheData cacheData = _cacheable.RetrieveCacheItem(_cacheitem, tableNames, criteria);
+                    var cacheData = _cacheable.RetrieveCacheItem(_cacheitem, tableNames, criteria);
                     if (cacheData.WatchTables != null)
                     {
-                        foreach (string index in cacheData.WatchTables)
+                        foreach (var index in cacheData.WatchTables)
                             _watchtables[index] = "";
                     }
                     var timeSpan = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified) - dateTime1;
@@ -163,10 +163,15 @@ namespace CraigLib.Data
                     if (_cacheitem != null && cacheData.Append)
                     {
                         var dateTime2 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified);
-                        if (cacheData.NewData is DataTable)
-                            DTImport((DataTable)_cacheitem, (DataTable)cacheData.NewData);
-                        else if (cacheData.NewData is DataSet)
-                            DsImport((DataSet)_cacheitem, (DataSet)cacheData.NewData);
+                        var data = cacheData.NewData as DataTable;
+                        if (data != null)
+                            DTImport((DataTable)_cacheitem, data);
+                        else
+                        {
+                            var set = cacheData.NewData as DataSet;
+                            if (set != null)
+                                DsImport((DataSet)_cacheitem, set);
+                        }
                         Cstats.MergeTime += DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified) - dateTime2;
                     }
                     if (_stale || !cacheData.Append || IsSegmented && Cstats.Items > 500000)

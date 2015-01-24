@@ -8,3 +8,8 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.FileHelper\bin\Debug\
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.FileHelper\obj\Debug\CraigLib.File.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.FileHelper\obj\Debug\CraigLib.File.pdb
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.FileHelper\obj\Debug\CraigLib.File.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.FileHelper\bin\Debug\CraigLib.File.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.FileHelper\bin\Debug\CraigLib.File.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.FileHelper\obj\Debug\CraigLib.File.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.FileHelper\obj\Debug\CraigLib.File.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.FileHelper\obj\Debug\CraigLib.File.pdb

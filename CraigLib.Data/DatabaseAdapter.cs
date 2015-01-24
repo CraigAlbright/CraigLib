@@ -376,35 +376,17 @@ namespace CraigLib.Data
         public int Update(DataTable dtUpdate, bool sysGen)
         {
             var selectSql = DatabaseHelper.GetSelectSql(dtUpdate, new string[0]);
-            return Update(new[]
-      {
-        dtUpdate
-      }, new[]
-      {
-        selectSql
-      }, (sysGen ? 1 : 0) != 0);
+            return Update(new[] {dtUpdate}, new[]{selectSql}, (sysGen ? 1 : 0) != 0);
         }
 
         public int Update(DataTable dtUpdate, string selectSql)
         {
-            return Update(new[]
-      {
-        dtUpdate
-      }, new[]
-      {
-        selectSql
-      }, 1 != 0);
+            return Update(new[]{dtUpdate}, new[]{selectSql}, 1 != 0);
         }
 
         public int Update(DataTable dtUpdate, string selectSql, bool sysGen)
         {
-            return Update(new[]
-      {
-        dtUpdate
-      }, new[]
-      {
-        selectSql
-      }, (sysGen ? 1 : 0) != 0);
+            return Update(new[]{dtUpdate}, new[]{selectSql}, (sysGen ? 1 : 0) != 0);
         }
 
         public int Update(DataTable[] dtUpdates, bool sysGen)
@@ -445,7 +427,11 @@ namespace CraigLib.Data
                     if (selectSqls[index].Length > 0)
                     {
                         var queryBuilder = new QueryBuilder(selectSqls[index]);
-                        updatetable[index] = !queryBuilder.TableList.Contains(dtUpdates[index].TableName) ? (queryBuilder.TableList.Count <= 0 ? dtUpdates[index].TableName : queryBuilder.TableList[0]) : dtUpdates[index].TableName;
+                        updatetable[index] = !queryBuilder.TableList.Contains(dtUpdates[index].TableName)
+                            ? (queryBuilder.TableList.Count <= 0
+                                ? dtUpdates[index].TableName
+                                : queryBuilder.TableList[0])
+                            : dtUpdates[index].TableName;
                         if (DatabaseContent.GetDbColumns(updatetable[index]).Length == 0)
                             updatetable[index] = string.Empty;
                     }
@@ -459,7 +445,8 @@ namespace CraigLib.Data
                         DbSysGen.SetRevisionValue(dtUpdates[index]);
                     }
                     DbSysGen.SetDbDefaultValue(dtUpdates[index], updatetable[index]);
-                    dbDataAdapterArray[index] = DatabaseHelper.GetNewDataAdapter(selectSqls[index], Connection, Transaction);
+                    dbDataAdapterArray[index] = DatabaseHelper.GetNewDataAdapter(selectSqls[index], Connection,
+                        Transaction);
                     dbDataAdapterArray[index].AcceptChangesDuringUpdate = false;
                     commandBuilderArray[index] = new CommandBuilder(dbDataAdapterArray[index], updatetable[index]);
                     if (CreationName.Length > 0)
@@ -481,7 +468,8 @@ namespace CraigLib.Data
                                 if (UpdatingCommand != null)
                                 {
                                     UpdatingCommand.CommandTimeout = CommandTimeout;
-                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, dataRows.Length.ToString(CultureInfo.InvariantCulture));
+                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText,
+                                        dataRows.Length.ToString(CultureInfo.InvariantCulture));
                                 }
                                 num1 = dbDataAdapterArray[index].Update(dataRows);
                                 UpdatingCommand = null;
@@ -494,7 +482,8 @@ namespace CraigLib.Data
                                 {
                                     UpdatingCommand.CommandText = str;
                                     num1 = UpdatingCommand.ExecuteNonQuery();
-                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, num1.ToString(CultureInfo.InvariantCulture));
+                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText,
+                                        num1.ToString(CultureInfo.InvariantCulture));
                                 }
                                 UpdatingCommand = null;
                             }
@@ -522,7 +511,8 @@ namespace CraigLib.Data
                                 if (UpdatingCommand != null)
                                 {
                                     UpdatingCommand.CommandTimeout = CommandTimeout;
-                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, dataRowArray.Length.ToString(CultureInfo.InvariantCulture));
+                                    DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText,
+                                        dataRowArray.Length.ToString(CultureInfo.InvariantCulture));
                                 }
                                 num1 = dbDataAdapterArray[index].Update(dataRowArray);
                                 foreach (var dataRow in dataRowArray)
@@ -543,12 +533,14 @@ namespace CraigLib.Data
                         if (dataRows.Length != 0)
                         {
                             dataSet = dtUpdates[index].DataSet;
-                            commandBuilderArray[index].ConcurrentCheckColumns = list = dtUpdates[index].GetConcurrentCheckColumns();
+                            commandBuilderArray[index].ConcurrentCheckColumns =
+                                list = dtUpdates[index].GetConcurrentCheckColumns();
                             UpdatingCommand = commandBuilderArray[index].GetUpdateCommand();
                             if (UpdatingCommand != null)
                             {
                                 UpdatingCommand.CommandTimeout = CommandTimeout;
-                                DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText, dataRows.Length.ToString(CultureInfo.InvariantCulture));
+                                DataSetHelper.AttachSqlLog(dataSet, UpdatingCommand.CommandText,
+                                    dataRows.Length.ToString(CultureInfo.InvariantCulture));
                             }
                             num1 = dbDataAdapterArray[index].Update(dataRows);
                             list = null;
@@ -570,7 +562,7 @@ namespace CraigLib.Data
                         }
                     }
                 }
-               if (AutoCommit)
+                if (AutoCommit)
                 {
                     Commit();
                     foreach (var dt in dtUpdates)
@@ -581,16 +573,13 @@ namespace CraigLib.Data
             catch (DbException ex)
             {
                 var commandText = DatabaseHelper.GetCommandText(UpdatingCommand);
-                if ((ex.Message.Contains("ORA-02292") || ex.Message.ToLower().Contains("constraint")) && commandText.ToLower().Trim().StartsWith("delete"))
+                if ((ex.Message.Contains("ORA-02292") || ex.Message.ToLower().Contains("constraint")) &&
+                    commandText.ToLower().Trim().StartsWith("delete"))
                 {
-                    var strArray = commandText.Split(new[]
-          {
-            ' '
-          });
-                    var str1 = commandText.Split(new[]
-          {
-            ' '
-          })[1].Trim();
+                    var strArray = commandText.Split(new[]{' '});
+                    var str1 = commandText.Split(new[]                    {
+                        ' '
+                    })[1].Trim();
                     var str2 = string.Empty;
                     var str3 = string.Empty;
                     if (commandText.ToLower().Contains("where"))
@@ -608,7 +597,10 @@ namespace CraigLib.Data
                         if (num2 != -1)
                             str3 = commandText.Substring(num2 + 1);
                     }
-                    var dbErrorMessage = string.Format("Foreign key violation : Rows with {0}={1} cannot be deleted from table {2} as they are referenced in other tables.", str2, str3, str1);
+                    var dbErrorMessage =
+                        string.Format(
+                            "Foreign key violation : Rows with {0}={1} cannot be deleted from table {2} as they are referenced in other tables.",
+                            str2, str3, str1);
                     SetGenericDbUpdateException(ex, dataSet, dbErrorMessage);
                 }
                 else
@@ -623,7 +615,9 @@ namespace CraigLib.Data
             {
                 var dbErrorMessage = ex.Message;
                 if (list != null)
-                    dbErrorMessage = string.Format("Record has been modified in database.  Please refresh the data first.", new object[0]);
+                    dbErrorMessage =
+                        string.Format("Record has been modified in database.  Please refresh the data first.",
+                            new object[0]);
                 SetGenericDbUpdateException(ex, dataSet, dbErrorMessage);
                 if (UpdatingCommand == null)
                 {

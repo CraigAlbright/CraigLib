@@ -52,3 +52,37 @@ C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\bin\Debug\Syste
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.dll
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.pdb
 C:\Users\craig.albright\Documents\GitHub\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\CraigLib.Cloud.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\CraigLib.Cloud.pdb
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWS.SessionProvider.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWS.TraceListener.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWSSDK.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Azure.ResourceManager.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Data.Edm.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Data.OData.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Data.Services.Client.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Common.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Compute.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.ExpressRoute.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.MediaServices.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Network.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Scheduler.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.ServiceBus.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Sql.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Storage.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.Store.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.TrafficManager.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.VirtualNetworks.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Management.WebSites.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Storage.DataMovement.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.WindowsAzure.Storage.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Newtonsoft.Json.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\Microsoft.Threading.Tasks.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\System.Spatial.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWS.SessionProvider.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWS.TraceListener.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\bin\Debug\AWSSDK.xml
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.csprojResolveAssemblyReference.cache
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.dll
+C:\Visual Studio Projects\CraigLib\CraigLib.Cloud\obj\Debug\CraigLib.Cloud.pdb

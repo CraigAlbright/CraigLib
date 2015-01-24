@@ -65,6 +65,25 @@ namespace CraigLib.Data
         private DbViewDataTable _tableDbView;
         private DevCycleDataTable _tableDevCycle;
 
+        public DatabaseSchema(DataTable table)
+        {
+            BeginInit();
+            InitClass();
+            var changeEventHandler = new CollectionChangeEventHandler(SchemaChanged);
+            base.Tables.CollectionChanged += changeEventHandler;
+            base.Relations.CollectionChanged += changeEventHandler;
+            EndInit();
+            base.Tables.Add(table);
+            foreach (DataTable dataTable in base.Tables)
+            {
+                foreach (DataColumn dataColumn in dataTable.Columns)
+                {
+                    if (dataColumn.DataType == typeof(DateTime) &&
+                        dataColumn.DateTimeMode != DataSetDateTime.Unspecified)
+                        dataColumn.DateTimeMode = DataSetDateTime.Unspecified;
+                }
+            }
+        }
         [DebuggerNonUserCode]
         [GeneratedCode("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public DatabaseSchema()
